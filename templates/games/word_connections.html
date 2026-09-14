@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Word Connections - Round {{ current_round }} of {{ total_rounds }} - Cognicare{% endblock %}
+
+{% block content %}
+<div class="gameplay-container" style="max-width: 860px; margin: 0 auto;">
+    <!-- Top Status Bar (Unhurried, no timer or score pressure) -->
+    <header class="gameplay-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6); padding: var(--space-4) var(--space-6); background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+        <div>
+            <span style="font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
+                Activity
+            </span>
+            <h1 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
+                Word Connections
+            </h1>
+        </div>
+        <div>
+            <span id="round-indicator" class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
+                Round {{ current_round }} of {{ total_rounds }}
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Game Board Container -->
+    <main id="game-board" class="card" style="padding: var(--space-8); border: 2px solid var(--primary-border); background-color: var(--bg-surface);" aria-live="polite">
+
+        <!-- ==============================================
+             STAGE 1: SEMANTIC ASSOCIATION STAGE
+             ============================================== -->
+        <section id="association-stage" class="game-stage" aria-labelledby="question-heading">
+            <!-- Prompt & Guidance -->
+            <div style="text-align: center; margin-bottom: var(--space-6);">
+                <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); margin-bottom: var(--space-3); font-size: 1rem; padding: 4px 14px;">
+                    Semantic Memory & Association
+                </span>
+                <h2 id="question-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-top: var(--space-2);">
+                    {{ round_data.prompt }}
+                </h2>
+                <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 620px; margin: var(--space-2) auto 0; line-height: 1.5;">
+                    Consider the central concept below, then select the word that connects most naturally.
+                </p>
+            </div>
+
+            <!-- Central Concept Card -->
+            <div class="concept-card" role="region" aria-label="Central concept card">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: var(--space-3);">
+                    <span id="concept-theme" class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-size: 0.85rem; padding: 2px 10px;">
+                        {{ round_data.theme }}
+                    </span>
+                    <button type="button" id="btn-speak-prompt" class="btn btn-secondary" style="min-height: 36px; padding: 2px 12px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;" aria-label="Listen to concept and clue" title="Listen to concept and clue">
+                        <span aria-hidden="true">🔊</span> Listen
+                    </button>
+                </div>
+
+                <div style="text-align: center; width: 100%;">
+                    <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700; display: block; margin-bottom: var(--space-1);">
+                        Central Concept
+                    </span>
+                    <div id="concept-title" style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary); line-height: 1.25; margin-bottom: var(--space-2);">
+                        {{ round_data.concept }}
+                    </div>
+                    <div id="concept-clue" style="font-size: 1.1rem; color: var(--text-secondary); max-width: 580px; margin: 0 auto; line-height: 1.4; font-style: italic;">
+                        "{{ round_data.contextual_clue }}"
+                    </div>
+                </div>
+            </div>
+
+            <!-- Word Choices Grid -->
+            <div style="margin-bottom: var(--space-8);">
+                <div style="text-align: center; margin-bottom: var(--space-4);">
+                    <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0; font-weight: 700;">
+                        Select the Matching Word:
+                    </h3>
+                </div>
+
+                <div id="word-chip-grid"
+                     class="word-chip-grid"
+                     role="group"
+                     aria-label="Word choice options">
+                    {% for choice in round_data.choices %}
+                        <button type="button"
+                                class="word-card"
+                                data-word-id="{{ choice.id }}"
+                                data-word-text="{{ choice.word }}"
+                                aria-label="{{ choice.word }}"
+                                aria-pressed="false">
+                            <div class="word-card-check" aria-hidden="true">✓</div>
+                            <span class="word-card-text">{{ choice.word }}</span>
+                            <button type="button"
+                                    class="word-card-audio-btn"
+                                    data-speak-text="{{ choice.word }}"
+                                    aria-label="Listen to {{ choice.word }}"
+                                    title="Listen to {{ choice.word }}"
+                                    tabindex="-1">
+                                <span aria-hidden="true">🔊</span>
+                            </button>
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Confirm Action Button -->
+            <div style="text-align: center;">
+                <button type="button"
+                        id="btn-confirm-selection"
+                        class="btn btn-primary btn-lg"
+                        style="min-width: 280px; min-height: 60px; font-size: var(--font-size-lg);"
+                        disabled
+                        aria-label="Confirm selected word">
+                    Confirm My Selection &rarr;
+                </button>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             STAGE 2: GENTLE FEEDBACK STAGE
+             ============================================== -->
+        <section id="feedback-stage" class="game-stage" style="display: none;" aria-labelledby="feedback-message-heading">
+            <div style="text-align: center; padding: var(--space-4) 0;">
+                <div id="feedback-icon-container" style="width: 68px; height: 68px; border-radius: 50%; margin: 0 auto var(--space-4); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; background-color: var(--color-teal-100); color: var(--color-teal-800);">
+                    ✓
+                </div>
+                <h2 id="feedback-message-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+                    Wonderful!
+                </h2>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: var(--space-6);">
+                    <p id="feedback-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); max-width: 620px; margin: 0; line-height: 1.6;">
+                        Thank you for exploring this memory connection.
+                    </p>
+                    <button type="button" id="btn-speak-feedback" class="btn btn-secondary" style="min-height: 32px; padding: 2px 10px; font-size: 0.85rem; flex-shrink: 0;" aria-label="Listen to explanation" title="Listen to explanation">
+                        <span aria-hidden="true">🔊</span>
+                    </button>
+                </div>
+
+                <!-- Feedback Connection Recap Card -->
+                <div class="card" style="max-width: 520px; margin: 0 auto var(--space-8); padding: var(--space-5); background-color: var(--color-teal-50); border: 1px solid var(--primary-border); text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-2);">
+                        <span id="feedback-theme" style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700;">
+                            {{ round_data.theme }}
+                        </span>
+                    </div>
+                    <div id="feedback-concept-title" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: var(--space-1);">
+                        {{ round_data.concept }}
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--primary-border);">
+                        <span style="font-size: 0.95rem; color: var(--text-secondary);">Connection:</span>
+                        <strong id="feedback-target-word" style="font-size: 1.15rem; color: var(--color-teal-900);">{{ round_data.target_word }}</strong>
+                    </div>
+                </div>
+
+                <!-- Next Action Button -->
+                <div>
+                    <button type="button"
+                            id="btn-next-action"
+                            class="btn btn-primary btn-lg"
+                            style="min-width: 280px; min-height: 60px; font-size: var(--font-size-lg);">
+                        Continue &rarr;
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Exit Navigation -->
+    <footer style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-6);">
+        <a href="{% url 'games:list' %}" class="btn btn-secondary" onclick="return confirm('Would you like to return to the Games menu?');" style="min-height: 44px; padding: 8px 18px;">
+            &larr; Exit to Games
+        </a>
+    </footer>
+</div>
+
+<!-- Initial Data JSON Scripts -->
+{{ round_data.choices|json_script:"initial-choices-data" }}
+{{ round_data|json_script:"initial-round-data" }}
+
+<!-- Game Session Metadata -->
+<div id="game-metadata"
+     data-session-id="{{ session.id }}"
+     data-current-round="{{ current_round }}"
+     data-total-rounds="{{ total_rounds }}"
+     data-submit-url="{% url 'games:submit_round' session_id=session.id %}"
+     data-complete-url="{% url 'games:complete_session' session_id=session.id %}"
+     data-results-url="{% url 'games:results' session_id=session.id %}"
+     style="display: none;">
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/word_connections.js' %}"></script>
+{% endblock %}

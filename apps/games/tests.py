@@ -1565,3 +1565,449 @@ class FocusFinderSessionFlowTests(TestCase):
         self.assertEqual(ff_metrics['current_difficulty'], 4)
         self.assertEqual(ff_metrics['avg_accuracy'], 100.0)
         self.assertEqual(ff_metrics['avg_response_time_ms'], 2100)
+
+
+# ==========================================================================
+# Phase 10: Word Connections Tests
+# ==========================================================================
+
+from apps.games.services import WordConnectionsEngine, WORD_CONNECTIONS_CATALOG, GAME_ENGINES
+
+
+class WordConnectionsEngineTests(TestCase):
+    """Unit tests for WordConnectionsEngine logic, catalog validity, and deterministic planning."""
+
+    def test_engine_registered(self):
+        """Confirms 'word-connections' is registered in GAME_ENGINES."""
+        self.assertIn('word-connections', GAME_ENGINES)
+        self.assertIs(GAME_ENGINES['word-connections'], WordConnectionsEngine)
+
+    def test_catalog_completeness_and_validity(self):
+        """Verifies at least 20 scenarios, complete metadata, valid distractor counts, and unique IDs."""
+        self.assertGreaterEqual(len(WORD_CONNECTIONS_CATALOG), 20)
+        approved_themes = {
+            'Food & Kitchen', 'Crafts & Trades', 'Garden & Nature',
+            'Daily Routines', 'Nature & Seasons', 'Home & Hearth',
+            'Community & Culture'
+        }
+
+        for s_id, scenario in WORD_CONNECTIONS_CATALOG.items():
+            self.assertEqual(scenario['scenario_id'], s_id)
+            self.assertIn(scenario['theme'], approved_themes)
+            self.assertTrue(scenario['prompt'])
+            self.assertTrue(scenario['concept'])
+            self.assertTrue(scenario['contextual_clue'])
+            self.assertTrue(scenario['target_word_id'])
+            self.assertTrue(scenario['target_word'])
+            self.assertTrue(scenario['explanation'])
+
+            t_id = scenario['target_word_id']
+            t_word = scenario['target_word']
+
+            for diff in range(1, 6):
+                distractors = scenario['distractors'].get(diff, [])
+                expected_distractors = 3 if diff in (1, 2) else (4 if diff in (3, 4) else 5)
+                self.assertEqual(
+                    len(distractors),
+                    expected_distractors,
+                    f"Scenario {s_id} Level {diff} must have {expected_distractors} distractors"
+                )
+
+                d_ids = [d[0] for d in distractors]
+                d_words = [d[1] for d in distractors]
+
+                self.assertNotIn(t_id, d_ids, f"Target ID {t_id} cannot be in distractors for {s_id} L{diff}")
+                self.assertNotIn(t_word, d_words, f"Target word {t_word} cannot be in distractors for {s_id} L{diff}")
+                self.assertEqual(len(d_ids), len(set(d_ids)), f"Duplicate distractor IDs in {s_id} L{diff}")
+
+    def test_instructions(self):
+        """Verifies elder-friendly 4-step instructions."""
+        instructions = WordConnectionsEngine.get_instructions()
+        self.assertEqual(len(instructions), 4)
+        for i, step in enumerate(instructions, 1):
+            self.assertEqual(step['number'], i)
+            self.assertTrue(step['title'])
+            self.assertTrue(step['description'])
+
+    def test_difficulty_choice_counts(self):
+        """Verifies choice counts across all 5 difficulty tiers (Level 1: 4, Level 2: 4, Level 3: 5, Level 4: 5, Level 5: 6)."""
+        expected_counts = {1: 4, 2: 4, 3: 5, 4: 5, 5: 6}
+        for diff, count in expected_counts.items():
+            plan = WordConnectionsEngine.get_session_plan(session=None, difficulty=diff)
+            self.assertEqual(len(plan), 3)
+            for r in range(1, 4):
+                round_plan = plan[r]
+                self.assertEqual(len(round_plan['choices']), count)
+                self.assertEqual(len(round_plan['choice_ids']), count)
+                self.assertEqual(len(round_plan['distractor_ids']), count - 1)
+                t_id = round_plan['target_word_id']
+                self.assertIn(t_id, round_plan['choice_ids'])
+                self.assertEqual(round_plan['choice_ids'].count(t_id), 1)
+                self.assertNotIn(t_id, round_plan['distractor_ids'])
+
+    def test_session_plan_determinism_and_distinct_scenarios(self):
+        """Confirms identical session and difficulty produce an identical plan and distinct scenarios."""
+        class MockSession:
+            id = 77
+            difficulty = 3
+
+        session = MockSession()
+        plan1 = WordConnectionsEngine.get_session_plan(session=session)
+        plan2 = WordConnectionsEngine.get_session_plan(session=session)
+
+        # Scenarios across rounds 1, 2, 3 must be distinct
+        scenarios = [plan1[r]['scenario_id'] for r in range(1, 4)]
+        self.assertEqual(len(set(scenarios)), 3)
+
+        for r in range(1, 4):
+            self.assertEqual(plan1[r]['scenario_id'], plan2[r]['scenario_id'])
+            self.assertEqual(plan1[r]['target_word_id'], plan2[r]['target_word_id'])
+            self.assertEqual(plan1[r]['choice_ids'], plan2[r]['choice_ids'])
+
+    def test_evaluate_round_correct(self):
+        """Selecting target word yields is_correct=True, score=1, mistake_count=0, success tone."""
+        round_data = WordConnectionsEngine.get_round_data(1)
+        target_id = round_data['target_word_id']
+
+        eval_res = WordConnectionsEngine.evaluate_round(1, [target_id], response_time_ms=2100)
+        self.assertTrue(eval_res['is_correct'])
+        self.assertEqual(eval_res['score'], 1)
+        self.assertEqual(eval_res['max_score'], 1)
+        self.assertEqual(eval_res['mistake_count'], 0)
+        self.assertEqual(eval_res['correct_ids'], [target_id])
+        self.assertEqual(eval_res['distractor_ids'], [])
+        self.assertEqual(eval_res['feedback_tone'], 'success')
+        self.assertIn("Wonderful!", eval_res['feedback_message'])
+
+    def test_evaluate_round_incorrect(self):
+        """Selecting a distractor yields is_correct=False, score=0, mistake_count=1, encouraging tone."""
+        round_data = WordConnectionsEngine.get_round_data(1)
+        distractor_id = round_data['distractor_ids'][0]
+
+        eval_res = WordConnectionsEngine.evaluate_round(1, [distractor_id], response_time_ms=2800)
+        self.assertFalse(eval_res['is_correct'])
+        self.assertEqual(eval_res['score'], 0)
+        self.assertEqual(eval_res['max_score'], 1)
+        self.assertEqual(eval_res['mistake_count'], 1)
+        self.assertEqual(eval_res['correct_ids'], [])
+        self.assertEqual(eval_res['distractor_ids'], [distractor_id])
+        self.assertEqual(eval_res['missed_ids'], [round_data['target_word_id']])
+        self.assertEqual(eval_res['feedback_tone'], 'encouraging')
+        self.assertIn("Good effort!", eval_res['feedback_message'])
+
+    def test_evaluate_round_empty_alien_or_multiple(self):
+        """Empty, alien, or multiple IDs are safely evaluated as incorrect."""
+        # Empty
+        eval_empty = WordConnectionsEngine.evaluate_round(1, [], response_time_ms=1000)
+        self.assertFalse(eval_empty['is_correct'])
+        self.assertEqual(eval_empty['score'], 0)
+        self.assertEqual(eval_empty['mistake_count'], 1)
+
+        # Alien
+        eval_alien = WordConnectionsEngine.evaluate_round(1, ['alien_word_id_999'], response_time_ms=1000)
+        self.assertFalse(eval_alien['is_correct'])
+        self.assertEqual(eval_alien['score'], 0)
+
+        # Multiple
+        round_data = WordConnectionsEngine.get_round_data(1)
+        t_id = round_data['target_word_id']
+        d_id = round_data['distractor_ids'][0]
+        eval_multi = WordConnectionsEngine.evaluate_round(1, [t_id, d_id], response_time_ms=1000)
+        self.assertFalse(eval_multi['is_correct'])
+        self.assertEqual(eval_multi['score'], 0)
+
+
+class WordConnectionsSessionFlowTests(TestCase):
+    """Integration tests for Word Connections session lifecycle, security, telemetry, and caregiver analytics."""
+
+    def setUp(self):
+        self.member = CustomUser.objects.create_user(
+            username='player_words',
+            email='pw@example.com',
+            password='Password123!',
+            role=Role.PATIENT,
+            first_name='Arthur',
+            last_name='Dent'
+        )
+        self.caregiver = CustomUser.objects.create_user(
+            username='caregiver_words',
+            email='cw@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER,
+            first_name='Trillian',
+            last_name='Astra'
+        )
+        CaregiverMemberRelationship.objects.create(
+            caregiver=self.caregiver,
+            member=self.member,
+            is_active=True
+        )
+        self.game = Game.objects.get(slug='word-connections')
+
+    def test_patient_can_start_word_connections_session(self):
+        """Patient can initiate Word Connections session with chosen difficulty."""
+        self.client.login(username='player_words', password='Password123!')
+        res = self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 4}
+        )
+        self.assertEqual(res.status_code, 302)
+
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        self.assertEqual(session.difficulty, 4)
+        self.assertEqual(session.status, GameSession.Status.IN_PROGRESS)
+        self.assertEqual(session.score, 0)
+        self.assertEqual(session.max_score, 3)
+        self.assertEqual(session.accuracy, Decimal('0.00'))
+
+    def test_caregiver_blocked_from_playing(self):
+        """Caregiver cannot directly start or play Word Connections."""
+        self.client.login(username='caregiver_words', password='Password123!')
+        res = self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 1}
+        )
+        self.assertEqual(res.status_code, 403)
+
+    def test_gameplay_view_renders_word_connections(self):
+        """Active gameplay delivers word_connections.html with concept card and choices."""
+        self.client.login(username='player_words', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 2}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'games/word_connections.html')
+        self.assertContains(res, 'Word Connections')
+        self.assertContains(res, 'Central Concept')
+        self.assertContains(res, 'Select the Matching Word:')
+        self.assertContains(res, 'Confirm My Selection')
+
+    def test_full_three_round_gameplay_and_scoring(self):
+        """Plays 3 rounds (2 correct, 1 incorrect), finalizes session, verifies score=2/3 and accuracy=66.67%."""
+        self.client.login(username='player_words', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = WordConnectionsEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_word_id']
+        t2 = plan[2]['target_word_id']
+        d3 = plan[3]['distractor_ids'][0]
+
+        # Round 1 (Correct)
+        res1 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 2000}),
+            content_type='application/json'
+        )
+        self.assertEqual(res1.status_code, 200)
+        data1 = res1.json()
+        self.assertTrue(data1['evaluation']['is_correct'])
+        self.assertTrue(data1['has_next_round'])
+        self.assertEqual(data1['next_round_number'], 2)
+
+        # Round 2 (Correct)
+        res2 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 2, 'selected_ids': [t2], 'response_time_ms': 2200}),
+            content_type='application/json'
+        )
+        self.assertEqual(res2.status_code, 200)
+        data2 = res2.json()
+        self.assertTrue(data2['evaluation']['is_correct'])
+        self.assertTrue(data2['has_next_round'])
+        self.assertEqual(data2['next_round_number'], 3)
+
+        # Round 3 (Incorrect)
+        res3 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 3, 'selected_ids': [d3], 'response_time_ms': 2600}),
+            content_type='application/json'
+        )
+        self.assertEqual(res3.status_code, 200)
+        data3 = res3.json()
+        self.assertFalse(data3['evaluation']['is_correct'])
+        self.assertFalse(data3['has_next_round'])
+
+        # Finalize session
+        comp_res = self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+        self.assertEqual(comp_res.status_code, 200)
+
+        # Verify database metrics
+        session.refresh_from_db()
+        self.assertEqual(session.status, GameSession.Status.COMPLETED)
+        self.assertEqual(session.score, 2)
+        self.assertEqual(session.max_score, 3)
+        self.assertEqual(session.accuracy, Decimal('66.67'))
+        self.assertEqual(session.rounds.count(), 3)
+        self.assertEqual(session.total_time_ms, 6800)
+
+        # Check results view
+        results_res = self.client.get(reverse('games:results', kwargs={'session_id': session.id}))
+        self.assertEqual(results_res.status_code, 200)
+        self.assertContains(results_res, 'Connections Made')
+        self.assertContains(results_res, '✓ Connection Identified')
+
+    def test_duplicate_submission_blocked(self):
+        """Submitting round 1 twice triggers a validation error (HTTP 400)."""
+        self.client.login(username='player_words', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = WordConnectionsEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_word_id']
+
+        res1 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res1.status_code, 200)
+
+        # Duplicate submission
+        res2 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res2.status_code, 400)
+
+    def test_tamper_rejection_on_completed_session(self):
+        """Cannot submit rounds to an already finalized session."""
+        self.client.login(username='player_words', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = WordConnectionsEngine.get_session_plan(session=session)
+        for r in range(1, 4):
+            t = plan[r]['target_word_id']
+            self.client.post(
+                reverse('games:submit_round', kwargs={'session_id': session.id}),
+                data=json.dumps({'round_number': r, 'selected_ids': [t], 'response_time_ms': 1000}),
+                content_type='application/json'
+            )
+        self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+
+        tamper_res = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': ['yeast'], 'response_time_ms': 1000}),
+            content_type='application/json'
+        )
+        self.assertEqual(tamper_res.status_code, 400)
+
+    def test_premature_completion_rejected(self):
+        """Cannot finalize session before all 3 rounds are submitted."""
+        self.client.login(username='player_words', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = WordConnectionsEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_word_id']
+
+        self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+
+        comp_res = self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+        self.assertEqual(comp_res.status_code, 400)
+
+    def test_privacy_telemetry_stimulus_data(self):
+        """Confirms stimulus_data contains only scenario_id, target_word_id, distractor_word_ids, choice_word_ids."""
+        self.client.login(username='player_words', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 3}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = WordConnectionsEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_word_id']
+
+        sub_res = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1900}),
+            content_type='application/json'
+        )
+        self.assertEqual(sub_res.status_code, 200)
+
+        round_obj = session.rounds.get(round_number=1)
+        stimulus = round_obj.stimulus_data
+
+        # Verify key presence and structure
+        self.assertIn('scenario_id', stimulus)
+        self.assertIn('target_word_id', stimulus)
+        self.assertEqual(stimulus['target_word_id'], t1)
+        self.assertIn('distractor_word_ids', stimulus)
+        self.assertIn('choice_word_ids', stimulus)
+        self.assertEqual(len(stimulus['choice_word_ids']), 5)  # Diff 3 has 5 choices
+
+        # Verify absence of personal or HTML presentation data
+        self.assertNotIn('user_id', stimulus)
+        self.assertNotIn('username', stimulus)
+        self.assertNotIn('explanation', stimulus)
+        self.assertNotIn('contextual_clue', stimulus)
+        self.assertNotIn('html', stimulus)
+
+        # Expected and actual response telemetry
+        self.assertEqual(round_obj.expected_response, {'target_ids': [t1]})
+        self.assertEqual(round_obj.actual_response['selected_ids'], [t1])
+        self.assertEqual(round_obj.actual_response['correct_ids'], [t1])
+        self.assertTrue(round_obj.is_correct)
+
+    def test_caregiver_dashboard_reflects_word_connections(self):
+        """Verifies that completed Word Connections games appear under 'Semantic Memory' in Caregiver Dashboard."""
+        self.client.login(username='player_words', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 5}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = WordConnectionsEngine.get_session_plan(session=session)
+        for r in range(1, 4):
+            t = plan[r]['target_word_id']
+            self.client.post(
+                reverse('games:submit_round', kwargs={'session_id': session.id}),
+                data=json.dumps({'round_number': r, 'selected_ids': [t], 'response_time_ms': 2400}),
+                content_type='application/json'
+            )
+        self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+
+        dashboard_data = get_caregiver_dashboard_data(self.caregiver, member_id=self.member.id)
+        wc_metrics = [g for g in dashboard_data['games_performance'] if g['slug'] == 'word-connections'][0]
+
+        self.assertTrue(wc_metrics['is_active'])
+        self.assertEqual(wc_metrics['domain'], 'Semantic Memory')
+        self.assertEqual(wc_metrics['completed_count'], 1)
+        self.assertEqual(wc_metrics['current_difficulty'], 5)
+        self.assertEqual(wc_metrics['avg_accuracy'], 100.0)
+        self.assertEqual(wc_metrics['avg_response_time_ms'], 2400)

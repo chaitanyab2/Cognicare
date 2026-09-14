@@ -1068,12 +1068,594 @@ class FocusFinderEngine:
         }
 
 
+
+WORD_CONNECTIONS_CATALOG = {
+    'baking_bread': {
+        'scenario_id': 'baking_bread',
+        'theme': 'Food & Kitchen',
+        'prompt': 'Which item is essential for making traditional dough rise?',
+        'concept': 'Baking Bread',
+        'contextual_clue': 'Think of the natural ingredient that creates warm, airy loaves.',
+        'target_word_id': 'yeast',
+        'target_word': 'Yeast',
+        'distractors': {
+            1: [('teacup', 'Teacup'), ('hammer', 'Hammer'), ('umbrella', 'Umbrella')],
+            2: [('frying_pan', 'Frying Pan'), ('refrigerator', 'Refrigerator'), ('blender', 'Blender')],
+            3: [('honey', 'Honey'), ('vinegar', 'Vinegar'), ('olive_oil', 'Olive Oil'), ('cinnamon', 'Cinnamon')],
+            4: [('cornstarch', 'Cornstarch'), ('gelatin', 'Gelatin'), ('cocoa', 'Cocoa Powder'), ('vanilla', 'Vanilla')],
+            5: [('baking_tin', 'Baking Tin'), ('rolling_pin', 'Rolling Pin'), ('bread_knife', 'Bread Knife'), ('cooling_rack', 'Cooling Rack'), ('apron', 'Kitchen Apron')],
+        },
+        'explanation': 'Yeast is the living leavening agent that ferments and makes traditional bread dough rise.',
+    },
+    'sewing_basket': {
+        'scenario_id': 'sewing_basket',
+        'theme': 'Crafts & Trades',
+        'prompt': 'Which tool is worn on the fingertip to push needles safely?',
+        'concept': 'Sewing Basket',
+        'contextual_clue': 'A small metal shield used when hand-stitching thick fabric.',
+        'target_word_id': 'thimble',
+        'target_word': 'Thimble',
+        'distractors': {
+            1: [('garden_rake', 'Garden Rake'), ('alarm_clock', 'Alarm Clock'), ('sailboat', 'Sailboat')],
+            2: [('teaspoon', 'Teaspoon'), ('doorbell', 'Doorbell'), ('hairbrush', 'Hairbrush')],
+            3: [('safety_pin', 'Safety Pin'), ('tape_measure', 'Tape Measure'), ('cushion', 'Pin Cushion'), ('button', 'Spare Button')],
+            4: [('embroidery_hoop', 'Embroidery Hoop'), ('seam_ripper', 'Seam Ripper'), ('bobbin', 'Bobbin'), ('tailors_chalk', "Tailor's Chalk")],
+            5: [('pinking_shears', 'Pinking Shears'), ('needle_threader', 'Needle Threader'), ('measuring_gauge', 'Sewing Gauge'), ('tracing_wheel', 'Tracing Wheel'), ('bodkin', 'Bodkin')],
+        },
+        'explanation': 'A thimble is worn over the fingertip to shield it while pushing a needle through tough cloth.',
+    },
+    'morning_gardening': {
+        'scenario_id': 'morning_gardening',
+        'theme': 'Garden & Nature',
+        'prompt': 'Which vessel is traditionally used to sprinkle water gently on flowerbeds?',
+        'concept': 'Tending the Garden',
+        'contextual_clue': 'A handheld container with a spout and perforated rose.',
+        'target_word_id': 'watering_can',
+        'target_word': 'Watering Can',
+        'distractors': {
+            1: [('typewriter', 'Typewriter'), ('pillowcase', 'Pillowcase'), ('violin', 'Violin')],
+            2: [('bookshelf', 'Bookshelf'), ('armchair', 'Armchair'), ('tea_kettle', 'Tea Kettle')],
+            3: [('flower_pot', 'Flower Pot'), ('garden_trowel', 'Garden Trowel'), ('pruning_shears', 'Pruning Shears'), ('seed_packet', 'Seed Packet')],
+            4: [('wheelbarrow', 'Wheelbarrow'), ('garden_kneeler', 'Garden Kneeler'), ('trellis', 'Plant Trellis'), ('compost_bin', 'Compost Bin')],
+            5: [('sprinkler_head', 'Lawn Sprinkler'), ('hose_nozzle', 'Hose Nozzle'), ('rain_gauge', 'Rain Gauge'), ('soil_scoop', 'Soil Scoop'), ('plant_mister', 'Glass Mister')],
+        },
+        'explanation': 'A watering can is designed specifically to carry and sprinkle water gently onto delicate plants.',
+    },
+    'letter_writing': {
+        'scenario_id': 'letter_writing',
+        'theme': 'Daily Routines',
+        'prompt': 'Which item is affixed to an envelope so postal carriers can deliver it?',
+        'concept': 'Sending a Letter',
+        'contextual_clue': 'A small gummed paper receipt showing postal payment.',
+        'target_word_id': 'postage_stamp',
+        'target_word': 'Postage Stamp',
+        'distractors': {
+            1: [('toaster', 'Toaster'), ('rain_boots', 'Rain Boots'), ('bicycle', 'Bicycle')],
+            2: [('paper_clip', 'Paper Clip'), ('pencil_sharpener', 'Pencil Sharpener'), ('bookmark', 'Bookmark')],
+            3: [('fountain_pen', 'Fountain Pen'), ('writing_pad', 'Writing Pad'), ('envelope', 'Postal Envelope'), ('sealing_wax', 'Sealing Wax')],
+            4: [('rubber_stamp', 'Rubber Date Stamp'), ('blotting_paper', 'Blotting Paper'), ('letter_opener', 'Letter Opener'), ('address_book', 'Address Book')],
+            5: [('postcard', 'Picture Postcard'), ('airmail_sticker', 'Airmail Label'), ('stationery_box', 'Stationery Box'), ('pen_holder', 'Wooden Pen Stand'), ('wax_seal_stamp', 'Embossing Seal')],
+        },
+        'explanation': 'A postage stamp is the official paper token affixed to an envelope confirming postal delivery fees.',
+    },
+    'afternoon_tea': {
+        'scenario_id': 'afternoon_tea',
+        'theme': 'Food & Kitchen',
+        'prompt': 'Which utensil is used to hold loose tea leaves inside hot water while steeping?',
+        'concept': 'Afternoon Tea',
+        'contextual_clue': 'A small mesh sphere or perforated basket placed in the cup or pot.',
+        'target_word_id': 'tea_infuser',
+        'target_word': 'Tea Infuser',
+        'distractors': {
+            1: [('garden_rake', 'Garden Rake'), ('flashlight', 'Flashlight'), ('telescope', 'Telescope')],
+            2: [('soup_ladle', 'Soup Ladle'), ('rolling_pin', 'Rolling Pin'), ('breadbox', 'Breadbox')],
+            3: [('teacup', 'Teacup'), ('sugar_bowl', 'Sugar Bowl'), ('milk_pitcher', 'Milk Pitcher'), ('tea_cosy', 'Tea Cosy')],
+            4: [('tea_tray', 'Serving Tray'), ('honey_dipper', 'Honey Dipper'), ('cake_stand', 'Cake Stand'), ('biscuit_tin', 'Biscuit Tin')],
+            5: [('tea_strainer', 'Tea Strainer'), ('tea_caddy', 'Tea Caddy'), ('lemon_fork', 'Lemon Fork'), ('sugar_tongs', 'Sugar Tongs'), ('slop_bowl', 'Tea Slop Bowl')],
+        },
+        'explanation': 'A tea infuser holds dried tea leaves securely while allowing boiling water to circulate and steep.',
+    },
+    'rainy_weather': {
+        'scenario_id': 'rainy_weather',
+        'theme': 'Nature & Seasons',
+        'prompt': 'Which protective item unfolds overhead to keep rain showers off?',
+        'concept': 'Rainy Afternoon',
+        'contextual_clue': 'A portable fabric canopy on ribs carried when dark clouds gather.',
+        'target_word_id': 'umbrella',
+        'target_word': 'Umbrella',
+        'distractors': {
+            1: [('harmonica', 'Harmonica'), ('desk_lamp', 'Desk Lamp'), ('flowerbed', 'Flowerbed')],
+            2: [('beach_towel', 'Beach Towel'), ('sunhat', 'Straw Sunhat'), ('sunglasses', 'Sunglasses')],
+            3: [('waterproof_boots', 'Rain Boots'), ('warm_scarf', 'Warm Scarf'), ('woolen_mittens', 'Woolen Mittens'), ('trenchcoat', 'Trenchcoat')],
+            4: [('storm_lantern', 'Storm Lantern'), ('doormat', 'Mud Mat'), ('galoshes', 'Rubber Galoshes'), ('rain_gauge', 'Outdoor Rain Gauge')],
+            5: [('umbrella_stand', 'Hall Umbrella Stand'), ('windbreaker', 'Windbreaker Jacket'), ('hatbox', 'Felt Hatbox'), ('walking_stick', 'Wooden Cane'), ('waterproof_hat', 'Souwester Hat')],
+        },
+        'explanation': 'An umbrella is designed specifically to open overhead and shield a person from falling rain.',
+    },
+    'carpentry_bench': {
+        'scenario_id': 'carpentry_bench',
+        'theme': 'Crafts & Trades',
+        'prompt': 'Which hand tool is pushed along rough wood boards to shave them smooth and flat?',
+        'concept': 'Woodworking Bench',
+        'contextual_clue': 'A block tool with a sharp angled iron blade underneath.',
+        'target_word_id': 'hand_plane',
+        'target_word': 'Hand Plane',
+        'distractors': {
+            1: [('telephone', 'Telephone'), ('pillow', 'Bed Pillow'), ('cookbook', 'Cookbook')],
+            2: [('garden_hose', 'Garden Hose'), ('frying_pan', 'Frying Pan'), ('washcloth', 'Washcloth')],
+            3: [('claw_hammer', 'Claw Hammer'), ('handsaw', 'Handsaw'), ('tape_measure', 'Measuring Tape'), ('wood_glue', 'Wood Glue')],
+            4: [('wood_chisel', 'Wood Chisel'), ('try_square', 'Carpenter Square'), ('bench_vise', 'Bench Vise'), ('sandpaper', 'Sandpaper Sheet')],
+            5: [('marking_gauge', 'Marking Gauge'), ('spoke_shave', 'Spokeshave'), ('draw_knife', 'Drawknife'), ('coping_saw', 'Coping Saw'), ('wood_rasp', 'Cabinet Rasp')],
+        },
+        'explanation': 'A hand plane is pushed across timber surfaces to shave off thin curls and create a true, smooth plane.',
+    },
+    'autumn_fireplace': {
+        'scenario_id': 'autumn_fireplace',
+        'theme': 'Home & Hearth',
+        'prompt': 'Which hearth tool is squeezed by hand to blow air and revive fading embers?',
+        'concept': 'Living Room Fireplace',
+        'contextual_clue': 'An accordion-like wooden tool with leather sides and a brass nozzle.',
+        'target_word_id': 'fireplace_bellows',
+        'target_word': 'Fireplace Bellows',
+        'distractors': {
+            1: [('wristwatch', 'Wristwatch'), ('watering_can', 'Watering Can'), ('paint_brush', 'Paint Brush')],
+            2: [('dustpan', 'Dustpan'), ('window_curtain', 'Window Curtain'), ('carpet_sweeper', 'Carpet Sweeper')],
+            3: [('iron_poker', 'Fire Poker'), ('log_grate', 'Hearth Grate'), ('kindling_bucket', 'Kindling Bucket'), ('spark_screen', 'Firescreen')],
+            4: [('hearth_shovel', 'Ash Shovel'), ('fire_tongs', 'Log Tongs'), ('hearth_broom', 'Ash Broom'), ('log_basket', 'Firewood Basket')],
+            5: [('andiron', 'Brass Andiron'), ('fender', 'Hearth Fender'), ('chimney_cap', 'Chimney Flue'), ('fire_starter', 'Flint Striker'), ('coal_scuttle', 'Coal Scuttle')],
+        },
+        'explanation': 'Fireplace bellows pump a concentrated blast of fresh air into the coals to kindle and feed the flames.',
+    },
+    'bedtime_routine': {
+        'scenario_id': 'bedtime_routine',
+        'theme': 'Daily Routines',
+        'prompt': 'Which soft item filled with feathers or wool supports your head through the night?',
+        'concept': 'Evening Bedtime',
+        'contextual_clue': 'A comfortable resting cushion dressed in a clean cotton slip.',
+        'target_word_id': 'bed_pillow',
+        'target_word': 'Bed Pillow',
+        'distractors': {
+            1: [('watering_can', 'Watering Can'), ('lawnmower', 'Lawnmower'), ('bicycle_pump', 'Bicycle Pump')],
+            2: [('dinner_plate', 'Dinner Plate'), ('soup_spoon', 'Soup Spoon'), ('kitchen_clock', 'Kitchen Clock')],
+            3: [('bedside_lamp', 'Bedside Lamp'), ('warm_quilt', 'Warm Quilt'), ('alarm_clock', 'Alarm Clock'), ('slippers', 'House Slippers')],
+            4: [('woolen_blanket', 'Woolen Blanket'), ('mattress_pad', 'Mattress Pad'), ('nightstand', 'Wooden Nightstand'), ('hot_water_bottle', 'Hot Water Bottle')],
+            5: [('bolster_cushion', 'Bolster Cushion'), ('bedspread', 'Linen Bedspread'), ('feather_duvet', 'Feather Duvet'), ('sleep_mask', 'Silk Eye Mask'), ('valance_sheet', 'Bed Skirt')],
+        },
+        'explanation': 'A bed pillow provides head and neck support for restful sleep throughout the night.',
+    },
+    'baking_apple_pie': {
+        'scenario_id': 'baking_apple_pie',
+        'theme': 'Food & Kitchen',
+        'prompt': 'Which aromatic sweet brown spice is traditionally sprinkled over baking apples?',
+        'concept': 'Apple Pie Baking',
+        'contextual_clue': 'A warm ground bark spice fragrant with comforting holiday aromas.',
+        'target_word_id': 'cinnamon',
+        'target_word': 'Ground Cinnamon',
+        'distractors': {
+            1: [('roller_skate', 'Roller Skate'), ('harmonica', 'Harmonica'), ('birdcage', 'Birdcage')],
+            2: [('black_pepper', 'Black Pepper'), ('garlic_salt', 'Garlic Salt'), ('mustard_seed', 'Mustard Seed')],
+            3: [('cane_sugar', 'Cane Sugar'), ('unsalted_butter', 'Unsalted Butter'), ('lemon_juice', 'Lemon Juice'), ('pastry_flour', 'Pastry Flour')],
+            4: [('ground_nutmeg', 'Ground Nutmeg'), ('allspice', 'Ground Allspice'), ('ground_cloves', 'Ground Cloves'), ('vanilla_pod', 'Vanilla Pod')],
+            5: [('pie_dish', 'Ceramic Pie Dish'), ('pastry_brush', 'Pastry Brush'), ('pie_crust_shield', 'Pie Crust Shield'), ('dough_blender', 'Pastry Blender'), ('apple_peeler', 'Apple Corer')],
+        },
+        'explanation': 'Cinnamon is the classic warm spice paired with apples in traditional homemade pies.',
+    },
+    'knitting_sweaters': {
+        'scenario_id': 'knitting_sweaters',
+        'theme': 'Crafts & Trades',
+        'prompt': 'Which material wound into soft skeins or balls is knitted into warm garments?',
+        'concept': 'Knitting a Warm Sweater',
+        'contextual_clue': 'Spun strands of wool or cotton pulled loop by loop onto needles.',
+        'target_word_id': 'knitting_yarn',
+        'target_word': 'Spun Yarn',
+        'distractors': {
+            1: [('garden_rake', 'Garden Rake'), ('typewriter', 'Typewriter'), ('pocket_knife', 'Pocket Knife')],
+            2: [('fishing_line', 'Fishing Line'), ('electrical_wire', 'Copper Wire'), ('twine', 'Garden Twine')],
+            3: [('knitting_needles', 'Knitting Needles'), ('measuring_tape', 'Measuring Tape'), ('stitch_markers', 'Stitch Markers'), ('tapestry_needle', 'Tapestry Needle')],
+            4: [('yarn_bowl', 'Ceramic Yarn Bowl'), ('row_counter', 'Row Counter'), ('stitch_holder', 'Stitch Holder'), ('crochet_hook', 'Crochet Hook')],
+            5: [('skein_winder', 'Ball Winder'), ('yarn_swift', 'Wooden Yarn Swift'), ('blocking_mats', 'Blocking Board'), ('gauge_ruler', 'Needle Gauge'), ('yarn_gauge', 'Tension Square')],
+        },
+        'explanation': 'Spun yarn is the primary fibrous material knitted with needles to form blankets and sweaters.',
+    },
+    'morning_coffee': {
+        'scenario_id': 'morning_coffee',
+        'theme': 'Daily Routines',
+        'prompt': 'Which countertop appliance uses burrs or blades to crush whole roasted coffee beans?',
+        'concept': 'Fresh Morning Coffee',
+        'contextual_clue': 'A mill used to turn whole aromatic beans into grounds before brewing.',
+        'target_word_id': 'coffee_grinder',
+        'target_word': 'Coffee Grinder',
+        'distractors': {
+            1: [('garden_spade', 'Garden Spade'), ('sewing_needle', 'Sewing Needle'), ('binoculars', 'Binoculars')],
+            2: [('toaster', 'Bread Toaster'), ('waffle_iron', 'Waffle Iron'), ('can_opener', 'Can Opener')],
+            3: [('coffee_mug', 'Ceramic Mug'), ('french_press', 'French Press'), ('coffee_pot', 'Glass Coffee Pot'), ('paper_filter', 'Paper Filter')],
+            4: [('espresso_tamper', 'Espresso Tamper'), ('milk_frother', 'Milk Frother'), ('water_kettle', 'Pour-Over Kettle'), ('ceramic_dripper', 'Coffee Dripper')],
+            5: [('beans_canister', 'Beans Canister'), ('coffee_scale', 'Digital Coffee Scale'), ('measuring_scoop', 'Coffee Scoop'), ('carafe_warmer', 'Carafe Warmer'), ('filter_stand', 'Filter Holder')],
+        },
+        'explanation': 'A coffee grinder crushes whole roasted beans into fresh grounds for brewing.',
+    },
+    'visiting_library': {
+        'scenario_id': 'visiting_library',
+        'theme': 'Community & Culture',
+        'prompt': 'Which thin card or ribbon slips between pages to save your reading place?',
+        'concept': 'A Quiet Afternoon at the Library',
+        'contextual_clue': 'A gentle paper or ribbon keeper tucked inside a book.',
+        'target_word_id': 'bookmark',
+        'target_word': 'Bookmark',
+        'distractors': {
+            1: [('rolling_pin', 'Rolling Pin'), ('garden_hose', 'Garden Hose'), ('tea_kettle', 'Tea Kettle')],
+            2: [('pencil_sharpener', 'Pencil Sharpener'), ('desk_ruler', 'Wooden Ruler'), ('paperweight', 'Glass Paperweight')],
+            3: [('reading_glasses', 'Reading Glasses'), ('hardcover_book', 'Hardcover Book'), ('library_card', 'Library Card'), ('desk_lamp', 'Study Lamp')],
+            4: [('bookends', 'Brass Bookends'), ('magnifying_glass', 'Magnifying Glass'), ('book_stand', 'Book Display Stand'), ('card_catalog', 'Card Catalog Drawer')],
+            5: [('bookplate', 'Ex Libris Bookplate'), ('dust_jacket', 'Book Dust Jacket'), ('ribbon_marker', 'Bound Ribbon Page Marker'), ('book_pocket', 'Checkout Pocket'), ('stamp_pad', 'Due Date Stamp')],
+        },
+        'explanation': 'A bookmark is placed between the pages of a book to preserve your reading position safely.',
+    },
+    'autumn_orchard': {
+        'scenario_id': 'autumn_orchard',
+        'theme': 'Garden & Nature',
+        'prompt': 'Which deep wooden container is traditionally used to collect harvested tree fruit?',
+        'concept': 'Autumn Apple Orchard',
+        'contextual_clue': 'A sturdy slatted box or woven vessel used during seasonal harvests.',
+        'target_word_id': 'bushel_basket',
+        'target_word': 'Bushel Basket',
+        'distractors': {
+            1: [('teacup', 'Teacup'), ('typewriter', 'Typewriter'), ('fireplace_poker', 'Fireplace Poker')],
+            2: [('dustpan', 'Dustpan'), ('breadbox', 'Breadbox'), ('shoe_rack', 'Shoe Rack')],
+            3: [('gardening_gloves', 'Gardening Gloves'), ('step_ladder', 'Step Ladder'), ('pruning_clippers', 'Pruning Clippers'), ('sun_hat', 'Canvas Sun Hat')],
+            4: [('wooden_crate', 'Storage Crate'), ('cider_jug', 'Glass Cider Jug'), ('fruit_picker_pole', 'Fruit Picker Pole'), ('orchard_tarp', 'Harvest Tarp')],
+            5: [('apple_press', 'Cider Press'), ('produce_scale', 'Hanging Produce Scale'), ('harvest_apron', 'Harvest Apron'), ('wheelbarrow', 'Garden Wheelbarrow'), ('fruit_sorter', 'Grading Sieve')],
+        },
+        'explanation': 'A bushel basket is the traditional woven container used to hold picked apples and pears in an orchard.',
+    },
+    'family_album': {
+        'scenario_id': 'family_album',
+        'theme': 'Community & Culture',
+        'prompt': 'Which small decorative paper triangles hold vintage pictures securely onto album pages?',
+        'concept': 'Family Photo Album',
+        'contextual_clue': 'Adhesive corner tabs that hold photographs without damaging delicate backing.',
+        'target_word_id': 'photo_corners',
+        'target_word': 'Photo Corners',
+        'distractors': {
+            1: [('watering_can', 'Watering Can'), ('soup_ladle', 'Soup Ladle'), ('garden_rake', 'Garden Rake')],
+            2: [('scotch_tape', 'Cellophane Tape'), ('paper_clip', 'Paper Clip'), ('rubber_band', 'Rubber Band')],
+            3: [('picture_frame', 'Picture Frame'), ('album_page', 'Black Album Page'), ('fountain_pen', 'Fountain Pen'), ('magnifying_glass', 'Magnifying Glass')],
+            4: [('tissue_interleaving', 'Glassine Tissue Sheet'), ('film_negative', 'Film Negative Sleeve'), ('keepsake_envelope', 'Keepsake Envelope'), ('scrapbook_binder', 'Leather Binder')],
+            5: [('mounting_squares', 'Mounting Squares'), ('corner_punch', 'Corner Punch'), ('archival_glue', 'Acid-Free Glue Stick'), ('labeling_tabs', 'Embossed Labeling Tape'), ('slipcase', 'Album Slipcase')],
+        },
+        'explanation': 'Photo corners are adhesive pockets that gently hold the corners of photographs onto album pages without damaging them.',
+    },
+    'shoe_polishing': {
+        'scenario_id': 'shoe_polishing',
+        'theme': 'Daily Routines',
+        'prompt': 'Which dense horsehair brush is used to buff polished leather to a lustrous shine?',
+        'concept': 'Caring for Leather Shoes',
+        'contextual_clue': 'A wooden-backed bristle brush rubbed vigorously across the shoe.',
+        'target_word_id': 'buffing_brush',
+        'target_word': 'Shoe Buffing Brush',
+        'distractors': {
+            1: [('harmonica', 'Harmonica'), ('tea_kettle', 'Tea Kettle'), ('garden_hose', 'Garden Hose')],
+            2: [('hairbrush', 'Hairbrush'), ('toothbrush', 'Toothbrush'), ('paint_brush', 'Paint Brush')],
+            3: [('shoe_polish_tin', 'Wax Polish Tin'), ('polishing_cloth', 'Cotton Buffing Rag'), ('shoe_horn', 'Brass Shoe Horn'), ('wooden_shoe_tree', 'Wooden Shoe Tree')],
+            4: [('edge_dressing', 'Sole Edge Dressing'), ('saddle_soap', 'Saddle Soap'), ('welt_brush', 'Small Welt Brush'), ('dauber_brush', 'Polish Applicator Dauber')],
+            5: [('chamois_leather', 'Chamois Leather'), ('shine_box', 'Wooden Valet Box'), ('leather_conditioner', 'Leather Balm'), ('waterproof_wax', 'Dubbin Wax'), ('heel_shifter', 'Heel Pad')],
+        },
+        'explanation': 'A shoe buffing brush made of horsehair creates friction to bring leather wax to a rich, warm shine.',
+    },
+    'flower_arranging': {
+        'scenario_id': 'flower_arranging',
+        'theme': 'Garden & Nature',
+        'prompt': 'Which decorative glass or ceramic container holds water and displays fresh cut stems?',
+        'concept': 'Arranging Fresh Flowers',
+        'contextual_clue': 'A classic table vessel designed specifically to hold fresh-cut floral bouquets.',
+        'target_word_id': 'flower_vase',
+        'target_word': 'Flower Vase',
+        'distractors': {
+            1: [('bicycle_bell', 'Bicycle Bell'), ('alarm_clock', 'Alarm Clock'), ('typewriter', 'Typewriter')],
+            2: [('soup_bowl', 'Soup Bowl'), ('coffee_mug', 'Coffee Mug'), ('water_jug', 'Water Pitcher')],
+            3: [('floral_shears', 'Floral Shears'), ('garden_twine', 'Garden Twine'), ('plant_food_packet', 'Plant Food Packet'), ('ribbon', 'Satin Ribbon')],
+            4: [('flower_frog', 'Metal Flower Frog'), ('floral_foam', 'Floral Foam Block'), ('stem_wire', 'Floral Stem Wire'), ('table_runner', 'Linen Table Runner')],
+            5: [('urn_pedestal', 'Urn Pedestal'), ('rose_stripper', 'Thorn Stripper'), ('glass_marbles', 'Vase Filler Marbles'), ('floral_tape', 'Green Stem Tape'), ('water_pipette', 'Orchid Water Tube')],
+        },
+        'explanation': 'A flower vase is the dedicated vessel used to hold water and display freshly cut floral arrangements.',
+    },
+    'picnic_lunch': {
+        'scenario_id': 'picnic_lunch',
+        'theme': 'Community & Culture',
+        'prompt': 'Which wide woven wicker container with handles and lids carries lunch into the park?',
+        'concept': 'An Afternoon Picnic',
+        'contextual_clue': 'A classic lidded hamper carried outdoors for alfresco meals.',
+        'target_word_id': 'picnic_basket',
+        'target_word': 'Picnic Basket',
+        'distractors': {
+            1: [('fireplace_poker', 'Fireplace Poker'), ('typewriter', 'Typewriter'), ('feather_pillow', 'Feather Pillow')],
+            2: [('laundry_basket', 'Laundry Basket'), ('wastepaper_basket', 'Wastepaper Basket'), ('sewing_basket', 'Sewing Basket')],
+            3: [('gingham_blanket', 'Checkered Blanket'), ('thermos_flask', 'Insulated Thermos'), ('cloth_napkins', 'Cloth Napkins'), ('sandwich_box', 'Sandwich Tin')],
+            4: [('enamel_plates', 'Enamel Camp Plates'), ('cutlery_roll', 'Cutlery Roll'), ('salt_cellar', 'Travel Salt Shaker'), ('folding_corkscrew', 'Pocket Corkscrew')],
+            5: [('picnic_rug_strap', 'Leather Blanket Carrier'), ('ice_flask', 'Cooler Flask'), ('bento_tins', 'Stacking Food Tins'), ('parasol', 'Paper Parasol'), ('canvas_cooler', 'Insulated Canvas Bag')],
+        },
+        'explanation': 'A picnic basket or wicker hamper is the traditional portable carrier for outdoor lunches and tablecloths.',
+    },
+    'winter_hearth': {
+        'scenario_id': 'winter_hearth',
+        'theme': 'Home & Hearth',
+        'prompt': 'Which small, dry twigs and wood splinters catch sparks easily to ignite large logs?',
+        'concept': 'Building a Winter Fire',
+        'contextual_clue': 'Slender dry wood used between crumpled paper and heavy firewood.',
+        'target_word_id': 'kindling',
+        'target_word': 'Dry Kindling',
+        'distractors': {
+            1: [('rubber_duck', 'Rubber Duck'), ('alarm_clock', 'Alarm Clock'), ('bicycle_helmet', 'Bicycle Helmet')],
+            2: [('dry_leaves', 'Raked Leaves'), ('sawdust', 'Sawdust'), ('newspaper', 'Old Newspaper')],
+            3: [('oak_firewood', 'Heavy Oak Logs'), ('iron_poker', 'Fire Poker'), ('fireplace_hearth', 'Stone Hearth'), ('ash_bucket', 'Ash Bucket')],
+            4: [('matches_box', 'Safety Matches'), ('fire_bellows', 'Hearth Bellows'), ('fatwood_sticks', 'Resinous Pine Sticks'), ('chimney_grate', 'Cast Iron Grate')],
+            5: [('fire_tongs', 'Log Tongs'), ('hearth_fender', 'Brass Hearth Fender'), ('birch_bark', 'Dried Birch Bark Strips'), ('spark_screen', 'Mesh Fireplace Screen'), ('ember_rake', 'Ember Rake')],
+        },
+        'explanation': 'Kindling consists of dry, thin sticks that catch fire easily and produce enough sustained heat to ignite heavy logs.',
+    },
+    'morning_shave': {
+        'scenario_id': 'morning_shave',
+        'theme': 'Daily Routines',
+        'prompt': 'Which soft bristle tool is swirled in a mug with soap to whip up rich lather?',
+        'concept': 'Traditional Morning Shave',
+        'contextual_clue': 'A wooden or resin handle with dense badger or boar hair bristles.',
+        'target_word_id': 'shaving_brush',
+        'target_word': 'Shaving Brush',
+        'distractors': {
+            1: [('garden_spade', 'Garden Spade'), ('rolling_pin', 'Rolling Pin'), ('harmonica', 'Harmonica')],
+            2: [('hairbrush', 'Hairbrush'), ('toothbrush', 'Toothbrush'), ('shoe_brush', 'Shoe Brush')],
+            3: [('safety_razor', 'Safety Razor'), ('shaving_soap', 'Shaving Soap Puck'), ('warm_towel', 'Warm Face Towel'), ('aftershave_lotion', 'Aftershave Splash')],
+            4: [('shaving_mug', 'Ceramic Shave Mug'), ('leather_strop', 'Leather Strop'), ('alum_block', 'Alum Block'), ('razor_stand', 'Chrome Razor Stand')],
+            5: [('styptic_pencil', 'Styptic Pencil'), ('shaving_scuttle', 'Hot Water Scuttle'), ('blade_dispenser', 'Razor Blade Pack'), ('pre_shave_oil', 'Pre-Shave Oil'), ('mirror_stand', 'Magnifying Shave Mirror')],
+        },
+        'explanation': 'A shaving brush whips warm water and soap into a thick, protective lather applied to the face.',
+    },
+    'pottery_wheel': {
+        'scenario_id': 'pottery_wheel',
+        'theme': 'Crafts & Trades',
+        'prompt': 'Which natural pliable earth material is shaped by hand on a spinning wheel?',
+        'concept': 'Working with Pottery',
+        'contextual_clue': 'Moist mineral soil molded into bowls and baked in a kiln.',
+        'target_word_id': 'pottery_clay',
+        'target_word': 'Pottery Clay',
+        'distractors': {
+            1: [('alarm_clock', 'Alarm Clock'), ('typewriter', 'Typewriter'), ('frying_pan', 'Frying Pan')],
+            2: [('garden_soil', 'Garden Soil'), ('sandpaper', 'Sandpaper'), ('flour_dough', 'Flour Dough')],
+            3: [('potters_wheel', "Potter's Wheel"), ('water_sponge', 'Pottery Sponge'), ('ceramic_glaze', 'Ceramic Glaze'), ('pottery_kiln', 'Firing Kiln')],
+            4: [('wire_cutter', 'Wire Clay Cutter'), ('wooden_rib', 'Shaping Rib'), ('carving_loop', 'Loop Carving Tool'), ('canvas_board', 'Wedging Board')],
+            5: [('bat_pins', 'Wheel Bat Pins'), ('slip_cup', 'Clay Slip Cup'), ('calipers', 'Pottery Calipers'), ('sculpting_needle', 'Needle Tool'), ('banding_wheel', 'Banding Wheel')],
+        },
+        'explanation': 'Clay is the natural, malleable earthen material centered and shaped by hand on the potter’s wheel.',
+    },
+    'herb_garden': {
+        'scenario_id': 'herb_garden',
+        'theme': 'Garden & Nature',
+        'prompt': 'Which fragrant needle-leafed evergreen herb is often paired with roasted potatoes?',
+        'concept': 'Kitchen Herb Garden',
+        'contextual_clue': 'A woody Mediterranean bush with pine-like aroma used in roasting.',
+        'target_word_id': 'rosemary',
+        'target_word': 'Fresh Rosemary',
+        'distractors': {
+            1: [('teacup', 'Teacup'), ('harmonica', 'Harmonica'), ('lawnmower', 'Lawnmower')],
+            2: [('pine_needle', 'Pine Needle'), ('clover', 'Clover Leaf'), ('oak_leaf', 'Oak Leaf')],
+            3: [('garden_trowel', 'Garden Trowel'), ('herb_shears', 'Herb Shears'), ('plant_marker', 'Slate Plant Marker'), ('terracotta_pot', 'Terracotta Pot')],
+            4: [('fresh_parsley', 'Fresh Parsley'), ('sweet_basil', 'Sweet Basil'), ('garden_thyme', 'Garden Thyme'), ('garden_mint', 'Spearmint')],
+            5: [('sage_leaves', 'Garden Sage'), ('french_tarragon', 'French Tarragon'), ('winter_savory', 'Winter Savory'), ('bay_laurel', 'Bay Laurel Leaves'), ('marjoram', 'Sweet Marjoram')],
+        },
+        'explanation': 'Rosemary is the aromatic, needle-leaved garden herb traditionally roasted with potatoes and meats.',
+    },
+    'sunday_baking': {
+        'scenario_id': 'sunday_baking',
+        'theme': 'Food & Kitchen',
+        'prompt': 'Which heavy wooden or marble cylinder is rolled back and forth to flatten pastry dough?',
+        'concept': 'Making Homemade Pies',
+        'contextual_clue': 'A smooth cylindrical roller with handles on both ends.',
+        'target_word_id': 'rolling_pin',
+        'target_word': 'Rolling Pin',
+        'distractors': {
+            1: [('garden_rake', 'Garden Rake'), ('telephone', 'Telephone'), ('violin', 'Violin')],
+            2: [('hammer', 'Hammer'), ('frying_pan', 'Frying Pan'), ('soup_spoon', 'Soup Spoon')],
+            3: [('pastry_board', 'Pastry Board'), ('mixing_bowl', 'Mixing Bowl'), ('measuring_cup', 'Measuring Cup'), ('pastry_cutter', 'Pastry Cutter')],
+            4: [('pie_tin', 'Pie Dish'), ('dough_scraper', 'Bench Scraper'), ('flour_sifter', 'Flour Sifter'), ('pastry_brush', 'Pastry Brush')],
+            5: [('marble_board', 'Marble Pastry Slab'), ('pie_weights', 'Ceramic Pie Weights'), ('lattice_cutter', 'Pastry Lattice Roller'), ('crust_crimper', 'Pie Crust Fluter'), ('dough_docking_tool', 'Dough Docker')],
+        },
+        'explanation': 'A rolling pin is rolled across dough to flatten it to an even, uniform thickness for pies and tarts.',
+    },
+    'evening_reading': {
+        'scenario_id': 'evening_reading',
+        'theme': 'Home & Hearth',
+        'prompt': 'Which optical instrument with framed convex glass rests on the nose to clarify small print?',
+        'concept': 'Quiet Evening Reading',
+        'contextual_clue': 'A pair of corrective lenses worn to bring book pages into sharp focus.',
+        'target_word_id': 'reading_glasses',
+        'target_word': 'Reading Glasses',
+        'distractors': {
+            1: [('garden_spade', 'Garden Spade'), ('teapot', 'Teapot'), ('rain_boots', 'Rain Boots')],
+            2: [('sunglasses', 'Sunglasses'), ('pocket_watch', 'Pocket Watch'), ('compass', 'Pocket Compass')],
+            3: [('bookmark', 'Silk Bookmark'), ('hardcover_book', 'Hardcover Book'), ('bedside_lamp', 'Bedside Lamp'), ('armchair', 'Reading Armchair')],
+            4: [('magnifying_glass', 'Handheld Magnifier'), ('eyeglass_case', 'Hard Eyeglass Case'), ('cleaning_cloth', 'Microfiber Lens Cloth'), ('book_light', 'Clip-on Book Light')],
+            5: [('bifocals', 'Bifocal Lenses'), ('pince_nez', 'Pince-Nez Spectacles'), ('opera_glasses', 'Opera Glasses'), ('spectacle_chain', 'Eyeglass Neck Cord'), ('reading_loupe', 'Jeweler Loupe')],
+        },
+        'explanation': 'Reading glasses magnify close-up printed text, making books and newspapers clear and easy to read.',
+    },
+}
+
+
+class WordConnectionsEngine:
+    """
+    Game Engine for Word Connections (Semantic Memory & Association).
+    Elder-friendly semantic recognition and contextual pairing activity
+    with deterministic scenario generation and nuanced distractors across 5 difficulty levels.
+    """
+    SLUG = 'word-connections'
+    TOTAL_ROUNDS = 3
+    TOTAL_MAX_SCORE = 3
+    TEMPLATE_NAME = 'games/word_connections.html'
+
+    CHOICE_COUNTS = {
+        1: 4,
+        2: 4,
+        3: 5,
+        4: 5,
+        5: 6,
+    }
+
+    @classmethod
+    def get_instructions(cls):
+        """
+        Elder-friendly step-by-step instructions for the Word Connections intro screen.
+        """
+        return [
+            {
+                'number': 1,
+                'title': "Read the Central Concept",
+                'description': "You will see an everyday theme or activity on the main card, along with a helpful contextual clue.",
+            },
+            {
+                'number': 2,
+                'title': "Review the Word Options",
+                'description': "Read through the word choices below at your own pace. There are no timers or rushing.",
+            },
+            {
+                'number': 3,
+                'title': "Select the Matching Word",
+                'description': "Tap the card that has the closest natural connection. You can change your choice anytime without penalty.",
+            },
+            {
+                'number': 4,
+                'title': "Confirm & Receive Gentle Feedback",
+                'description': "Press \"Confirm My Selection\" to review the connection and complete 3 pleasant rounds.",
+            },
+        ]
+
+    @classmethod
+    def get_session_plan(cls, session=None, difficulty=1):
+        """
+        Deterministically plans 3 rounds for a session.
+        Uses session ID and difficulty as seed so results are reproducible.
+        Ensures 3 distinct scenarios across rounds.
+        """
+        if session and hasattr(session, 'difficulty'):
+            diff = session.difficulty
+        else:
+            diff = difficulty
+
+        diff = max(1, min(5, diff))
+        s_id = session.id if (session and session.id) else 1
+        base_seed = s_id * 1000 + diff * 10
+        rng_session = random.Random(base_seed)
+
+        all_keys = sorted(WORD_CONNECTIONS_CATALOG.keys())
+        chosen_keys = rng_session.sample(all_keys, cls.TOTAL_ROUNDS)
+
+        plan = {}
+        for r in range(1, cls.TOTAL_ROUNDS + 1):
+            s_key = chosen_keys[r - 1]
+            scenario = WORD_CONNECTIONS_CATALOG[s_key]
+            target_id = scenario['target_word_id']
+            target_word = scenario['target_word']
+            distractors_list = scenario['distractors'].get(diff, scenario['distractors'][1])
+
+            choices = [{'id': target_id, 'word': target_word}] + [
+                {'id': d[0], 'word': d[1]} for d in distractors_list
+            ]
+            rng_round = random.Random(base_seed + r)
+            rng_round.shuffle(choices)
+
+            plan[r] = {
+                'scenario_id': s_key,
+                'theme': scenario['theme'],
+                'prompt': scenario['prompt'],
+                'concept': scenario['concept'],
+                'contextual_clue': scenario['contextual_clue'],
+                'target_word_id': target_id,
+                'target_word': target_word,
+                'target_ids': [target_id],
+                'distractor_ids': [d[0] for d in distractors_list],
+                'choices': choices,
+                'choice_ids': [c['id'] for c in choices],
+                'explanation': scenario['explanation'],
+            }
+        return plan
+
+    @classmethod
+    def get_round_data(cls, round_number, session=None):
+        if round_number not in (1, 2, 3):
+            raise ValueError(f"Invalid round number {round_number}. Max rounds is {cls.TOTAL_ROUNDS}.")
+
+        plan = cls.get_session_plan(session=session)
+        round_plan = plan[round_number]
+
+        return {
+            'round_number': round_number,
+            'total_rounds': cls.TOTAL_ROUNDS,
+            'scenario_id': round_plan['scenario_id'],
+            'theme': round_plan['theme'],
+            'prompt': round_plan['prompt'],
+            'concept': round_plan['concept'],
+            'contextual_clue': round_plan['contextual_clue'],
+            'target_word_id': round_plan['target_word_id'],
+            'target_word': round_plan['target_word'],
+            'target_ids': round_plan['target_ids'],
+            'distractor_ids': round_plan['distractor_ids'],
+            'choices': round_plan['choices'],
+            'choice_ids': round_plan['choice_ids'],
+            'explanation': round_plan['explanation'],
+        }
+
+    @classmethod
+    def evaluate_round(cls, round_number, actual_selected_ids, response_time_ms, session=None):
+        if round_number not in (1, 2, 3):
+            raise ValueError(f"Invalid round number {round_number}.")
+
+        round_data = cls.get_round_data(round_number, session=session)
+        target_id = round_data['target_ids'][0]
+        target_word = round_data['target_word']
+        explanation = round_data['explanation']
+
+        norm_selected = [str(x) for x in actual_selected_ids]
+        is_correct = (len(norm_selected) == 1 and norm_selected[0] == target_id)
+
+        if is_correct:
+            correct_ids = [target_id]
+            distractor_ids = []
+            missed_ids = []
+            mistake_count = 0
+            score = 1
+            feedback_message = f"Wonderful! {explanation}"
+            feedback_tone = "success"
+        else:
+            correct_ids = []
+            distractor_ids = norm_selected
+            missed_ids = [target_id]
+            mistake_count = 1
+            score = 0
+            feedback_message = f"Good effort! The closest connection is {target_word}. {explanation}"
+            feedback_tone = "encouraging"
+
+        return {
+            'is_correct': is_correct,
+            'score': score,
+            'max_score': 1,
+            'mistake_count': mistake_count,
+            'correct_ids': correct_ids,
+            'distractor_ids': distractor_ids,
+            'missed_ids': missed_ids,
+            'misplaced_ids': [],
+            'target_word': target_word,
+            'explanation': explanation,
+            'feedback_message': feedback_message,
+            'feedback_tone': feedback_tone,
+        }
+
+
 # Global registry of game engines for modular expansion
 GAME_ENGINES = {
     MemoryMarketEngine.SLUG: MemoryMarketEngine,
     DailyLifeJourneyEngine.SLUG: DailyLifeJourneyEngine,
     FamiliarFacesEngine.SLUG: FamiliarFacesEngine,
     FocusFinderEngine.SLUG: FocusFinderEngine,
+    WordConnectionsEngine.SLUG: WordConnectionsEngine,
 }
 
 
@@ -1159,6 +1741,13 @@ def record_round_submission(session, round_number, actual_selected_ids, response
             'distractor_ids': [item['id'] for item in round_data.get('grid_items', []) if item['id'] != round_data.get('target_ids', [''])[0]],
             'grid_item_ids': [item['id'] for item in round_data.get('grid_items', [])],
             'grid_size': round_data.get('grid_size', {'rows': 2, 'cols': 3}),
+        }
+    elif session.game.slug == 'word-connections':
+        stimulus_payload = {
+            'scenario_id': round_data.get('scenario_id', ''),
+            'target_word_id': round_data.get('target_word_id', ''),
+            'distractor_word_ids': round_data.get('distractor_ids', []),
+            'choice_word_ids': round_data.get('choice_ids', []),
         }
     else:
         stimulus_payload = round_data

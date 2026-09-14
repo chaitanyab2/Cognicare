@@ -29,7 +29,7 @@
         <!-- Summary Metric Card (Dignified and Simple) -->
         <div style="background-color: var(--color-teal-50); border: 1px solid var(--primary-border); border-radius: var(--radius-md); padding: var(--space-6); margin-bottom: var(--space-8);">
             <span style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700;">
-                {% if session.game.slug == 'memory-market' %}Items Remembered{% elif session.game.slug == 'familiar-faces' %}Familiar Faces Recognized{% elif session.game.slug == 'focus-finder' %}Targets Spotted{% else %}Steps in Natural Order{% endif %}
+                {% if session.game.slug == 'memory-market' %}Items Remembered{% elif session.game.slug == 'familiar-faces' %}Familiar Faces Recognized{% elif session.game.slug == 'focus-finder' %}Targets Spotted{% elif session.game.slug == 'word-connections' %}Connections Made{% else %}Steps in Natural Order{% endif %}
             </span>
             <div style="font-size: 3rem; font-weight: 800; color: var(--color-teal-900); line-height: 1.2; margin: var(--space-2) 0;">
                 {{ session.score }} <span style="font-size: 1.5rem; font-weight: 500; color: var(--color-slate-600);">/ {{ session.max_score }}</span>
@@ -54,7 +54,7 @@
                         <div>
                             {% if r.is_correct %}
                                 <span class="badge" style="background-color: var(--state-success-bg); color: var(--state-success-text); border: 1px solid var(--state-success-border); font-weight: 600;">
-                                    {% if session.game.slug == 'familiar-faces' %}✓ Recognized{% elif session.game.slug == 'daily-life-journey' %}✓ Perfect Order{% elif session.game.slug == 'focus-finder' %}✓ Target Found{% else %}✓ Correct{% endif %}
+                                    {% if session.game.slug == 'familiar-faces' %}✓ Recognized{% elif session.game.slug == 'daily-life-journey' %}✓ Perfect Order{% elif session.game.slug == 'focus-finder' %}✓ Target Found{% elif session.game.slug == 'word-connections' %}✓ Connection Identified{% else %}✓ Correct{% endif %}
                                 </span>
                             {% else %}
                                 <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-weight: 600;">

@@ -1076,3 +1076,134 @@ main {
         font-size: 0.85rem;
     }
 }
+
+/* ==========================================================================
+   Phase 10: Word Connections (Semantic Memory & Association) Styles
+   ========================================================================== */
+
+.concept-card {
+    background: linear-gradient(135deg, var(--color-teal-50) 0%, var(--bg-surface) 100%);
+    border: 2px solid var(--primary-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 680px;
+    margin: 0 auto var(--space-8);
+    box-shadow: var(--shadow-card);
+}
+
+.word-chip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto var(--space-8);
+}
+
+.word-card {
+    position: relative;
+    min-height: 68px;
+    padding: var(--space-4) var(--space-5);
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    outline: none;
+    text-align: left;
+}
+
+.word-card:hover {
+    border-color: var(--color-teal-600);
+    background-color: var(--color-teal-50);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+}
+
+.word-card:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.word-card.selected {
+    border-color: var(--primary-main) !important;
+    border-width: 2.5px !important;
+    background-color: var(--color-teal-50) !important;
+    box-shadow: 0 4px 14px rgba(13, 148, 136, 0.2) !important;
+    transform: translateY(-2px);
+}
+
+.word-card-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    padding-right: var(--space-2);
+}
+
+.word-card-check {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-surface);
+    color: var(--primary-main);
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.35;
+    transition: all 0.15s ease;
+}
+
+.word-card.selected .word-card-check {
+    border-color: var(--primary-main);
+    background-color: var(--primary-main);
+    color: var(--text-inverse);
+    opacity: 1;
+}
+
+.word-card-audio-btn {
+    background: none;
+    border: none;
+    color: var(--color-slate-400);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: color 0.15s ease;
+    margin-left: auto;
+    margin-top: 14px;
+}
+
+.word-card-audio-btn:hover {
+    color: var(--primary-main);
+}
+
+@media (max-width: 640px) {
+    .concept-card {
+        padding: var(--space-4) var(--space-5);
+    }
+    .word-chip-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+    .word-card {
+        min-height: 60px;
+        padding: var(--space-3) var(--space-4);
+    }
+    .word-card-text {
+        font-size: 1.1rem;
+    }
+}
