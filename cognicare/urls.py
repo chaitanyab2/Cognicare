@@ -15,6 +15,7 @@ urlpatterns = [
     path('accounts/', include('apps.accounts.urls', namespace='accounts')),
     path('games/', include('apps.games.urls', namespace='games')),
     path('memories/', include('apps.memories.urls', namespace='memories')),
+    path('routines/', include('apps.routines.urls', namespace='routines')),
     path('', lambda request: redirect('accounts:login'), name='root_redirect'),
 ]
 

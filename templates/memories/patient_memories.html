@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "My Memories" %} - Cognicare{% endblock %}
+
+{% block content %}
+<div style="max-width: 960px; margin: 0 auto;">
+    <!-- Welcoming Header -->
+    <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
+        <div>
+            <a href="{% url 'accounts:patient_portal' %}" class="btn btn-outline btn-sm" style="margin-bottom: var(--space-3);">
+                &larr; {% trans "Back to My Space" %}
+            </a>
+            <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-1);">
+                {% trans "My Cherished Memories" %}
+            </h1>
+            <p style="font-size: var(--font-size-lg); color: var(--text-secondary); margin: 0;">
+                {% trans "Take your time and revisit warm moments, family photographs, and loved ones' voices." %}
+            </p>
+        </div>
+        <div>
+            <span class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
+                {% trans "Photo Album" %}
+            </span>
+        </div>
+    </div>
+
+    {% if memories %}
+        <div class="memory-card-grid">
+            {% for mem in memories %}
+                <article class="memory-card" aria-labelledby="patient-mem-{{ mem.id }}">
+                    {% if mem.image %}
+                        <img src="{{ mem.image.url }}" alt="{{ mem.title }}" class="memory-card-media" loading="lazy">
+                    {% endif %}
+                    <div class="memory-card-content">
+                        <h2 id="patient-mem-{{ mem.id }}" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+                            {{ mem.title }}
+                        </h2>
+
+                        {% if mem.description %}
+                            <p id="desc-{{ mem.id }}" style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-4); flex-grow: 1;">
+                                {{ mem.description }}
+                            </p>
+                        {% endif %}
+
+                        {% if mem.audio_clip %}
+                            <div style="margin-bottom: var(--space-3); background: #fef3c7; padding: 10px; border-radius: var(--radius-md); border: 1px solid #fde68a;">
+                                <label style="font-size: var(--font-size-sm); color: #92400e; font-weight: 600; display: block; margin-bottom: 6px;">
+                                    🎵 {% trans "Voice Note from Family" %}
+                                </label>
+                                <audio controls style="width: 100%; height: 40px;" preload="none">
+                                    <source src="{{ mem.audio_clip.url }}">
+                                    {% trans "Your browser does not support audio playback." %}
+                                </audio>
+                            </div>
+                        {% endif %}
+
+                        <!-- On-Demand TTS Listen Control (No Autoplay) -->
+                        <div style="margin-top: auto; padding-top: var(--space-3); border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end;">
+                            <button type="button" class="btn btn-outline" style="min-height: 44px; display: inline-flex; align-items: center; gap: 8px;"
+                                    data-voice-speak="{{ mem.title }}. {{ mem.description }}"
+                                    aria-label="{% trans 'Read memory aloud' %}">
+                                <span aria-hidden="true">🔊</span>
+                                <span>{% trans "Listen" %}</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card" style="text-align: center; padding: var(--space-10) var(--space-4); background-color: var(--color-teal-50); border: 1px solid var(--primary-border); border-radius: var(--radius-lg);">
+            <div style="font-size: 3rem; margin-bottom: var(--space-3);">📷</div>
+            <h2 style="font-size: var(--font-size-xl); color: var(--color-teal-950); margin-bottom: var(--space-2);">
+                {% trans "Your photo album is ready" %}
+            </h2>
+            <p style="font-size: var(--font-size-base); color: var(--color-teal-900); max-width: 520px; margin: 0 auto var(--space-6);">
+                {% trans "Your caregiver will add family photographs and memorable moments here for you to enjoy anytime." %}
+            </p>
+            <a href="{% url 'accounts:patient_portal' %}" class="btn btn-primary" style="min-height: 44px;">
+                {% trans "Return to My Space" %}
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

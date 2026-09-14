@@ -62,9 +62,9 @@
                 </p>
             </div>
             <div>
-                <button type="button" class="btn btn-outline btn-block btn-lg" onclick="alert('Memories module will be activated in Phase 7.')" aria-label="{% trans 'View My Memories' %}">
+                <a href="{% url 'memories:patient_memories' %}" class="btn btn-primary btn-block btn-lg" aria-label="{% trans 'View My Memories' %}">
                     {% trans "View Memories" %}
-                </button>
+                </a>
             </div>
         </article>
 
@@ -85,9 +85,9 @@
                 </p>
             </div>
             <div>
-                <button type="button" class="btn btn-outline btn-block btn-lg" onclick="alert('Daily Routines will be activated in Phase 7.')" aria-label="{% trans "Check Today's Routine" %}">
+                <a href="{% url 'routines:patient_routine' %}" class="btn btn-primary btn-block btn-lg" aria-label="{% trans "Check Today's Routine" %}">
                     {% trans "View Routine" %}
-                </button>
+                </a>
             </div>
         </article>
 

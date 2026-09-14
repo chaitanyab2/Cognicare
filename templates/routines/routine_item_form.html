@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ action_title }} - Cognicare{% endblock %}
+
+{% block content %}
+<div style="max-width: 640px; margin: 0 auto; padding: var(--space-6) 0;">
+    <div style="margin-bottom: var(--space-6);">
+        <a href="{% url 'routines:edit_routine' routine.id %}" class="btn btn-outline btn-sm" style="margin-bottom: var(--space-3);">
+            &larr; {% trans "Back to Routine" %}
+        </a>
+        <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-1);">
+            {{ action_title }}
+        </h1>
+        <p style="color: var(--text-secondary); margin: 0;">
+            {% blocktrans with title=routine.title %}Routine: <strong>{{ title }}</strong>{% endblocktrans %}
+        </p>
+    </div>
+
+    <div class="card" style="padding: var(--space-6);">
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-error" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Title Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="id_title" style="font-weight: 600; color: var(--text-primary);">
+                        {% trans "Task Title" %} <span style="color: #dc2626;">*</span>
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="id_title" aria-label="{% trans 'Speak task title' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Description Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="id_description" style="font-weight: 600; color: var(--text-primary);">
+                        {% trans "Task Instructions & Details" %}
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="id_description" aria-label="{% trans 'Speak task description' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-6);">
+                <!-- Scheduled Time -->
+                <div class="form-group">
+                    <label for="id_scheduled_time" style="font-weight: 600; color: var(--text-primary); display: block; margin-bottom: var(--space-1);">
+                        {% trans "Scheduled Time (Optional)" %}
+                    </label>
+                    {{ form.scheduled_time }}
+                    <p style="font-size: var(--font-size-xs); color: var(--text-muted); margin-top: 4px;">
+                        {% trans "Leave blank for anytime today." %}
+                    </p>
+                    {% if form.scheduled_time.errors %}
+                        <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.scheduled_time.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Display Order -->
+                <div class="form-group">
+                    <label for="id_display_order" style="font-weight: 600; color: var(--text-primary); display: block; margin-bottom: var(--space-1);">
+                        {% trans "Display Order" %}
+                    </label>
+                    {{ form.display_order }}
+                    <p style="font-size: var(--font-size-xs); color: var(--text-muted); margin-top: 4px;">
+                        {% trans "Sequence number (1, 2, 3...)" %}
+                    </p>
+                    {% if form.display_order.errors %}
+                        <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.display_order.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-3);">
+                <a href="{% url 'routines:edit_routine' routine.id %}" class="btn btn-secondary" style="min-height: 44px;">
+                    {% trans "Cancel" %}
+                </a>
+                <button type="submit" class="btn btn-primary" style="min-height: 44px;">
+                    {% if is_edit %}{% trans "Save Task" %}{% else %}{% trans "Add Task" %}{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ action_title }} - Cognicare{% endblock %}
+
+{% block content %}
+<div style="max-width: 760px; margin: 0 auto; padding: var(--space-6) 0;">
+    <div style="margin-bottom: var(--space-6);">
+        <a href="{% url 'routines:manage_routines' %}?member={{ selected_member.id }}" class="btn btn-outline btn-sm" style="margin-bottom: var(--space-3);">
+            &larr; {% trans "Back to Routines" %}
+        </a>
+        <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-1);">
+            {{ action_title }}
+        </h1>
+        <p style="color: var(--text-secondary); margin: 0;">
+            {% blocktrans with name=selected_member.first_name|default:selected_member.username %}For supervised member: <strong>{{ name }}</strong>{% endblocktrans %}
+        </p>
+    </div>
+
+    <!-- Routine Metadata Form -->
+    <div class="card" style="padding: var(--space-6); margin-bottom: var(--space-6);">
+        <form method="post">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-error" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Title Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="id_title" style="font-weight: 600; color: var(--text-primary);">
+                        {% trans "Routine Title" %} <span style="color: #dc2626;">*</span>
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="id_title" aria-label="{% trans 'Speak routine title' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Description Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="id_description" style="font-weight: 600; color: var(--text-primary);">
+                        {% trans "Routine Description & Notes" %}
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="id_description" aria-label="{% trans 'Speak routine description' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: var(--space-6);">
+                <!-- Target Date -->
+                <div class="form-group">
+                    <label for="id_date" style="font-weight: 600; color: var(--text-primary); display: block; margin-bottom: var(--space-1);">
+                        {% trans "Target Date" %} <span style="color: #dc2626;">*</span>
+                    </label>
+                    {{ form.date }}
+                    {% if form.date.errors %}
+                        <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.date.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <!-- Active Status -->
+                <div class="form-group" style="display: flex; align-items: center; gap: 8px; padding-top: var(--space-6);">
+                    {{ form.is_active }}
+                    <label for="id_is_active" style="font-weight: 600; color: var(--text-primary); cursor: pointer;">
+                        {% trans "Active Routine Schedule" %}
+                    </label>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-3);">
+                <a href="{% url 'routines:manage_routines' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="min-height: 44px;">
+                    {% trans "Cancel" %}
+                </a>
+                <button type="submit" class="btn btn-primary" style="min-height: 44px;">
+                    {% if is_edit %}{% trans "Update Routine" %}{% else %}{% trans "Save & Add Items" %}{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Routine Items Section (When editing existing routine) -->
+    {% if is_edit %}
+        <div class="card" style="padding: var(--space-6);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4);">
+                <div>
+                    <h2 style="font-size: var(--font-size-xl); color: var(--text-primary); margin: 0;">
+                        {% trans "Schedule Tasks & Activities" %}
+                    </h2>
+                    <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin: 2px 0 0 0;">
+                        {% trans "Ordered activities for the member's daily rhythm." %}
+                    </p>
+                </div>
+                <a href="{% url 'routines:add_routine_item' routine.id %}" class="btn btn-primary btn-sm" style="min-height: 38px;">
+                    + {% trans "Add Task" %}
+                </a>
+            </div>
+
+            {% if items %}
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-3);">
+                    {% for item in items %}
+                        <li class="routine-item-row {% if item.is_completed %}completed{% endif %}">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center; border-radius: 50%; background: var(--color-teal-100); color: var(--color-teal-800); font-weight: 700; font-size: 0.8rem;">
+                                        {{ item.display_order }}
+                                    </span>
+                                    <strong style="font-size: var(--font-size-base); color: var(--text-primary);">
+                                        {{ item.title }}
+                                    </strong>
+                                    {% if item.is_completed %}
+                                        <span class="badge" style="background-color: #dcfce7; color: #15803d; font-size: 0.75rem;">
+                                            &#10003; {% trans "Completed" %}
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                {% if item.description %}
+                                    <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin: 4px 0 0 32px;">
+                                        {{ item.description }}
+                                    </p>
+                                {% endif %}
+                                <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin: 4px 0 0 32px;">
+                                    {% if item.scheduled_time %}
+                                        ⏰ {{ item.scheduled_time|time:"g:i A" }}
+                                    {% else %}
+                                        ⏰ {% trans "Anytime today" %}
+                                    {% endif %}
+                                    {% if item.is_completed and item.completed_at %}
+                                        &bull; {% trans "Logged at" %}: {{ item.completed_at|date:"g:i A" }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: var(--space-2); flex-shrink: 0;">
+                                <a href="{% url 'routines:edit_routine_item' item.id %}" class="btn btn-outline btn-sm" style="min-height: 36px;">
+                                    {% trans "Edit" %}
+                                </a>
+                                <a href="{% url 'routines:delete_routine_item' item.id %}" class="btn btn-secondary btn-sm" style="min-height: 36px; color: #dc2626;">
+                                    {% trans "Delete" %}
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div style="text-align: center; padding: var(--space-6) 0; color: var(--text-muted);">
+                    <p>{% trans "No tasks added to this routine yet. Click '+ Add Task' above to begin building the schedule." %}</p>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Delete Routine" %} - Cognicare{% endblock %}
+
+{% block content %}
+<div style="max-width: 540px; margin: var(--space-8) auto; padding: 0 var(--space-4);">
+    <div class="card" style="padding: var(--space-6); text-align: center;">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background-color: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto var(--space-4);">
+            ⚠️
+        </div>
+        <h1 style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+            {% trans "Delete Daily Routine?" %}
+        </h1>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+            {% blocktrans with title=routine.title %}Are you sure you want to delete the routine <strong>"{{ title }}"</strong> and all its scheduled tasks? This action cannot be undone.{% endblocktrans %}
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="display: flex; justify-content: center; gap: var(--space-3);">
+                <a href="{% url 'routines:manage_routines' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="min-height: 44px;">
+                    {% trans "Cancel" %}
+                </a>
+                <button type="submit" class="btn btn-primary" style="background-color: #dc2626; border-color: #dc2626; min-height: 44px;">
+                    {% trans "Yes, Delete" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

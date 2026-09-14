@@ -9,6 +9,8 @@ from django.db.models import Avg, Count, Q
 from django.http import Http404
 from django.utils import timezone
 
+from django.utils.translation import gettext_lazy as _
+
 from apps.accounts.models import CaregiverMemberRelationship
 from apps.games.models import Game, GameSession, GameRound
 from apps.games.services import GAME_ENGINES
@@ -16,12 +18,12 @@ from apps.routines.models import Routine
 
 
 GAME_COGNITIVE_DOMAINS = {
-    'memory-market': 'Working Memory',
-    'daily-life-journey': 'Executive Function',
-    'familiar-faces': 'Recognition Memory',
-    'focus-finder': 'Visual Attention',
-    'word-connections': 'Semantic Memory',
-    'pattern-detective': 'Reasoning & Logic',
+    'memory-market': _('Working Memory'),
+    'daily-life-journey': _('Executive Function'),
+    'familiar-faces': _('Recognition Memory'),
+    'focus-finder': _('Visual Attention'),
+    'word-connections': _('Semantic Memory'),
+    'pattern-detective': _('Reasoning & Logic'),
 }
 
 

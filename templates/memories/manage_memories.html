@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Memories" %} - Cognicare{% endblock %}
+
+{% block content %}
+<div class="caregiver-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="caregiver-sidebar-nav" aria-label="{% trans 'Caregiver Navigation' %}">
+        <h2 style="font-size: var(--font-size-base); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-3); padding-left: 8px;">
+            {% trans "Caregiver Portal" %}
+        </h2>
+        <nav>
+            <a href="{% url 'accounts:caregiver_portal' %}?member={{ selected_member.id }}" class="caregiver-nav-link">
+                <span>📊</span>
+                <span>{% trans "Analytics Dashboard" %}</span>
+            </a>
+            <a href="{% url 'memories:manage_memories' %}?member={{ selected_member.id }}" class="caregiver-nav-link active" aria-current="page">
+                <span>📷</span>
+                <span>{% trans "Memories" %}</span>
+            </a>
+            <a href="{% url 'routines:manage_routines' %}?member={{ selected_member.id }}" class="caregiver-nav-link">
+                <span>🗓️</span>
+                <span>{% trans "Daily Routines" %}</span>
+            </a>
+            <a href="{% url 'memories:manage_familiar_people' %}?member={{ selected_member.id }}" class="caregiver-nav-link">
+                <span>👥</span>
+                <span>{% trans "Familiar Faces" %}</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <section style="min-width: 0;">
+        {% if not has_members %}
+            <div class="card" style="text-align: center; padding: var(--space-10) var(--space-6); max-width: 680px; margin: 0 auto;">
+                <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+                    {% trans "No Connected Members" %}
+                </h1>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+                    {% trans "You must have an active supervised member profile to manage reminiscence memories." %}
+                </p>
+                <a href="{% url 'accounts:caregiver_portal' %}" class="btn btn-primary">
+                    {% trans "Return to Dashboard" %}
+                </a>
+            </div>
+        {% else %}
+            <!-- Header with Member Selector -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
+                <div>
+                    <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-1);">
+                        {% trans "Cherished Memories" %}
+                    </h1>
+                    <p style="color: var(--text-secondary); margin: 0; font-size: var(--font-size-base);">
+                        {% blocktrans with name=selected_member.first_name|default:selected_member.username %}Reminiscence stories, photographs, and voice notes for <strong>{{ name }}</strong>.{% endblocktrans %}
+                    </p>
+                </div>
+
+                <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
+                    {% if authorized_members|length > 1 %}
+                        <form method="get" action="{% url 'memories:manage_memories' %}" style="margin: 0;">
+                            <label for="member-select" class="sr-only">{% trans "Switch Member" %}</label>
+                            <select id="member-select" name="member" onchange="this.form.submit()" class="form-input" style="padding: 6px 12px; min-height: 44px; cursor: pointer;">
+                                {% for m in authorized_members %}
+                                    <option value="{{ m.id }}" {% if m.id == selected_member.id %}selected{% endif %}>
+                                        {{ m.name }} (@{{ m.username }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    {% endif %}
+
+                    <a href="{% url 'memories:add_memory' %}?member={{ selected_member.id }}" class="btn btn-primary" style="min-height: 44px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>+ {% trans "Add Memory" %}</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Memories List -->
+            {% if memories %}
+                <div class="memory-card-grid">
+                    {% for mem in memories %}
+                        <article class="memory-card" aria-labelledby="mem-title-{{ mem.id }}">
+                            {% if mem.image %}
+                                <img src="{{ mem.image.url }}" alt="{{ mem.title }}" class="memory-card-media" loading="lazy">
+                            {% endif %}
+                            <div class="memory-card-content">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-2);">
+                                    <h2 id="mem-title-{{ mem.id }}" style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
+                                        {{ mem.title }}
+                                    </h2>
+                                    <span style="font-size: var(--font-size-xs); color: var(--text-muted); white-space: nowrap;">
+                                        {{ mem.created_at|date:"M d, Y" }}
+                                    </span>
+                                </div>
+
+                                {% if mem.description %}
+                                    <p style="color: var(--text-secondary); font-size: var(--font-size-sm); line-height: 1.5; margin-bottom: var(--space-3); flex-grow: 1;">
+                                        {{ mem.description }}
+                                    </p>
+                                {% endif %}
+
+                                {% if mem.audio_clip %}
+                                    <div style="margin-bottom: var(--space-3); background: var(--bg-surface-subtle); padding: 8px; border-radius: var(--radius-sm);">
+                                        <label style="font-size: var(--font-size-xs); color: var(--text-muted); display: block; margin-bottom: 4px;">
+                                            🎵 {% trans "Voice Note" %}
+                                        </label>
+                                        <audio controls style="width: 100%; height: 36px;" preload="none">
+                                            <source src="{{ mem.audio_clip.url }}">
+                                            {% trans "Your browser does not support audio playback." %}
+                                        </audio>
+                                    </div>
+                                {% endif %}
+
+                                <div style="display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: auto; padding-top: var(--space-3); border-top: 1px solid var(--border-subtle);">
+                                    <a href="{% url 'memories:edit_memory' mem.id %}" class="btn btn-outline btn-sm" style="min-height: 38px;">
+                                        {% trans "Edit" %}
+                                    </a>
+                                    <a href="{% url 'memories:delete_memory' mem.id %}" class="btn btn-secondary btn-sm" style="min-height: 38px; color: #dc2626;">
+                                        {% trans "Delete" %}
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card" style="text-align: center; padding: var(--space-10) var(--space-4); background-color: var(--bg-surface-subtle); border: 2px dashed var(--border-color);">
+                    <div style="font-size: 2.5rem; margin-bottom: var(--space-2);">📷</div>
+                    <h2 style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+                        {% trans "No memories added yet" %}
+                    </h2>
+                    <p style="color: var(--text-secondary); max-width: 480px; margin: 0 auto var(--space-6);">
+                        {% blocktrans with name=selected_member.first_name|default:selected_member.username %}Add cherished life events, family photographs, and voice notes for {{ name }} to reminisce and enjoy.{% endblocktrans %}
+                    </p>
+                    <a href="{% url 'memories:add_memory' %}?member={{ selected_member.id }}" class="btn btn-primary" style="min-height: 44px;">
+                        + {% trans "Add First Memory" %}
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

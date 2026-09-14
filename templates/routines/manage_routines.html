@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Daily Routines" %} - Cognicare{% endblock %}
+
+{% block content %}
+<div class="caregiver-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="caregiver-sidebar-nav" aria-label="{% trans 'Caregiver Navigation' %}">
+        <h2 style="font-size: var(--font-size-base); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--space-3); padding-left: 8px;">
+            {% trans "Caregiver Portal" %}
+        </h2>
+        <nav>
+            <a href="{% url 'accounts:caregiver_portal' %}?member={{ selected_member.id }}" class="caregiver-nav-link">
+                <span>📊</span>
+                <span>{% trans "Analytics Dashboard" %}</span>
+            </a>
+            <a href="{% url 'memories:manage_memories' %}?member={{ selected_member.id }}" class="caregiver-nav-link">
+                <span>📷</span>
+                <span>{% trans "Memories" %}</span>
+            </a>
+            <a href="{% url 'routines:manage_routines' %}?member={{ selected_member.id }}" class="caregiver-nav-link active" aria-current="page">
+                <span>🗓️</span>
+                <span>{% trans "Daily Routines" %}</span>
+            </a>
+            <a href="{% url 'memories:manage_familiar_people' %}?member={{ selected_member.id }}" class="caregiver-nav-link">
+                <span>👥</span>
+                <span>{% trans "Familiar Faces" %}</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <section style="min-width: 0;">
+        {% if not has_members %}
+            <div class="card" style="text-align: center; padding: var(--space-10) var(--space-6); max-width: 680px; margin: 0 auto;">
+                <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+                    {% trans "No Connected Members" %}
+                </h1>
+                <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">
+                    {% trans "You must have an active supervised member profile to manage daily routines." %}
+                </p>
+                <a href="{% url 'accounts:caregiver_portal' %}" class="btn btn-primary">
+                    {% trans "Return to Dashboard" %}
+                </a>
+            </div>
+        {% else %}
+            <!-- Header with Member Selector -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
+                <div>
+                    <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-1);">
+                        {% trans "Daily Routines & Schedules" %}
+                    </h1>
+                    <p style="color: var(--text-secondary); margin: 0; font-size: var(--font-size-base);">
+                        {% blocktrans with name=selected_member.first_name|default:selected_member.username %}Configure structured daily rhythm, medicines, hydration, and wellness tasks for <strong>{{ name }}</strong>.{% endblocktrans %}
+                    </p>
+                </div>
+
+                <div style="display: flex; gap: var(--space-3); align-items: center; flex-wrap: wrap;">
+                    {% if authorized_members|length > 1 %}
+                        <form method="get" action="{% url 'routines:manage_routines' %}" style="margin: 0;">
+                            <label for="member-select-routine" class="sr-only">{% trans "Switch Member" %}</label>
+                            <select id="member-select-routine" name="member" onchange="this.form.submit()" class="form-input" style="padding: 6px 12px; min-height: 44px; cursor: pointer;">
+                                {% for m in authorized_members %}
+                                    <option value="{{ m.id }}" {% if m.id == selected_member.id %}selected{% endif %}>
+                                        {{ m.name }} (@{{ m.username }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    {% endif %}
+
+                    <a href="{% url 'routines:add_routine' %}?member={{ selected_member.id }}" class="btn btn-primary" style="min-height: 44px; display: inline-flex; align-items: center; gap: 6px;">
+                        <span>+ {% trans "Create Routine" %}</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Routines List -->
+            {% if routine_cards %}
+                <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                    {% for item in routine_cards %}
+                        <article class="card" style="padding: var(--space-5);" aria-labelledby="routine-card-{{ item.routine.id }}">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-3);">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                        <h2 id="routine-card-{{ item.routine.id }}" style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
+                                            {{ item.routine.title }}
+                                        </h2>
+                                        {% if item.routine.is_active %}
+                                            <span class="badge badge-patient" style="font-size: var(--font-size-xs);">{% trans "Active" %}</span>
+                                        {% else %}
+                                            <span class="badge" style="background-color: var(--color-slate-100); color: var(--text-muted); font-size: var(--font-size-xs);">{% trans "Inactive" %}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div style="font-size: var(--font-size-sm); color: var(--text-muted);">
+                                        📅 {{ item.routine.date|date:"l, F j, Y" }}
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: var(--space-2);">
+                                    <span class="badge" style="background-color: var(--color-teal-50); color: var(--primary-main); border: 1px solid var(--primary-border); font-size: var(--font-size-sm);">
+                                        {{ item.completed_items }} / {{ item.total_items }} {% trans "Tasks Completed" %} ({{ item.adherence_pct }}%)
+                                    </span>
+                                </div>
+                            </div>
+
+                            {% if item.routine.description %}
+                                <p style="color: var(--text-secondary); font-size: var(--font-size-sm); line-height: 1.5; margin-bottom: var(--space-4);">
+                                    {{ item.routine.description }}
+                                </p>
+                            {% endif %}
+
+                            <!-- Summary of Tasks -->
+                            <div style="margin-bottom: var(--space-4);">
+                                {% with tasks=item.routine.items.all %}
+                                    {% if tasks %}
+                                        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px;">
+                                            {% for t in tasks %}
+                                                <li style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-surface-subtle); border-radius: var(--radius-sm); font-size: var(--font-size-sm);">
+                                                    <div>
+                                                        <strong>{{ t.title }}</strong>
+                                                        {% if t.scheduled_time %}
+                                                            <span style="color: var(--text-muted); margin-left: 6px;">⏰ {{ t.scheduled_time|time:"g:i A" }}</span>
+                                                        {% else %}
+                                                            <span style="color: var(--text-muted); margin-left: 6px;">⏰ {% trans "Anytime" %}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div>
+                                                        {% if t.is_completed %}
+                                                            <span style="color: #15803d; font-weight: 600;">&#10003; {% trans "Completed" %}</span>
+                                                        {% else %}
+                                                            <span style="color: var(--text-muted);">{% trans "Pending" %}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin: 0; font-style: italic;">
+                                            {% trans "No tasks added to this routine yet." %}
+                                        </p>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+
+                            <div style="display: flex; justify-content: flex-end; gap: var(--space-2); padding-top: var(--space-3); border-top: 1px solid var(--border-subtle);">
+                                <a href="{% url 'routines:add_routine_item' item.routine.id %}" class="btn btn-outline btn-sm" style="min-height: 38px;">
+                                    + {% trans "Add Task" %}
+                                </a>
+                                <a href="{% url 'routines:edit_routine' item.routine.id %}" class="btn btn-outline btn-sm" style="min-height: 38px;">
+                                    {% trans "Edit Routine" %}
+                                </a>
+                                <a href="{% url 'routines:delete_routine' item.routine.id %}" class="btn btn-secondary btn-sm" style="min-height: 38px; color: #dc2626;">
+                                    {% trans "Delete" %}
+                                </a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card" style="text-align: center; padding: var(--space-10) var(--space-4); background-color: var(--bg-surface-subtle); border: 2px dashed var(--border-color);">
+                    <div style="font-size: 2.5rem; margin-bottom: var(--space-2);">🗓️</div>
+                    <h2 style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+                        {% trans "No daily routines scheduled yet" %}
+                    </h2>
+                    <p style="color: var(--text-secondary); max-width: 480px; margin: 0 auto var(--space-6);">
+                        {% blocktrans with name=selected_member.first_name|default:selected_member.username %}Establish a calm daily routine schedule for {{ name }} with medication reminders, walks, hydration, and restful pauses.{% endblocktrans %}
+                    </p>
+                    <a href="{% url 'routines:add_routine' %}?member={{ selected_member.id }}" class="btn btn-primary" style="min-height: 44px;">
+                        + {% trans "Create First Routine" %}
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

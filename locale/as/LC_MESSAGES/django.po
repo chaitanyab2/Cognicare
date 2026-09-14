@@ -261,3 +261,627 @@ msgstr "আপুনি সফলভাৱে প্ৰস্থান কৰি
 
 msgid "You do not have permission to access this page."
 msgstr "আপোনাৰ এই পৃষ্ঠাখন চাবলৈ অনুমতি নাই।"
+
+msgid "Caregiver Dashboard"
+msgstr "সেৱাকাৰী ডেশ্বব’ৰ্ড"
+
+msgid "No Member Profiles Connected Yet"
+msgstr "এতিয়ালৈকে কোনো সদস্য প্ৰফাইল সংযুক্ত হোৱা নাই"
+
+msgid "Welcome to your Caregiver Portal. To begin monitoring daily activities, cognitive gameplay metrics, and routine adherence, a member profile needs to be linked to your account."
+msgstr "আপোনাৰ সেৱাকাৰী পৰ্টেললৈ স্বাগতম। দৈনিক কাৰ্যকলাপ, জ্ঞানমূলক খেলৰ পৰিসংখ্যা আৰু দিনলিপি অনুসৰণ নিৰীক্ষণ কৰিবলৈ, আপোনাৰ একাউণ্টৰ সৈতে এটি সদস্য প্ৰফাইল সংযোগ কৰিব লাগিব।"
+
+msgid "How it works:"
+msgstr "ই কেনেদৰে কাম কৰে:"
+
+msgid "Supervision relationships are established through member pairing. Once an active member profile is connected, their gameplay analytics, memories, and daily wellness routines will appear right here."
+msgstr "তত্ত্বাৱধান সম্পৰ্ক সদস্য সংযোগৰ জৰিয়তে স্থাপন কৰা হয়। এটা সক্ৰিয় সদস্য প্ৰফাইল সংযোগ হ'লে, তেওঁলোকৰ খেলৰ বিশ্লেষণ, স্মৃতিসমূহ আৰু দৈনিক কল্যাণমূলক দিনলিপি ইয়াত দেখা যাব।"
+
+msgid "Caregiver Portal"
+msgstr "সেৱাকাৰী পৰ্টেল"
+
+msgid "Caregiver Analytics Dashboard"
+msgstr "সেৱাকাৰী বিশ্লেষণ ডেশ্বব’ৰ্ড"
+
+msgid "Monitoring cognitive activity, gameplay pacing, and daily routine adherence for <strong>%(name)s</strong>."
+msgstr "<strong>%(name)s</strong>-ৰ বাবে জ্ঞানমূলক কাৰ্যকলাপ, খেলৰ গতি আৰু দৈনিক দিনলিপি অনুসৰণ নিৰীক্ষণ কৰা হৈছে।"
+
+msgid "Switch Supervised Member:"
+msgstr "তত্ত্বাৱধানাধীন সদস্য সলনি কৰক:"
+
+msgid "Select"
+msgstr "বাছনি কৰক"
+
+msgid "Supervising Member:"
+msgstr "তত্ত্বাৱধানাধীন সদস্য:"
+
+msgid "Reminiscence stories & audio"
+msgstr "সোঁৱৰণীৰ কাহিনী আৰু অডিঅ’"
+
+msgid "Medications & wellness rhythm"
+msgstr "ঔষধ আৰু সুস্থতাৰ গতি"
+
+msgid "Family photo game pool"
+msgstr "পৰিয়ালৰ ফটো খেল ভঁৰাল"
+
+msgid "Open"
+msgstr "খোলক"
+
+msgid "Key Performance Indicators"
+msgstr "মূল কাৰ্যদক্ষতা সূচক"
+
+msgid "Games Completed"
+msgstr "সম্পূৰ্ণ কৰা খেলসমূহ"
+
+msgid "%(count)s completed in past 7 days"
+msgstr "যোৱা ৭ দিনত %(count)s টা সম্পূৰ্ণ হৈছে"
+
+msgid "All-time completed sessions"
+msgstr "সকলো সময়ৰ সম্পূৰ্ণ সত্ৰসমূহ"
+
+msgid "Overall Accuracy"
+msgstr "সামগ্ৰিক শুদ্ধতা"
+
+msgid "Average across completed sessions"
+msgstr "সম্পূৰ্ণ সত্ৰসমূহৰ গড়"
+
+msgid "Average Response Time"
+msgstr "গড় সঁহাৰিৰ সময়"
+
+msgid "%(ms)s ms average per round"
+msgstr "প্ৰতি ৰাউণ্ডত গড় %(ms)s মিলিছেকেণ্ড"
+
+msgid "Gameplay response pace"
+msgstr "খেলৰ সঁহাৰিৰ গতি"
+
+msgid "Routine Adherence"
+msgstr "দিনলিপি অনুসৰণ"
+
+msgid "%(done)s of %(total)s tasks logged today"
+msgstr "আজি %(total)s টাৰ ভিতৰত %(done)s টা কাম সম্পন্ন হৈছে"
+
+msgid "No routine scheduled today"
+msgstr "আজি কোনো দিনলিপি নিৰ্ধাৰণ কৰা হোৱা নাই"
+
+msgid "Performance Progression Chart"
+msgstr "কাৰ্যদক্ষতাৰ অগ্ৰগতি তালিকা"
+
+msgid "Accuracy Over Completed Sessions"
+msgstr "সম্পূৰ্ণ সত্ৰসমূহৰ শুদ্ধতা"
+
+msgid "Session accuracy trend across all completed cognitive activities."
+msgstr "সকলো সম্পূৰ্ণ জ্ঞানমূলক কাৰ্যকলাপৰ সত্ৰৰ শুদ্ধতাৰ ধাৰা।"
+
+msgid "%(count)s Completed Sessions"
+msgstr "%(count)s টা সম্পূৰ্ণ সত্ৰ"
+
+msgid "Line graph showing cognitive activity accuracy across completed sessions"
+msgstr "সম্পূৰ্ণ সত্ৰসমূহৰ জ্ঞানমূলক কাৰ্যকলাপৰ শুদ্ধতা প্ৰদৰ্শন কৰা ৰেখাচিত্ৰ"
+
+msgid "View chart data as text table"
+msgstr "ৰেখাচিত্ৰৰ তথ্য তালিকা হিচাপে চাওক"
+
+msgid "Completed Sessions Accuracy Table"
+msgstr "সম্পূৰ্ণ সত্ৰৰ শুদ্ধতা তালিকা"
+
+msgid "Session #"
+msgstr "সত্ৰ নং"
+
+msgid "Activity"
+msgstr "কাৰ্যকলাপ"
+
+msgid "Level"
+msgstr "স্তৰ"
+
+msgid "Completed On"
+msgstr "সম্পন্ন কৰা সময়"
+
+msgid "Score"
+msgstr "নম্বৰ"
+
+msgid "Accuracy"
+msgstr "শুদ্ধতা"
+
+msgid "No completed gameplay sessions recorded yet for %(name)s.<br>Accuracy progression trends will appear here as activities are completed."
+msgstr "%(name)s-ৰ বাবে এতিয়ালৈকে কোনো সম্পূৰ্ণ খেলৰ সত্ৰ ৰেকৰ্ড হোৱা নাই।<br>কাৰ্যকলাপ সম্পূৰ্ণ হোৱাৰ লগে লগে শুদ্ধতাৰ অগ্ৰগতি ইয়াত দেখা যাব।"
+
+msgid "Cognitive Games Performance"
+msgstr "জ্ঞানমূলক খেলৰ কাৰ্যদক্ষতা"
+
+msgid "Activity metrics and gameplay accuracy across the cognitive domains."
+msgstr "জ্ঞানমূলক ক্ষেত্ৰসমূহত কাৰ্যকলাপৰ পৰিসংখ্যা আৰু খেলৰ শুদ্ধতা।"
+
+msgid "Cognitive Games Summary Table"
+msgstr "জ্ঞানমূলক খেলৰ সাৰাংশ তালিকা"
+
+msgid "Game Name"
+msgstr "খেলৰ নাম"
+
+msgid "Cognitive Domain"
+msgstr "জ্ঞানমূলক ক্ষেত্ৰ"
+
+msgid "Current Level"
+msgstr "বৰ্তমান স্তৰ"
+
+msgid "Sessions Completed"
+msgstr "সম্পূৰ্ণ কৰা সত্ৰসমূহ"
+
+msgid "Avg Accuracy"
+msgstr "গড় শুদ্ধতা"
+
+msgid "Avg Response Time"
+msgstr "গড় সঁহাৰি সময়"
+
+msgid "Status"
+msgstr "স্থিতি"
+
+msgid "No sessions yet"
+msgstr "এতিয়ালৈকে সত্ৰ হোৱা নাই"
+
+msgid "Active"
+msgstr "সক্ৰিয়"
+
+msgid "Planned Activity"
+msgstr "পৰিকল্পিত কাৰ্যকলাপ"
+
+msgid "Recent Activity and Routines"
+msgstr "শেহতীয়া কাৰ্যকলাপ আৰু দিনলিপি"
+
+msgid "Recent Gameplay Activity"
+msgstr "শেহতীয়া খেল কাৰ্যকলাপ"
+
+msgid "%(score)s of %(max)s correct (%(acc)s%%)"
+msgstr "%(max)s ৰ ভিতৰত %(score)s শুদ্ধ (%(acc)s%%)"
+
+msgid "Completed"
+msgstr "সম্পূৰ্ণ"
+
+msgid "No completed gameplay sessions recorded yet."
+msgstr "এতিয়ালৈকে কোনো সম্পূৰ্ণ খেলৰ সত্ৰ ৰেকৰ্ড হোৱা নাই।"
+
+msgid "Today's Routine Schedule"
+msgstr "আজিৰ দিনলিপি সূচী"
+
+msgid "Manage Routines"
+msgstr "দিনলিপি পৰিচালনা"
+
+msgid "Scheduled:"
+msgstr "নিৰ্ধাৰিত সময়:"
+
+msgid "Anytime today"
+msgstr "আজিৰ দিনটোৰ যিকোনো সময়ত"
+
+msgid "Logged:"
+msgstr "নথিভুক্ত:"
+
+msgid "Pending"
+msgstr "বাকী আছে"
+
+msgid "No routine schedule logged for today."
+msgstr "আজিৰ বাবে কোনো দিনলিপি নথিভুক্ত কৰা হোৱা নাই।"
+
+msgid "Platform Notice:"
+msgstr "মঞ্চৰ জাননী:"
+
+msgid "Cognicare is a cognitive wellness and daily engagement platform. Performance metrics and gameplay telemetry are intended to assist caregivers in tracking daily activities, game pacing, and routine engagement. They do not constitute a clinical diagnosis, medical evaluation, neurological assessment, or treatment plan."
+msgstr "Cognicare হৈছে এক জ্ঞানমূলক কল্যাণ আৰু দৈনন্দিন সংযোগ মঞ্চ। কাৰ্যদক্ষতাৰ পৰিসংখ্যা আৰু খেলৰ টেলিমেট্ৰি সেৱাকাৰীসকলক দৈনন্দিন কাৰ্যকলাপ, খেলৰ গতি আৰু দিনলিপি নিৰীক্ষণ কৰাত সহায় কৰাৰ উদ্দেশ্যে প্ৰস্তুত কৰা হৈছে। এইসমূহে কোনো ক্লিনিকেল নিদান, চিকিৎসা মূল্যায়ন, স্নায়বিক নিৰূপণ বা চিকিৎসা পৰিকল্পনা গঠন নকৰে।"
+
+msgid "Working Memory"
+msgstr "কাৰ্য্যকৰী স্মৃতি"
+
+msgid "Executive Function"
+msgstr "কাৰ্যনিৰ্বাহী ক্ৰিয়া"
+
+msgid "Recognition Memory"
+msgstr "চিনাক্তকৰণ স্মৃতি"
+
+msgid "Visual Attention"
+msgstr "দৃশ্য মনোযোগ"
+
+msgid "Semantic Memory"
+msgstr "অৰ্থগত স্মৃতি"
+
+msgid "Reasoning & Logic"
+msgstr "যুক্তি আৰু বিবেচনা"
+
+msgid "Memories"
+msgstr "স্মৃতিসমূহ"
+
+msgid "Cherished Memories"
+msgstr "মৰমৰ স্মৃতিসমূহ"
+
+msgid "Reminiscence stories, photographs, and voice notes for <strong>%(name)s</strong>."
+msgstr "<strong>%(name)s</strong>-ৰ বাবে সোঁৱৰণীৰ কাহিনী, আলোকচিত্ৰ আৰু কণ্ঠ বাৰ্তা।"
+
+msgid "Switch Member"
+msgstr "সদস্য সলনি কৰক"
+
+msgid "Add Memory"
+msgstr "স্মৃতি যোগ কৰক"
+
+msgid "Voice Note"
+msgstr "কণ্ঠ বাৰ্তা"
+
+msgid "Your browser does not support audio playback."
+msgstr "আপোনাৰ ব্ৰাউজাৰে অডিঅ’ প্লেবেক সমৰ্থন নকৰে।"
+
+msgid "Edit"
+msgstr "সম্পাদনা কৰক"
+
+msgid "Delete"
+msgstr "মচি পেলাওক"
+
+msgid "No memories added yet"
+msgstr "এতিয়ালৈকে কোনো স্মৃতি যোগ কৰা হোৱা নাই"
+
+msgid "Add cherished life events, family photographs, and voice notes for %(name)s to reminisce and enjoy."
+msgstr "%(name)s-এ সোঁৱৰণ আৰু উপভোগ কৰিবলৈ জীৱনৰ স্মৃতি, পৰিয়ালৰ ফটো আৰু কণ্ঠ বাৰ্তা যোগ কৰক।"
+
+msgid "Add First Memory"
+msgstr "প্ৰথম স্মৃতি যোগ কৰক"
+
+msgid "Back to Memories"
+msgstr "স্মৃতিসমূহলৈ উভতি যাওক"
+
+msgid "For supervised member: <strong>%(name)s</strong>"
+msgstr "তত্ত্বাৱধানাধীন সদস্য: <strong>%(name)s</strong>"
+
+msgid "Memory Title"
+msgstr "স্মৃতিৰ শিৰোনাম"
+
+msgid "Story & Reminiscence Notes"
+msgstr "কাহিনী আৰু সোঁৱৰণীৰ বিৱৰণ"
+
+msgid "Photograph (Optional)"
+msgstr "আলোকচিত্ৰ (ঐচ্ছিক)"
+
+msgid "Current photograph"
+msgstr "বৰ্তমানৰ আলোকচিত্ৰ"
+
+msgid "Voice Note / Audio Clip (Optional)"
+msgstr "কণ্ঠ বাৰ্তা / অডিঅ’ ক্লিপ (ঐচ্ছিক)"
+
+msgid "Cancel"
+msgstr "বাতিল কৰক"
+
+msgid "Save Changes"
+msgstr "পৰিৱৰ্তন সংৰক্ষণ কৰক"
+
+msgid "Save Memory"
+msgstr "স্মৃতি সংৰক্ষণ কৰক"
+
+msgid "Delete Memory?"
+msgstr "স্মৃতি মচি পেলাব বিচাৰে নেকি?"
+
+msgid "Are you sure you want to permanently delete the memory <strong>\"%(title)s\"</strong>? This action cannot be undone."
+msgstr "আপুনি নিশ্চিতনে যে আপুনি <strong>\"%(title)s\"</strong> স্মৃতিটো স্থায়ীভাৱে মচি পেলাব বিচাৰে? এই কামটো পুনৰ ঘূৰাই আনিব নোৱাৰি।"
+
+msgid "Yes, Delete"
+msgstr "হয়, মচি পেলাওক"
+
+msgid "My Cherished Memories"
+msgstr "মোৰ মৰমৰ স্মৃতিসমূহ"
+
+msgid "Take your time and revisit warm moments, family photographs, and loved ones' voices."
+msgstr "সময় লৈ পৰিয়ালৰ আলোকচিত্ৰ, সুখৰ ক্ষণসমূহ আৰু আপোন মানুহৰ কণ্ঠ সোঁৱৰক।"
+
+msgid "Voice Note from Family"
+msgstr "পৰিয়ালৰ ফালৰ পৰা কণ্ঠ বাৰ্তা"
+
+msgid "Read memory aloud"
+msgstr "স্মৃতিটো ডাঙৰকৈ পঢ়ি শুনাওক"
+
+msgid "Listen"
+msgstr "শুনক"
+
+msgid "Your photo album is ready"
+msgstr "আপোনাৰ ফটো এলবাম সাজু আছে"
+
+msgid "Your caregiver will add family photographs and memorable moments here for you to enjoy anytime."
+msgstr "আপুনি যিকোনো সময়তে উপভোগ কৰিব পৰাকৈ আপোনাৰ সেৱাকাৰীয়ে পৰিয়ালৰ আলোকচিত্ৰ আৰু স্মৰণীয় ক্ষণসমূহ ইয়াত যোগ কৰিব।"
+
+msgid "Return to My Space"
+msgstr "মোৰ স্থানলৈ উভতি যাওক"
+
+msgid "Memory added successfully."
+msgstr "স্মৃতি সফলতাৰে যোগ কৰা হ'ল।"
+
+msgid "Memory updated successfully."
+msgstr "স্মৃতি সফলতাৰে আপডেট কৰা হ'ল।"
+
+msgid "Memory deleted successfully."
+msgstr "স্মৃতি সফলতাৰে মচি পেলোৱা হ'ল।"
+
+msgid "Memory title cannot be blank."
+msgstr "স্মৃতিৰ শিৰোনাম খালী হ'ব নোৱাৰে।"
+
+msgid "Optional photograph for visual reminiscence (JPEG, PNG, WEBP, max 5 MB)."
+msgstr "দৃশ্য সোঁৱৰণীৰ বাবে ঐচ্ছিক আলোকচিত্ৰ (JPEG, PNG, WEBP, সৰ্বোচ্চ ৫ মেগাবাইট)।"
+
+msgid "Optional voice note or audio memory from family (MP3, WAV, OGG, M4A, WEBM, max 10 MB)."
+msgstr "পৰিয়ালৰ পৰা ঐচ্ছিক কণ্ঠ বাৰ্তা বা অডিঅ’ স্মৃতি (MP3, WAV, OGG, M4A, WEBM, সৰ্বোচ্চ ১০ মেগাবাইট)।"
+
+msgid "Leave blank to keep current photo, or upload a new photo to replace it."
+msgstr "বৰ্তমানৰ ফটোখন ৰাখিবলৈ খালী এৰক, বা সলনি কৰিবলৈ নতুন ফটো আপলোড কৰক।"
+
+msgid "Leave blank to keep current audio note, or upload new audio to replace it."
+msgstr "বৰ্তমানৰ কণ্ঠ বাৰ্তা ৰাখিবলৈ খালী এৰক, বা সলনি কৰিবলৈ নতুন অডিঅ’ আপলোড কৰক।"
+
+msgid "Daily Routines"
+msgstr "দৈনিক দিনলিপি"
+
+msgid "Daily Routines & Schedules"
+msgstr "দৈনিক দিনলিপি আৰু সূচী"
+
+msgid "Configure structured daily rhythm, medicines, hydration, and wellness tasks for <strong>%(name)s</strong>."
+msgstr "<strong>%(name)s</strong>-ৰ বাবে নিয়মীয়া দৈনন্দিন গতি, ঔষধ, পানী খোৱা আৰু কল্যাণমূলক কাম নিৰ্ধাৰণ কৰক।"
+
+msgid "Create Routine"
+msgstr "দিনলিপি তৈয়াৰ কৰক"
+
+msgid "Inactive"
+msgstr "নিষ্ক্ৰিয়"
+
+msgid "Tasks Completed"
+msgstr "কাম সম্পন্ন হৈছে"
+
+msgid "Anytime"
+msgstr "যিকোনো সময়ত"
+
+msgid "No tasks added to this routine yet."
+msgstr "এই দিনলিপিত এতিয়ালৈকে কোনো কাম যোগ কৰা হোৱা নাই।"
+
+msgid "Add Task"
+msgstr "কাম যোগ কৰক"
+
+msgid "Edit Routine"
+msgstr "দিনলিপি সম্পাদনা কৰক"
+
+msgid "No daily routines scheduled yet"
+msgstr "এতিয়ালৈকে কোনো দৈনিক দিনলিপি নিৰ্ধাৰণ কৰা হোৱা নাই"
+
+msgid "Establish a calm daily routine schedule for %(name)s with medication reminders, walks, hydration, and restful pauses."
+msgstr "%(name)s-ৰ বাবে ঔষধৰ সোঁৱৰণী, খোজ কঢ়া, পানী খোৱা আৰু জিৰণিৰ এক শান্ত দৈনিক দিনলিপি প্ৰস্তুত কৰক।"
+
+msgid "Create First Routine"
+msgstr "প্ৰথম দিনলিপি তৈয়াৰ কৰক"
+
+msgid "Back to Routines"
+msgstr "দিনলিপিসমূহলৈ উভতি যাওক"
+
+msgid "Routine Title"
+msgstr "দিনলিপিৰ শিৰোনাম"
+
+msgid "Routine Description & Notes"
+msgstr "দিনলিপিৰ বিৱৰণ আৰু টোকা"
+
+msgid "Target Date"
+msgstr "নিৰ্ধাৰিত তাৰিখ"
+
+msgid "Active Routine Schedule"
+msgstr "সক্ৰিয় দিনলিপি সূচী"
+
+msgid "Update Routine"
+msgstr "দিনলিপি আপডেট কৰক"
+
+msgid "Save & Add Items"
+msgstr "সংৰক্ষণ কৰি কাম যোগ কৰক"
+
+msgid "Schedule Tasks & Activities"
+msgstr "সূচীৰ কাম আৰু কাৰ্যকলাপ"
+
+msgid "Ordered activities for the member's daily rhythm."
+msgstr "সদস্যজনৰ দৈনন্দিন গতিৰ বাবে ক্ৰমানুসাৰে সজোৱা কাৰ্যকলাপ।"
+
+msgid "Logged at"
+msgstr "নথিভুক্ত সময়"
+
+msgid "No tasks added to this routine yet. Click '+ Add Task' above to begin building the schedule."
+msgstr "এই দিনলিপিত এতিয়ালৈকে কোনো কাম যোগ কৰা হোৱা নাই। সূচী তৈয়াৰ কৰিবলৈ ওপৰৰ '+ কাম যোগ কৰক' বুটামত টিপক।"
+
+msgid "Delete Routine"
+msgstr "দিনলিপি মচি পেলাওক"
+
+msgid "Delete Daily Routine?"
+msgstr "দৈনিক দিনলিপি মচি পেলাব বিচাৰে নেকি?"
+
+msgid "Are you sure you want to delete the routine <strong>\"%(title)s\"</strong> and all its scheduled tasks? This action cannot be undone."
+msgstr "আপুনি নিশ্চিতনে যে আপুনি <strong>\"%(title)s\"</strong> দিনলিপি আৰু ইয়াৰ সকলো নিৰ্ধাৰিত কাম মচি পেলাব বিচাৰে? এই কামটো পুনৰ ঘূৰাই আনিব নোৱাৰি।"
+
+msgid "Back to Routine"
+msgstr "দিনলিপিলৈ উভতি যাওক"
+
+msgid "Routine: <strong>%(title)s</strong>"
+msgstr "দিনলিপি: <strong>%(title)s</strong>"
+
+msgid "Task Title"
+msgstr "কামৰ শিৰোনাম"
+
+msgid "Task Instructions & Details"
+msgstr "কামৰ নিৰ্দেশনা আৰু সবিশেষ"
+
+msgid "Scheduled Time (Optional)"
+msgstr "নিৰ্ধাৰিত সময় (ঐচ্ছিক)"
+
+msgid "Leave blank for anytime today."
+msgstr "আজিৰ দিনটোৰ যিকোনো সময়ৰ বাবে খালী ৰাখক।"
+
+msgid "Display Order"
+msgstr "প্ৰদৰ্শন ক্ৰম"
+
+msgid "Sequence number (1, 2, 3...)"
+msgstr "ক্ৰমিক সংখ্যা (১, ২, ৩...)"
+
+msgid "Save Task"
+msgstr "কাম সংৰক্ষণ কৰক"
+
+msgid "Delete Task"
+msgstr "কাম মচি পেলাওক"
+
+msgid "Delete Task from Routine?"
+msgstr "দিনলিপিৰ পৰা কাম মচি পেলাব বিচাৰে নেকি?"
+
+msgid "Are you sure you want to delete the task <strong>\"%(title)s\"</strong>?"
+msgstr "আপুনি নিশ্চিতনে যে আপুনি <strong>\"%(title)s\"</strong> কামটো মচি পেলাব বিচাৰে?"
+
+msgid "Follow your gentle daily rhythm at your own pace."
+msgstr "আপোনাৰ নিজৰ গতিত শান্ত দৈনন্দিন নিয়ম অনুসৰণ কৰক।"
+
+msgid "Read routine guidance aloud"
+msgstr "দিনলিপিৰ নিৰ্দেশনা ডাঙৰকৈ পঢ়ি শুনাওক"
+
+msgid "Read task aloud"
+msgstr "কামটো ডাঙৰকৈ পঢ়ি শুনাওক"
+
+msgid "Mark as pending"
+msgstr "বাকী আছে বুলি চিহ্নিত কৰক"
+
+msgid "Undo"
+msgstr "পূৰ্বৰ অৱস্থালৈ আনক"
+
+msgid "Mark as completed"
+msgstr "সম্পূৰ্ণ বুলি চিহ্নিত কৰক"
+
+msgid "Complete"
+msgstr "সম্পূৰ্ণ কৰক"
+
+msgid "Done"
+msgstr "হৈ গ'ল"
+
+msgid "Completed at"
+msgstr "সম্পন্ন হোৱাৰ সময়"
+
+msgid "No tasks scheduled for today"
+msgstr "আজিৰ বাবে কোনো কাম নিৰ্ধাৰণ কৰা হোৱা নাই"
+
+msgid "Enjoy your day! Your caregiver will add your daily schedule and activities here when needed."
+msgstr "আপোনাৰ দিনটো আনন্দৰে কটাওক! প্ৰয়োজন অনুসৰি আপোনাৰ সেৱাকাৰীয়ে দৈনন্দিন সূচী আৰু কাৰ্যকলাপ ইয়াত যোগ কৰিব।"
+
+msgid "Daily routine created successfully. You can now add schedule items."
+msgstr "দৈনিক দিনলিপি সফলতাৰে তৈয়াৰ কৰা হ'ল। আপুনি এতিয়া সূচীৰ কাম যোগ কৰিব পাৰে।"
+
+msgid "Routine schedule updated successfully."
+msgstr "দিনলিপি সূচী সফলতাৰে আপডেট কৰা হ'ল।"
+
+msgid "Routine schedule deleted successfully."
+msgstr "দিনলিপি সূচী সফলতাৰে মচি পেলোৱা হ'ল।"
+
+msgid "Added task to routine successfully."
+msgstr "দিনলিপিত সফলতাৰে কাম যোগ কৰা হ'ল।"
+
+msgid "Task updated successfully."
+msgstr "কাম সফলতাৰে আপডেট কৰা হ'ল।"
+
+msgid "Task removed from routine."
+msgstr "দিনলিপিৰ পৰা কাম আঁতৰোৱা হ'ল।"
+
+msgid "Completed: %(title)s"
+msgstr "সম্পূৰ্ণ হ'ল: %(title)s"
+
+msgid "Routine title cannot be blank."
+msgstr "দিনলিপিৰ শিৰোনাম খালী হ'ব নোৱাৰে।"
+
+msgid "Item title cannot be blank."
+msgstr "কামৰ শিৰোনাম খালী হ'ব নোৱাৰে।"
+
+msgid "Target date for this daily routine schedule."
+msgstr "এই দৈনিক দিনলিপি সূচীৰ নিৰ্ধাৰিত তাৰিখ।"
+
+msgid "Active routines are displayed on the member portal and caregiver adherence reports."
+msgstr "সক্ৰিয় দিনলিপিসমূহ সদস্য পৰ্টেল আৰু সেৱাকাৰীৰ অনুসৰণ প্ৰতিবেদনত প্ৰদৰ্শিত হয়।"
+
+msgid "Optional planned time of day (e.g., 08:30 AM). Leave blank for anytime today."
+msgstr "দিনটোৰ ঐচ্ছিক পৰিকল্পিত সময় (যেনে পুৱা ০৮:৩০)। আজিৰ দিনটোৰ যিকোনো সময়ৰ বাবে খালী ৰাখক।"
+
+msgid "Order in which this activity appears in the schedule (lower numbers appear first)."
+msgstr "সূচীত এই কাৰ্যকলাপ প্ৰদৰ্শিত হোৱাৰ ক্ৰম (সৰু সংখ্যাবোৰ প্ৰথমে দেখা যায়)।"
+
+msgid "Speak"
+msgstr "কওক"
+
+msgid "Speak title"
+msgstr "শিৰোনাম কওক"
+
+msgid "Speak description"
+msgstr "বিৱৰণ কওক"
+
+msgid "Speak routine title"
+msgstr "দিনলিপিৰ শিৰোনাম কওক"
+
+msgid "Speak routine description"
+msgstr "দিনলিপিৰ বিৱৰণ কওক"
+
+msgid "Speak task title"
+msgstr "কামৰ শিৰোনাম কওক"
+
+msgid "Speak task description"
+msgstr "কামৰ বিৱৰণ কওক"
+
+msgid "Manage Familiar Faces"
+msgstr "পৰিচিত মুখসমূহ পৰিচালনা কৰক"
+
+msgid "Familiar Faces Management"
+msgstr "পৰিচিত মুখসমূহ পৰিচালনা"
+
+msgid "Ready to Play"
+msgstr "খেলিবলৈ সাজু"
+
+msgid "Needs More People (%(count)s of %(req)s)"
+msgstr "অধিক ব্যক্তিৰ প্ৰয়োজন (%(req)s ৰ ভিতৰত %(count)s)"
+
+msgid "Curate photographs of family members, loved ones, and close friends for <strong>%(name)s</strong>."
+msgstr "<strong>%(name)s</strong>-ৰ বাবে পৰিয়ালৰ সদস্য, আপোন মানুহ আৰু অন্তৰঙ্গ বন্ধু-বান্ধৱীৰ আলোকচিত্ৰ সজাওক।"
+
+msgid "+ Add Familiar Person"
+msgstr "+ পৰিচিত ব্যক্তি যোগ কৰক"
+
+msgid "Activity Pool Status:"
+msgstr "কাৰ্যকলাপ ভঁৰালৰ স্থিতি:"
+
+msgid "Ready for Gameplay (%(count)s active people)"
+msgstr "খেলৰ বাবে সাজু (%(count)s গৰাকী সক্ৰিয় ব্যক্তি)"
+
+msgid "Setup in progress (%(count)s of %(req)s people added)"
+msgstr "প্ৰস্তুতি চলি আছে (%(req)s গৰাকীৰ ভিতৰত %(count)s গৰাকী যোগ কৰা হৈছে)"
+
+msgid "%(name)s has enough active familiar people for all 3 rounds of the recognition activity."
+msgstr "%(name)s-ৰ বাবে চিনাক্তকৰণ কাৰ্যকলাপৰ তিনিওটা ৰাউণ্ডৰ বাবে পৰ্যাপ্ত সক্ৰিয় পৰিচিত ব্যক্তি আছে।"
+
+msgid "Add at least <strong>%(req)s familiar people</strong> with clear photographs so the activity can generate 3 choices in Round 1 and 4 choices in Rounds 2 & 3."
+msgstr "অন্ততঃ <strong>%(req)s গৰাকী পৰিচিত ব্যক্তিৰ</strong> স্পষ্ট ফটো যোগ কৰক যাতে খেলৰ ১ম ৰাউণ্ডত ৩টা আৰু ২য় ও ৩য় ৰাউণ্ডত ৪টাকৈ বিকল্প প্ৰস্তুত কৰিব পৰা যায়।"
+
+msgid "Paused"
+msgstr "স্থগিত"
+
+msgid "Pause"
+msgstr "স্থগিত কৰক"
+
+msgid "Activate"
+msgstr "সক্ৰিয় কৰক"
+
+msgid "No Familiar People Added Yet"
+msgstr "এতিয়ালৈকে কোনো পৰিচিত ব্যক্তি যোগ কৰা হোৱা নাই"
+
+msgid "Add photographs and relationship labels for family members and loved ones to activate the Familiar Faces activity for %(name)s."
+msgstr "%(name)s-ৰ বাবে পৰিচিত মুখ কাৰ্যকলাপ সক্ৰিয় কৰিবলৈ পৰিয়ালৰ সদস্য আৰু আপোন মানুহৰ আলোকচিত্ৰ আৰু সম্পৰ্ক যোগ কৰক।"
+
+msgid "+ Add First Familiar Person"
+msgstr "+ প্ৰথম পৰিচিত ব্যক্তি যোগ কৰক"
+
+msgid "Person name cannot be blank."
+msgstr "ব্যক্তিৰ নাম খালী হ'ব নোৱাৰে।"
+
+msgid "Relationship cannot be blank."
+msgstr "সম্পৰ্ক খালী হ'ব নোৱাৰে।"
+
+msgid "Upload a clear portrait photo (JPEG, PNG, or WEBP, max 5 MB)."
+msgstr "এখন স্পষ্ট প্ৰতিকৃতি ফটো আপলোড কৰক (JPEG, PNG বা WEBP, সৰ্বোচ্চ ৫ মেগাবাইট)।"
+
+msgid "Common examples: Daughter, Son, Wife, Husband, Grandchild, Brother, Sister, Friend, Niece, Nephew."
+msgstr "সাধাৰণ উদাহৰণ: জীয়াৰী, পুত্ৰ, পত্নী, স্বামী, নাতি/নাতিনী, ভাই/ককাই, বাই/ভনী, বন্ধু, ভাগিনী/ভতিজা।"
+
+msgid "Include this person in the active Familiar Faces game pool."
+msgstr "এই ব্যক্তিক সক্ৰিয় পৰিচিত মুখ খেল ভঁৰালত অন্তৰ্ভুক্ত কৰক।"
+
+msgid "Leave blank to keep the current photograph, or upload a new image to replace it."
+msgstr "বৰ্তমানৰ ফটোখন ৰাখিবলৈ খালী এৰক, বা নতুন ফটো আপলোড কৰক।"

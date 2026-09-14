@@ -350,3 +350,141 @@ class FamiliarPersonCaregiverViewTests(TestCase):
             reverse('memories:delete_familiar_person', kwargs={'person_id': beta_person.id}) + f'?member={self.patient_other.id}'
         )
         self.assertEqual(res_del.status_code, 403)
+
+
+class MemoryViewTests(TestCase):
+    """Tests for caregiver Memory CRUD views and patient reminiscence portal."""
+
+    def setUp(self):
+        self.client = Client()
+        self.patient_1 = CustomUser.objects.create_user(
+            username='patient_one',
+            email='p1@example.com',
+            password='Password123!',
+            role=Role.PATIENT,
+            first_name='Ananya'
+        )
+        self.patient_2 = CustomUser.objects.create_user(
+            username='patient_two',
+            email='p2@example.com',
+            password='Password123!',
+            role=Role.PATIENT,
+            first_name='Rajesh'
+        )
+        self.caregiver_1 = CustomUser.objects.create_user(
+            username='caregiver_one',
+            email='c1@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER
+        )
+        self.caregiver_2 = CustomUser.objects.create_user(
+            username='caregiver_two',
+            email='c2@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER
+        )
+        # Link caregiver_1 -> patient_1
+        CaregiverMemberRelationship.objects.create(
+            caregiver=self.caregiver_1,
+            member=self.patient_1,
+            is_active=True
+        )
+        # Link caregiver_2 -> patient_2
+        CaregiverMemberRelationship.objects.create(
+            caregiver=self.caregiver_2,
+            member=self.patient_2,
+            is_active=True
+        )
+        # Create a memory for patient_1
+        self.memory_1 = Memory.objects.create(
+            member=self.patient_1,
+            title='Bihu Celebration 2025',
+            description='Enjoying pitha and dhol music with family.'
+        )
+
+    def test_anonymous_redirected_from_memories(self):
+        res = self.client.get(reverse('memories:manage_memories'))
+        self.assertEqual(res.status_code, 302)
+        res_patient = self.client.get(reverse('memories:patient_memories'))
+        self.assertEqual(res_patient.status_code, 302)
+
+    def test_caregiver_can_view_supervised_member_memories(self):
+        self.client.login(username='caregiver_one', password='Password123!')
+        res = self.client.get(reverse('memories:manage_memories') + f'?member={self.patient_1.id}')
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'Bihu Celebration 2025')
+        self.assertContains(res, 'Enjoying pitha and dhol music with family.')
+
+    def test_caregiver_can_create_memory(self):
+        self.client.login(username='caregiver_one', password='Password123!')
+        res = self.client.post(
+            reverse('memories:add_memory') + f'?member={self.patient_1.id}',
+            data={
+                'title': 'Tea Garden Stroll',
+                'description': 'Walking near Dibrugarh tea estates.',
+            }
+        )
+        self.assertEqual(res.status_code, 302)
+        self.assertTrue(Memory.objects.filter(title='Tea Garden Stroll', member=self.patient_1).exists())
+
+    def test_caregiver_can_edit_memory(self):
+        self.client.login(username='caregiver_one', password='Password123!')
+        res = self.client.post(
+            reverse('memories:edit_memory', args=[self.memory_1.id]),
+            data={
+                'title': 'Bihu Celebration 2025 Updated',
+                'description': 'Enjoying pitha with everyone.',
+            }
+        )
+        self.assertEqual(res.status_code, 302)
+        self.memory_1.refresh_from_db()
+        self.assertEqual(self.memory_1.title, 'Bihu Celebration 2025 Updated')
+
+    def test_caregiver_can_delete_memory(self):
+        self.client.login(username='caregiver_one', password='Password123!')
+        res = self.client.post(reverse('memories:delete_memory', args=[self.memory_1.id]))
+        self.assertEqual(res.status_code, 302)
+        self.assertFalse(Memory.objects.filter(id=self.memory_1.id).exists())
+
+    def test_cross_tenant_caregiver_blocked(self):
+        # Caregiver 2 tries to edit/delete patient 1's memory
+        self.client.login(username='caregiver_two', password='Password123!')
+        res_edit = self.client.post(
+            reverse('memories:edit_memory', args=[self.memory_1.id]),
+            data={'title': 'Hacked Title', 'description': 'Hacked Desc'}
+        )
+        self.assertEqual(res_edit.status_code, 403)
+
+        res_del = self.client.post(reverse('memories:delete_memory', args=[self.memory_1.id]))
+        self.assertEqual(res_del.status_code, 403)
+
+    def test_patient_can_view_own_memories(self):
+        self.client.login(username='patient_one', password='Password123!')
+        res = self.client.get(reverse('memories:patient_memories'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'Bihu Celebration 2025')
+        self.assertContains(res, 'Enjoying pitha and dhol music with family.')
+
+    def test_patient_cannot_view_caregiver_manage_memories(self):
+        self.client.login(username='patient_one', password='Password123!')
+        res = self.client.get(reverse('memories:manage_memories'))
+        self.assertEqual(res.status_code, 403)
+
+    def test_memory_form_includes_speech_to_text_bindings(self):
+        self.client.login(username='caregiver_one', password='Password123!')
+        res = self.client.get(reverse('memories:add_memory') + f'?member={self.patient_1.id}')
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'data-speech-target="id_title"')
+        self.assertContains(res, 'data-speech-target="id_description"')
+        self.assertContains(res, 'btn-speech')
+
+    def test_user_created_content_preserved_in_assamese(self):
+        self.client.post(reverse('set_language'), data={'language': 'as'}, follow=True)
+        self.client.login(username='patient_one', password='Password123!')
+        res = self.client.get(reverse('memories:patient_memories'))
+        self.assertEqual(res.status_code, 200)
+        # User content intact
+        self.assertContains(res, 'Bihu Celebration 2025')
+        self.assertContains(res, 'Enjoying pitha and dhol music with family.')
+        # System text translated
+        self.assertContains(res, 'মোৰ মৰমৰ স্মৃতিসমূহ')

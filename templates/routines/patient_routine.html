@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Today's Routine" %} - Cognicare{% endblock %}
+
+{% block content %}
+<div style="max-width: 860px; margin: 0 auto;">
+    <!-- Welcoming Header for Member -->
+    <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: var(--space-4); margin-bottom: var(--space-6);">
+        <div>
+            <a href="{% url 'accounts:patient_portal' %}" class="btn btn-outline btn-sm" style="margin-bottom: var(--space-3);">
+                &larr; {% trans "Back to My Space" %}
+            </a>
+            <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-1);">
+                {% trans "Today's Routine" %}
+            </h1>
+            <p style="font-size: var(--font-size-lg); color: var(--text-secondary); margin: 0;">
+                {{ today|date:"l, F j, Y" }} &bull; {% trans "Follow your gentle daily rhythm at your own pace." %}
+            </p>
+        </div>
+        <div>
+            <span class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
+                {% if total_items > 0 %}
+                    {{ completed_items }} / {{ total_items }} {% trans "Completed" %}
+                {% else %}
+                    {% trans "Daily Schedule" %}
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    {% if routine and items %}
+        <!-- Calm Routine Title & Guidance -->
+        <div class="card" style="padding: var(--space-5); margin-bottom: var(--space-6); background: var(--color-teal-50); border: 1px solid var(--primary-border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3);">
+                <div>
+                    <h2 style="font-size: var(--font-size-xl); color: var(--color-teal-950); margin: 0 0 4px 0;">
+                        {{ routine.title }}
+                    </h2>
+                    {% if routine.description %}
+                        <p style="font-size: var(--font-size-base); color: var(--color-teal-900); margin: 0;">
+                            {{ routine.description }}
+                        </p>
+                    {% endif %}
+                </div>
+                <!-- On-demand TTS read-aloud button for routine guidance -->
+                <button type="button" class="btn btn-outline" style="min-height: 44px; display: inline-flex; align-items: center; gap: 8px; background: white;"
+                        data-voice-speak="{{ routine.title }}. {{ routine.description }}"
+                        aria-label="{% trans 'Read routine guidance aloud' %}">
+                    <span aria-hidden="true">🔊</span>
+                    <span>{% trans "Listen" %}</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Checklist of Items -->
+        <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+            {% for item in items %}
+                <article class="card" style="padding: var(--space-5); border-left: 6px solid {% if item.is_completed %}#15803d{% else %}var(--primary-main){% endif %}; transition: all 0.2s ease;" aria-labelledby="item-title-{{ item.id }}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-4);">
+                        <div style="flex-grow: 1; max-width: 600px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: var(--space-2);">
+                                <h3 id="item-title-{{ item.id }}" style="font-size: var(--font-size-xl); color: var(--text-primary); margin: 0; {% if item.is_completed %}text-decoration: line-through; color: var(--text-muted);{% endif %}">
+                                    {{ item.title }}
+                                </h3>
+                                {% if item.is_completed %}
+                                    <span class="badge" style="background-color: #dcfce7; color: #15803d; font-size: var(--font-size-sm); font-weight: 700;">
+                                        &#10003; {% trans "Done" %}
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            {% if item.description %}
+                                <p style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6; margin: 0 0 var(--space-3) 0;">
+                                    {{ item.description }}
+                                </p>
+                            {% endif %}
+
+                            <div style="font-size: var(--font-size-sm); color: var(--text-muted); display: flex; gap: var(--space-3); flex-wrap: wrap;">
+                                <span>
+                                    ⏰ {% if item.scheduled_time %}{{ item.scheduled_time|time:"g:i A" }}{% else %}{% trans "Anytime today" %}{% endif %}
+                                </span>
+                                {% if item.is_completed and item.completed_at %}
+                                    <span>
+                                        &bull; {% trans "Completed at" %}: {{ item.completed_at|date:"g:i A" }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Check-off / Toggle Form and TTS button -->
+                        <div style="display: flex; align-items: center; gap: var(--space-2); flex-shrink: 0;">
+                            <!-- Listen button for this item -->
+                            <button type="button" class="btn btn-outline" style="min-height: 44px; min-width: 44px; padding: 8px;"
+                                    data-voice-speak="{{ item.title }}. {{ item.description }}"
+                                    aria-label="{% trans 'Read task aloud' %}">
+                                <span aria-hidden="true">🔊</span>
+                            </button>
+
+                            <form method="post" action="{% url 'routines:toggle_item' item.id %}" style="margin: 0;">
+                                {% csrf_token %}
+                                {% if item.is_completed %}
+                                    <button type="submit" class="btn btn-outline" style="min-height: 44px; min-width: 140px;" aria-label="{% trans 'Mark as pending' %}">
+                                        &#8635; {% trans "Undo" %}
+                                    </button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary" style="min-height: 44px; min-width: 140px; font-size: var(--font-size-base); font-weight: 700;" aria-label="{% trans 'Mark as completed' %}">
+                                        &#10003; {% trans "Complete" %}
+                                    </button>
+                                {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="card" style="text-align: center; padding: var(--space-10) var(--space-4); background-color: var(--color-teal-50); border: 1px solid var(--primary-border); border-radius: var(--radius-lg);">
+            <div style="font-size: 3rem; margin-bottom: var(--space-3);">☀️</div>
+            <h2 style="font-size: var(--font-size-xl); color: var(--color-teal-950); margin-bottom: var(--space-2);">
+                {% trans "No tasks scheduled for today" %}
+            </h2>
+            <p style="font-size: var(--font-size-base); color: var(--color-teal-900); max-width: 520px; margin: 0 auto var(--space-6);">
+                {% trans "Enjoy your day! Your caregiver will add your daily schedule and activities here when needed." %}
+            </p>
+            <a href="{% url 'accounts:patient_portal' %}" class="btn btn-primary" style="min-height: 44px;">
+                {% trans "Return to My Space" %}
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

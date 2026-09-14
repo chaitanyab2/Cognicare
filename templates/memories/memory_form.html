@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ action_title }} - Cognicare{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 0 auto; padding: var(--space-6) 0;">
+    <div style="margin-bottom: var(--space-6);">
+        <a href="{% url 'memories:manage_memories' %}?member={{ selected_member.id }}" class="btn btn-outline btn-sm" style="margin-bottom: var(--space-3);">
+            &larr; {% trans "Back to Memories" %}
+        </a>
+        <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-1);">
+            {{ action_title }}
+        </h1>
+        <p style="color: var(--text-secondary); margin: 0;">
+            {% blocktrans with name=selected_member.first_name|default:selected_member.username %}For supervised member: <strong>{{ name }}</strong>{% endblocktrans %}
+        </p>
+    </div>
+
+    <div class="card" style="padding: var(--space-6);">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="alert alert-error" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Title Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="id_title" style="font-weight: 600; color: var(--text-primary);">
+                        {% trans "Memory Title" %} <span style="color: #dc2626;">*</span>
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="id_title" aria-label="{% trans 'Speak title' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Description Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="id_description" style="font-weight: 600; color: var(--text-primary);">
+                        {% trans "Story & Reminiscence Notes" %}
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="id_description" aria-label="{% trans 'Speak description' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Photo Upload -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <label for="id_image" style="font-weight: 600; color: var(--text-primary); display: block; margin-bottom: var(--space-1);">
+                    {% trans "Photograph (Optional)" %}
+                </label>
+                {% if is_edit and memory.image %}
+                    <div style="margin-bottom: var(--space-2); display: flex; align-items: center; gap: var(--space-3);">
+                        <img src="{{ memory.image.url }}" alt="{{ memory.title }}" style="width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <span style="font-size: var(--font-size-sm); color: var(--text-secondary);">{% trans "Current photograph" %}</span>
+                    </div>
+                {% endif %}
+                {{ form.image }}
+                <p style="font-size: var(--font-size-xs); color: var(--text-muted); margin-top: 4px;">
+                    {{ form.image.help_text }}
+                </p>
+                {% if form.image.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Audio Note Upload -->
+            <div class="form-group" style="margin-bottom: var(--space-6);">
+                <label for="id_audio_clip" style="font-weight: 600; color: var(--text-primary); display: block; margin-bottom: var(--space-1);">
+                    {% trans "Voice Note / Audio Clip (Optional)" %}
+                </label>
+                {% if is_edit and memory.audio_clip %}
+                    <div style="margin-bottom: var(--space-2);">
+                        <audio controls style="height: 36px;">
+                            <source src="{{ memory.audio_clip.url }}">
+                        </audio>
+                    </div>
+                {% endif %}
+                {{ form.audio_clip }}
+                <p style="font-size: var(--font-size-xs); color: var(--text-muted); margin-top: 4px;">
+                    {{ form.audio_clip.help_text }}
+                </p>
+                {% if form.audio_clip.errors %}
+                    <div style="color: #dc2626; font-size: var(--font-size-sm); margin-top: 4px;">{{ form.audio_clip.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: var(--space-3);">
+                <a href="{% url 'memories:manage_memories' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="min-height: 44px;">
+                    {% trans "Cancel" %}
+                </a>
+                <button type="submit" class="btn btn-primary" style="min-height: 44px;">
+                    {% if is_edit %}{% trans "Save Changes" %}{% else %}{% trans "Save Memory" %}{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
