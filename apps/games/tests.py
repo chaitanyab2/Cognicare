@@ -1124,3 +1124,444 @@ class FamiliarFacesGameplayIntegrationTests(TestCase):
         self.assertEqual(round_obj.actual_response['selected_ids'], [target1])
         self.assertEqual(round_obj.actual_response['correct_ids'], [target1])
         self.assertTrue(round_obj.is_correct)
+
+
+# ==========================================================================
+# Phase 9: Focus Finder Tests
+# ==========================================================================
+
+import xml.etree.ElementTree as ET
+from decimal import Decimal
+from apps.games.services import FocusFinderEngine, FOCUS_FINDER_CATALOG
+from apps.accounts.models import CaregiverMemberRelationship
+from apps.accounts.services import get_caregiver_dashboard_data
+
+
+class FocusFinderEngineTests(TestCase):
+    """Unit tests for FocusFinderEngine logic, item catalog, and deterministic planning."""
+
+    def test_catalog_integrity(self):
+        """Validates that all 24 catalog items are complete, well-formed SVG, and free of emoji."""
+        self.assertGreaterEqual(len(FOCUS_FINDER_CATALOG), 20)
+        approved_categories = {'Flowers', 'Foliage & Botanicals', 'Kitchen & Table', 'Keepsakes'}
+
+        for item_id, item in FOCUS_FINDER_CATALOG.items():
+            self.assertEqual(item['id'], item_id)
+            self.assertTrue(item['name'])
+            self.assertIn(item['category'], approved_categories)
+            self.assertTrue(item['svg_icon'])
+
+            # Verify XML parsing of SVG
+            try:
+                root = ET.fromstring(item['svg_icon'])
+                self.assertIn('svg', root.tag)
+            except Exception as e:
+                self.fail(f"Item '{item_id}' has invalid SVG XML: {e}")
+
+    def test_instructions_present_and_structured(self):
+        """Verifies elder-friendly 4-step instructions."""
+        instructions = FocusFinderEngine.get_instructions()
+        self.assertEqual(len(instructions), 4)
+        for i, step in enumerate(instructions, 1):
+            self.assertEqual(step['number'], i)
+            self.assertTrue(step['title'])
+            self.assertTrue(step['description'])
+
+    def test_difficulty_configurations(self):
+        """Validates all 5 difficulty levels for grid dimensions, item counts, and single targets."""
+        expected_configs = {
+            1: (2, 3, 6),
+            2: (3, 3, 9),
+            3: (3, 4, 12),
+            4: (4, 4, 16),
+            5: (4, 5, 20),
+        }
+
+        for diff, (rows, cols, total_items) in expected_configs.items():
+            plan = FocusFinderEngine.get_session_plan(session=None, difficulty=diff)
+            self.assertEqual(len(plan), 3)
+
+            targets_in_session = [plan[r]['target_ids'][0] for r in range(1, 4)]
+            self.assertEqual(len(set(targets_in_session)), 3, f"Targets must be distinct across rounds for diff {diff}")
+
+            for r in range(1, 4):
+                round_data = plan[r]
+                self.assertEqual(round_data['grid_size'], {'rows': rows, 'cols': cols})
+                self.assertEqual(len(round_data['grid_items']), total_items)
+                self.assertEqual(len(round_data['grid_item_ids']), total_items)
+                self.assertEqual(len(round_data['distractor_ids']), total_items - 1)
+
+                target_id = round_data['target_ids'][0]
+                self.assertIn(target_id, round_data['grid_item_ids'])
+                self.assertEqual(round_data['grid_item_ids'].count(target_id), 1)
+                self.assertNotIn(target_id, round_data['distractor_ids'])
+
+    def test_session_plan_determinism(self):
+        """Confirms that the same session ID and difficulty produce an identical plan on repeated calls."""
+        class DummySession:
+            id = 42
+            difficulty = 3
+
+        session = DummySession()
+        plan1 = FocusFinderEngine.get_session_plan(session=session)
+        plan2 = FocusFinderEngine.get_session_plan(session=session)
+
+        for r in range(1, 4):
+            self.assertEqual(plan1[r]['target_ids'], plan2[r]['target_ids'])
+            self.assertEqual(plan1[r]['grid_item_ids'], plan2[r]['grid_item_ids'])
+            self.assertEqual(plan1[r]['distractor_ids'], plan2[r]['distractor_ids'])
+
+    def test_get_round_data_validation(self):
+        """Verifies get_round_data structure and boundary handling."""
+        round1 = FocusFinderEngine.get_round_data(1)
+        self.assertEqual(round1['round_number'], 1)
+        self.assertEqual(round1['total_rounds'], 3)
+        self.assertIn('target_item', round1)
+        self.assertIn('target_ids', round1)
+        self.assertIn('grid_items', round1)
+        self.assertIn('grid_size', round1)
+
+        with self.assertRaises(ValueError):
+            FocusFinderEngine.get_round_data(0)
+
+        with self.assertRaises(ValueError):
+            FocusFinderEngine.get_round_data(4)
+
+    def test_evaluate_round_correct_selection(self):
+        """Verifies scoring and feedback when matching target is selected."""
+        round_data = FocusFinderEngine.get_round_data(1)
+        target_id = round_data['target_ids'][0]
+
+        eval_res = FocusFinderEngine.evaluate_round(1, [target_id], response_time_ms=2200)
+        self.assertTrue(eval_res['is_correct'])
+        self.assertEqual(eval_res['score'], 1)
+        self.assertEqual(eval_res['max_score'], 1)
+        self.assertEqual(eval_res['mistake_count'], 0)
+        self.assertEqual(eval_res['correct_ids'], [target_id])
+        self.assertEqual(eval_res['distractor_ids'], [])
+        self.assertEqual(eval_res['feedback_tone'], 'success')
+        self.assertIn("Wonderful!", eval_res['feedback_message'])
+
+    def test_evaluate_round_incorrect_selection(self):
+        """Verifies scoring and gentle feedback when a distractor is selected."""
+        round_data = FocusFinderEngine.get_round_data(1)
+        target_id = round_data['target_ids'][0]
+        distractor_id = [item['id'] for item in round_data['grid_items'] if item['id'] != target_id][0]
+
+        eval_res = FocusFinderEngine.evaluate_round(1, [distractor_id], response_time_ms=3500)
+        self.assertFalse(eval_res['is_correct'])
+        self.assertEqual(eval_res['score'], 0)
+        self.assertEqual(eval_res['max_score'], 1)
+        self.assertEqual(eval_res['mistake_count'], 1)
+        self.assertEqual(eval_res['correct_ids'], [])
+        self.assertEqual(eval_res['distractor_ids'], [distractor_id])
+        self.assertEqual(eval_res['missed_ids'], [target_id])
+        self.assertEqual(eval_res['feedback_tone'], 'encouraging')
+        self.assertIn("Good effort!", eval_res['feedback_message'])
+
+    def test_evaluate_round_alien_or_empty_selection(self):
+        """Verifies graceful handling of empty or invalid IDs."""
+        eval_empty = FocusFinderEngine.evaluate_round(1, [], response_time_ms=1000)
+        self.assertFalse(eval_empty['is_correct'])
+        self.assertEqual(eval_empty['score'], 0)
+        self.assertEqual(eval_empty['mistake_count'], 1)
+
+        eval_alien = FocusFinderEngine.evaluate_round(1, ['alien_id_999'], response_time_ms=1000)
+        self.assertFalse(eval_alien['is_correct'])
+        self.assertEqual(eval_alien['score'], 0)
+
+
+class FocusFinderSessionFlowTests(TestCase):
+    """Integration tests for full Focus Finder session lifecycle, views, and caregiver reporting."""
+
+    def setUp(self):
+        self.member = CustomUser.objects.create_user(
+            username='player_focus',
+            email='pf@example.com',
+            password='Password123!',
+            role=Role.PATIENT,
+            first_name='Clara',
+            last_name='Oswald'
+        )
+        self.caregiver = CustomUser.objects.create_user(
+            username='caregiver_focus',
+            email='cgf@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER,
+            first_name='Martha',
+            last_name='Jones'
+        )
+        CaregiverMemberRelationship.objects.create(
+            caregiver=self.caregiver,
+            member=self.member,
+            is_active=True
+        )
+        self.game = Game.objects.get(slug='focus-finder')
+
+    def test_patient_can_start_focus_finder_session(self):
+        """A patient can initiate a Focus Finder session with a configured difficulty."""
+        self.client.login(username='player_focus', password='Password123!')
+        res = self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 3}
+        )
+        self.assertEqual(res.status_code, 302)
+
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        self.assertEqual(session.difficulty, 3)
+        self.assertEqual(session.status, GameSession.Status.IN_PROGRESS)
+        self.assertEqual(session.score, 0)
+        self.assertEqual(session.max_score, 3)
+        self.assertEqual(session.accuracy, Decimal('0.00'))
+
+    def test_caregiver_cannot_start_patient_session(self):
+        """A caregiver is not allowed to initiate a gameplay session directly."""
+        self.client.login(username='caregiver_focus', password='Password123!')
+        res = self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 1}
+        )
+        self.assertEqual(res.status_code, 403)
+
+    def test_gameplay_view_renders_focus_finder(self):
+        """Active gameplay view delivers the focus_finder.html template with target and grid."""
+        self.client.login(username='player_focus', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 2}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'games/focus_finder.html')
+        self.assertContains(res, 'Focus Finder')
+        self.assertContains(res, 'Target to Find')
+        self.assertContains(res, 'Picture Grid:')
+        self.assertContains(res, 'Confirm My Selection')
+
+    def test_full_three_round_gameplay_and_scoring(self):
+        """Executes full 3-round gameplay session (2 correct, 1 incorrect) and validates completion."""
+        self.client.login(username='player_focus', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = FocusFinderEngine.get_session_plan(session=session)
+        target1 = plan[1]['target_ids'][0]
+        target2 = plan[2]['target_ids'][0]
+        # Distractor for round 3 to simulate incorrect pick
+        distractor3 = plan[3]['distractor_ids'][0]
+
+        # Round 1 (Correct)
+        res1 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [target1], 'response_time_ms': 2000}),
+            content_type='application/json'
+        )
+        self.assertEqual(res1.status_code, 200)
+        data1 = res1.json()
+        self.assertTrue(data1['evaluation']['is_correct'])
+        self.assertTrue(data1['has_next_round'])
+        self.assertEqual(data1['next_round_number'], 2)
+
+        # Round 2 (Correct)
+        res2 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 2, 'selected_ids': [target2], 'response_time_ms': 2500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res2.status_code, 200)
+        data2 = res2.json()
+        self.assertTrue(data2['evaluation']['is_correct'])
+        self.assertTrue(data2['has_next_round'])
+        self.assertEqual(data2['next_round_number'], 3)
+
+        # Round 3 (Incorrect pick)
+        res3 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 3, 'selected_ids': [distractor3], 'response_time_ms': 3000}),
+            content_type='application/json'
+        )
+        self.assertEqual(res3.status_code, 200)
+        data3 = res3.json()
+        self.assertFalse(data3['evaluation']['is_correct'])
+        self.assertFalse(data3['has_next_round'])
+
+        # Finalize session
+        comp_res = self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+        self.assertEqual(comp_res.status_code, 200)
+
+        # Verify database metrics
+        session.refresh_from_db()
+        self.assertEqual(session.status, GameSession.Status.COMPLETED)
+        self.assertEqual(session.score, 2)  # 2 of 3 correct
+        self.assertEqual(session.max_score, 3)
+        self.assertEqual(session.accuracy, Decimal('66.67'))
+        self.assertEqual(session.rounds.count(), 3)
+        self.assertEqual(session.total_time_ms, 7500)
+
+        # Check results view
+        results_res = self.client.get(reverse('games:results', kwargs={'session_id': session.id}))
+        self.assertEqual(results_res.status_code, 200)
+        self.assertContains(results_res, 'Targets Spotted')
+        self.assertContains(results_res, '✓ Target Found')
+
+    def test_premature_completion_rejected(self):
+        """Cannot finalize session before all 3 rounds are submitted."""
+        self.client.login(username='player_focus', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = FocusFinderEngine.get_session_plan(session=session)
+        target1 = plan[1]['target_ids'][0]
+
+        self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [target1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+
+        comp_res = self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+        self.assertEqual(comp_res.status_code, 400)
+
+    def test_duplicate_round_submission_rejected(self):
+        """Submitting round 1 twice triggers a validation error."""
+        self.client.login(username='player_focus', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = FocusFinderEngine.get_session_plan(session=session)
+        target1 = plan[1]['target_ids'][0]
+
+        res1 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [target1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res1.status_code, 200)
+
+        # Duplicate submission
+        res2 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [target1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res2.status_code, 400)
+
+    def test_tamper_rejection_on_completed_session(self):
+        """Cannot submit rounds to an already finalized session."""
+        self.client.login(username='player_focus', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = FocusFinderEngine.get_session_plan(session=session)
+        for r in range(1, 4):
+            t = plan[r]['target_ids'][0]
+            self.client.post(
+                reverse('games:submit_round', kwargs={'session_id': session.id}),
+                data=json.dumps({'round_number': r, 'selected_ids': [t], 'response_time_ms': 1000}),
+                content_type='application/json'
+            )
+        self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+
+        tamper_res = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': ['marigold'], 'response_time_ms': 1000}),
+            content_type='application/json'
+        )
+        self.assertEqual(tamper_res.status_code, 400)
+
+    def test_stimulus_data_stores_only_safe_ids_and_grid_size(self):
+        """Privacy verification: GameRound.stimulus_data stores only target_id, distractor_ids, grid_item_ids, grid_size."""
+        self.client.login(username='player_focus', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = FocusFinderEngine.get_session_plan(session=session)
+        target1 = plan[1]['target_ids'][0]
+
+        sub_res = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [target1], 'response_time_ms': 1800}),
+            content_type='application/json'
+        )
+        self.assertEqual(sub_res.status_code, 200)
+
+        round_obj = session.rounds.get(round_number=1)
+        stimulus = round_obj.stimulus_data
+
+        # Verify key presence and structure
+        self.assertIn('target_id', stimulus)
+        self.assertEqual(stimulus['target_id'], target1)
+        self.assertIn('distractor_ids', stimulus)
+        self.assertIn('grid_item_ids', stimulus)
+        self.assertIn('grid_size', stimulus)
+        self.assertEqual(stimulus['grid_size'], {'rows': 2, 'cols': 3})
+
+        # Verify absence of personal or media data
+        self.assertNotIn('user_id', stimulus)
+        self.assertNotIn('username', stimulus)
+        self.assertNotIn('photo_url', stimulus)
+        self.assertNotIn('svg_icon', stimulus)
+
+        # Expected and actual response telemetry
+        self.assertEqual(round_obj.expected_response, {'target_ids': [target1]})
+        self.assertEqual(round_obj.actual_response['selected_ids'], [target1])
+        self.assertEqual(round_obj.actual_response['correct_ids'], [target1])
+        self.assertTrue(round_obj.is_correct)
+
+    def test_caregiver_dashboard_reflects_focus_finder(self):
+        """Verifies that completed Focus Finder games appear seamlessly in the Caregiver Dashboard."""
+        self.client.login(username='player_focus', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 4}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = FocusFinderEngine.get_session_plan(session=session)
+        for r in range(1, 4):
+            t = plan[r]['target_ids'][0]
+            self.client.post(
+                reverse('games:submit_round', kwargs={'session_id': session.id}),
+                data=json.dumps({'round_number': r, 'selected_ids': [t], 'response_time_ms': 2100}),
+                content_type='application/json'
+            )
+        self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+
+        dashboard_data = get_caregiver_dashboard_data(self.caregiver, member_id=self.member.id)
+        ff_metrics = [g for g in dashboard_data['games_performance'] if g['slug'] == 'focus-finder'][0]
+
+        self.assertTrue(ff_metrics['is_active'])
+        self.assertEqual(ff_metrics['domain'], 'Visual Attention')
+        self.assertEqual(ff_metrics['completed_count'], 1)
+        self.assertEqual(ff_metrics['current_difficulty'], 4)
+        self.assertEqual(ff_metrics['avg_accuracy'], 100.0)
+        self.assertEqual(ff_metrics['avg_response_time_ms'], 2100)

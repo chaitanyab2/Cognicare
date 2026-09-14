@@ -924,5 +924,155 @@ main {
     object-fit: cover;
 }
 
+/* ==========================================================================
+   Phase 9: Focus Finder (Visual Selective Attention) Styles
+   ========================================================================== */
 
+.focus-target-card {
+    background: linear-gradient(135deg, var(--color-teal-50) 0%, var(--bg-surface) 100%);
+    border: 2px solid var(--primary-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    max-width: 520px;
+    margin: 0 auto var(--space-6);
+    box-shadow: var(--shadow-card);
+}
 
+.focus-target-icon-box {
+    width: 80px;
+    height: 80px;
+    background-color: var(--bg-surface);
+    border: 2px solid var(--primary-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-2);
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+}
+
+.focus-target-icon-box svg {
+    width: 100%;
+    height: 100%;
+}
+
+.focus-grid {
+    display: grid;
+    gap: var(--space-3);
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto var(--space-8);
+}
+
+.focus-tile {
+    position: relative;
+    min-height: 100px;
+    padding: var(--space-3) var(--space-2);
+    border: 2.5px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-surface);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    outline: none;
+}
+
+.focus-tile:hover {
+    border-color: var(--color-teal-600);
+    background-color: var(--color-teal-50);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
+}
+
+.focus-tile:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+}
+
+.focus-tile.selected {
+    border-color: var(--primary-main) !important;
+    border-width: 3px !important;
+    background-color: var(--color-teal-50) !important;
+    box-shadow: 0 4px 16px rgba(13, 148, 136, 0.22) !important;
+    transform: translateY(-2px);
+}
+
+.focus-tile-svg {
+    width: 52px;
+    height: 52px;
+    margin-bottom: var(--space-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.focus-tile-svg svg {
+    width: 100%;
+    height: 100%;
+}
+
+.focus-tile-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.25;
+}
+
+.focus-tile-check {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background-color: var(--bg-surface);
+    color: var(--primary-main);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+    transition: all 0.15s ease;
+}
+
+.focus-tile.selected .focus-tile-check {
+    border-color: var(--primary-main);
+    background-color: var(--primary-main);
+    color: var(--text-inverse);
+    opacity: 1;
+}
+
+@media (max-width: 640px) {
+    .focus-target-card {
+        flex-direction: column;
+        text-align: center;
+        padding: var(--space-4);
+    }
+    .focus-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--space-2);
+    }
+    .focus-tile {
+        min-height: 90px;
+        padding: var(--space-2);
+    }
+    .focus-tile-svg {
+        width: 44px;
+        height: 44px;
+    }
+    .focus-tile-label {
+        font-size: 0.85rem;
+    }
+}

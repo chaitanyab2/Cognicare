@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Focus Finder - Round {{ current_round }} of {{ total_rounds }} - Cognicare{% endblock %}
+
+{% block content %}
+<div class="gameplay-container" style="max-width: 860px; margin: 0 auto;">
+    <!-- Top Status Bar (Unhurried, no timer or score pressure) -->
+    <header class="gameplay-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6); padding: var(--space-4) var(--space-6); background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+        <div>
+            <span style="font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
+                Activity
+            </span>
+            <h1 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
+                Focus Finder
+            </h1>
+        </div>
+        <div>
+            <span id="round-indicator" class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
+                Round {{ current_round }} of {{ total_rounds }}
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Game Board Container -->
+    <main id="game-board" class="card" style="padding: var(--space-8); border: 2px solid var(--primary-border); background-color: var(--bg-surface);" aria-live="polite">
+
+        <!-- ==============================================
+             STAGE 1: VISUAL SEARCH STAGE
+             ============================================== -->
+        <section id="search-stage" class="game-stage" aria-labelledby="question-heading">
+            <!-- Prompt & Guidance -->
+            <div style="text-align: center; margin-bottom: var(--space-6);">
+                <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); margin-bottom: var(--space-3); font-size: 1rem; padding: 4px 14px;">
+                    Visual Attention & Focus
+                </span>
+                <h2 id="question-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-top: var(--space-2);">
+                    {{ round_data.prompt_text }}
+                </h2>
+                <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 620px; margin: var(--space-2) auto 0; line-height: 1.5;">
+                    Look at the target item below, then tap the matching item in the picture grid.
+                </p>
+            </div>
+
+            <!-- Target Reference Card -->
+            <div class="focus-target-card" role="region" aria-label="Target item reference">
+                <div class="focus-target-icon-box" id="target-icon-box">
+                    {{ round_data.target_item.svg_icon|safe }}
+                </div>
+                <div>
+                    <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700; display: block; margin-bottom: 2px;">
+                        Target to Find
+                    </span>
+                    <div id="target-item-name" style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); line-height: 1.2;">
+                        {{ round_data.target_name }}
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+                        <span id="target-item-category" class="badge" style="background-color: var(--color-slate-100); color: var(--text-secondary); font-size: 0.85rem; padding: 2px 10px;">
+                            {{ round_data.target_category }}
+                        </span>
+                        <button type="button" id="btn-speak-target" class="btn btn-secondary" style="min-height: 36px; padding: 2px 10px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;" aria-label="Listen to target item name" title="Listen to target item name">
+                            <span aria-hidden="true">🔊</span> Listen
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Picture Search Grid -->
+            <div style="margin-bottom: var(--space-8);">
+                <div style="text-align: center; margin-bottom: var(--space-4);">
+                    <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0; font-weight: 700;">
+                        Picture Grid:
+                    </h3>
+                </div>
+
+                <div id="focus-grid"
+                     class="focus-grid"
+                     role="group"
+                     aria-label="Picture search grid"
+                     style="grid-template-columns: repeat({{ round_data.grid_size.cols }}, minmax(0, 1fr));">
+                    {% for item in round_data.grid_items %}
+                        <button type="button"
+                                class="focus-tile"
+                                data-item-id="{{ item.id }}"
+                                aria-label="{{ item.name }}"
+                                aria-pressed="false">
+                            <div class="focus-tile-check" aria-hidden="true">✓</div>
+                            <div class="focus-tile-svg">
+                                {{ item.svg_icon|safe }}
+                            </div>
+                            <div class="focus-tile-label">
+                                {{ item.name }}
+                            </div>
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Confirm Selection Action -->
+            <div style="text-align: center;">
+                <button type="button"
+                        id="btn-confirm-selection"
+                        class="btn btn-primary btn-lg"
+                        style="min-width: 280px; min-height: 60px; font-size: var(--font-size-lg);"
+                        disabled
+                        aria-label="Confirm selected item">
+                    Confirm My Selection &rarr;
+                </button>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             STAGE 2: GENTLE FEEDBACK STAGE
+             ============================================== -->
+        <section id="feedback-stage" class="game-stage" style="display: none;" aria-labelledby="feedback-message-heading">
+            <div style="text-align: center; padding: var(--space-4) 0;">
+                <div id="feedback-icon-container" style="width: 68px; height: 68px; border-radius: 50%; margin: 0 auto var(--space-4); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; background-color: var(--color-teal-100); color: var(--color-teal-800);">
+                    ✓
+                </div>
+                <h2 id="feedback-message-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+                    Wonderful!
+                </h2>
+                <p id="feedback-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); max-width: 600px; margin: 0 auto var(--space-6); line-height: 1.6;">
+                    Thank you for exercising your attention today.
+                </p>
+
+                <!-- Feedback Target Recap Card -->
+                <div class="card" style="max-width: 440px; margin: 0 auto var(--space-8); padding: var(--space-5); background-color: var(--color-teal-50); border: 1px solid var(--primary-border); display: flex; align-items: center; gap: var(--space-4); text-align: left;">
+                    <div id="feedback-target-icon-box" style="width: 80px; height: 80px; background-color: var(--bg-surface); border: 2px solid var(--primary-border); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; padding: var(--space-2); flex-shrink: 0;">
+                        {{ round_data.target_item.svg_icon|safe }}
+                    </div>
+                    <div>
+                        <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700; display: block;">
+                            Target Item
+                        </span>
+                        <div id="feedback-item-name" style="font-size: 1.3rem; font-weight: 700; color: var(--color-teal-900);">
+                            {{ round_data.target_name }}
+                        </div>
+                        <div id="feedback-item-category" style="font-size: 0.95rem; color: var(--text-secondary); margin-top: 2px;">
+                            {{ round_data.target_category }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Next Action Button -->
+                <div>
+                    <button type="button"
+                            id="btn-next-action"
+                            class="btn btn-primary btn-lg"
+                            style="min-width: 280px; min-height: 60px; font-size: var(--font-size-lg);">
+                        Continue &rarr;
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Exit Navigation -->
+    <footer style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-6);">
+        <a href="{% url 'games:list' %}" class="btn btn-secondary" onclick="return confirm('Would you like to return to the Games menu?');" style="min-height: 44px; padding: 8px 18px;">
+            &larr; Exit to Games
+        </a>
+    </footer>
+</div>
+
+<!-- Initial Data JSON Scripts -->
+{{ round_data.grid_items|json_script:"initial-grid-items" }}
+{{ round_data.target_item|json_script:"initial-target-item" }}
+{{ round_data.grid_size|json_script:"initial-grid-size" }}
+
+<!-- Game Session Metadata -->
+<div id="game-metadata"
+     data-session-id="{{ session.id }}"
+     data-current-round="{{ current_round }}"
+     data-total-rounds="{{ total_rounds }}"
+     data-submit-url="{% url 'games:submit_round' session_id=session.id %}"
+     data-complete-url="{% url 'games:complete_session' session_id=session.id %}"
+     data-results-url="{% url 'games:results' session_id=session.id %}"
+     style="display: none;">
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/focus_finder.js' %}"></script>
+{% endblock %}
