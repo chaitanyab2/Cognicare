@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cognicare - Cognitive Wellness Platform{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/cognicare.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <div class="site-wrapper">
+        <header class="site-header" role="banner">
+            <div class="container nav-bar">
+                <a href="{% url 'root_redirect' %}" class="brand-link" aria-label="Cognicare Home">
+                    <div class="brand-icon" aria-hidden="true">
+                        <svg class="brand-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9.5 4a3.5 3.5 0 0 0-3.5 3.5c0 .3.04.6.1.88A3.5 3.5 0 0 0 4 11.5c0 .65.18 1.26.5 1.78A3.5 3.5 0 0 0 5 19.5c.65 0 1.26-.18 1.78-.5A3.5 3.5 0 0 0 9.5 20c.8 0 1.54-.27 2.13-.73.23-.18.37-.46.37-.75V5.48c0-.3-.14-.57-.37-.75A3.47 3.47 0 0 0 9.5 4Z"/>
+                            <path d="M14.5 4a3.5 3.5 0 0 1 3.5 3.5c0 .3-.04.6-.1.88A3.5 3.5 0 0 1 20 11.5c0 .65-.18 1.26-.5 1.78A3.5 3.5 0 0 1 19 19.5c-.65 0-1.26-.18-1.78-.5A3.5 3.5 0 0 1 14.5 20a3.47 3.47 0 0 1-2.13-.73c-.23-.18-.37-.46-.37-.75V5.48c0-.3.14-.57.37-.75A3.47 3.47 0 0 1 14.5 4Z"/>
+                            <path d="M12 8v8"/>
+                            <path d="M8.5 11.5h3.5"/>
+                            <path d="M12 11.5h3.5"/>
+                            <path d="M8 15.5h4"/>
+                            <path d="M12 15.5h4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="brand-name">Cognicare</span>
+                        <span class="brand-tagline">Cognitive Wellness & Memory Support</span>
+                    </div>
+                </a>
+
+                <nav class="user-nav" aria-label="User Navigation">
+                    {% if user.is_authenticated %}
+                        <span class="user-greeting">
+                            Hello, <strong>{{ user.first_name|default:user.username }}</strong>
+                        </span>
+                        {% if user.is_patient %}
+                            <span class="badge badge-patient">Member</span>
+                        {% elif user.is_caregiver %}
+                            <span class="badge badge-caregiver">Caregiver</span>
+                        {% endif %}
+                        <form method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary" style="min-height: 44px; padding: 8px 18px;">
+                                Sign Out
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn btn-outline" style="min-height: 44px; padding: 8px 18px;">
+                            Sign In
+                        </a>
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+
+        <main id="main-content" role="main">
+            <div class="container">
+                {% if messages %}
+                    <div class="messages-container" role="status" aria-live="polite">
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        <footer class="site-footer" role="contentinfo">
+            <div class="container footer-content">
+                <div>
+                    <strong>Cognicare</strong> &bull; Multilingual Cognitive Wellness Platform
+                </div>
+                <div>
+                    Designed with care for elderly users and caregivers
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

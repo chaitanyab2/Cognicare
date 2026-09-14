@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Familiar Faces - Cognicare{% endblock %}
+
+{% block content %}
+<div class="caregiver-dashboard">
+    <!-- Back to Dashboard Navigation -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+        <a href="{% url 'accounts:caregiver_portal' %}{% if selected_member %}?member={{ selected_member.id }}{% endif %}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 16px;">
+            &larr; Back to Caregiver Portal
+        </a>
+    </nav>
+
+    {% if not has_members %}
+        <div class="card empty-state-card" style="text-align: center; padding: var(--space-10) var(--space-6); max-width: 640px; margin: var(--space-8) auto;">
+            <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">👥</div>
+            <h1 style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">No Member Profiles Connected</h1>
+            <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-bottom: var(--space-4);">
+                To curate familiar people and family photos for the Familiar Faces activity, an active member profile must be linked to your caregiver account.
+            </p>
+        </div>
+    {% else %}
+        <!-- Header & Member Switcher -->
+        <div class="dashboard-header" style="align-items: center;">
+            <div>
+                <div style="display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap;">
+                    <h1 class="card-title" style="margin-bottom: 0;">Familiar Faces Management</h1>
+                    {% if is_ready %}
+                        <span class="badge badge-patient" style="font-size: 0.85rem; padding: 4px 10px;">
+                            &#10003; Ready to Play
+                        </span>
+                    {% else %}
+                        <span class="badge" style="background-color: #fef3c7; color: #b45309; border: 1px solid #fde68a; font-size: 0.85rem; padding: 4px 10px;">
+                            Needs More People ({{ active_count }} of {{ min_required }})
+                        </span>
+                    {% endif %}
+                </div>
+                <p class="card-subtitle" style="margin-top: 4px;">
+                    Curate dignified photographs of family members, loved ones, and close friends for <strong>{{ selected_member.first_name|default:selected_member.username }}</strong>.
+                </p>
+            </div>
+
+            <!-- Member Selector if multiple -->
+            {% if authorized_members|length > 1 %}
+                <div class="card member-selector-card" style="padding: var(--space-3) var(--space-4); min-width: 260px;">
+                    <form method="get" action="{% url 'memories:manage_familiar_people' %}" class="member-selector-form">
+                        <label for="member-selector" style="font-size: var(--font-size-sm); color: var(--text-muted); display: block; margin-bottom: 4px; font-weight: 600;">
+                            Supervised Member:
+                        </label>
+                        <select id="member-selector" name="member" onchange="this.form.submit()" class="form-control" style="font-size: var(--font-size-base); padding: 6px 12px; min-height: 40px; cursor: pointer; width: 100%;">
+                            {% for m in authorized_members %}
+                                <option value="{{ m.id }}" {% if m.id == selected_member.id %}selected{% endif %}>
+                                    {{ m.name }} (@{{ m.username }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Status & Action Banner -->
+        <div class="card" style="margin-bottom: var(--space-8); padding: var(--space-6); background: linear-gradient(135deg, #ffffff, var(--bg-surface-subtle));">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+                <div>
+                    <div style="font-size: var(--font-size-base); font-weight: 700; color: var(--color-slate-900);">
+                        Activity Pool Status:
+                        {% if is_ready %}
+                            <span style="color: #15803d; font-weight: 800;">Ready for Gameplay ({{ active_count }} active people)</span>
+                        {% else %}
+                            <span style="color: #b45309; font-weight: 800;">Setup in progress ({{ active_count }} of {{ min_required }} people added)</span>
+                        {% endif %}
+                    </div>
+                    <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin-top: 4px; margin-bottom: 0;">
+                        {% if is_ready %}
+                            {{ selected_member.first_name|default:selected_member.username }} has enough active familiar people for all 3 rounds of the recognition activity.
+                        {% else %}
+                            Add at least <strong>{{ min_required }} familiar people</strong> with clear photographs so the activity can generate 3 choices in Round 1 and 4 choices in Rounds 2 &amp; 3.
+                        {% endif %}
+                    </p>
+                </div>
+                <div>
+                    <a href="{% url 'memories:add_familiar_person' %}?member={{ selected_member.id }}" class="btn btn-primary" style="min-height: 44px; padding: 10px 20px;">
+                        + Add Familiar Person
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Familiar People Grid -->
+        {% if people %}
+            <div class="grid-3" style="gap: var(--space-6); margin-bottom: var(--space-8);">
+                {% for person in people %}
+                    <div class="card familiar-person-card" style="display: flex; flex-direction: column; justify-content: space-between; padding: var(--space-5); border: 2px solid {% if person.is_active %}var(--border-color){% else %}var(--border-subtle){% endif %}; opacity: {% if person.is_active %}1{% else %}0.65{% endif %}; background-color: var(--bg-surface);">
+                        <div>
+                            <!-- Photo Thumbnail Frame -->
+                            <div class="person-photo-wrapper" style="width: 100%; height: 200px; border-radius: var(--radius-md); overflow: hidden; background-color: var(--color-slate-100); border: 1px solid var(--border-color); margin-bottom: var(--space-4); display: flex; align-items: center; justify-content: center;">
+                                {% if person.photo %}
+                                    <img src="{{ person.photo.url }}" alt="{{ person.name }} ({{ person.relationship }})" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                {% else %}
+                                    <div style="font-size: 3rem; color: var(--text-muted);">👤</div>
+                                {% endif %}
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-2);">
+                                <h2 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
+                                    {{ person.name }}
+                                </h2>
+                                {% if person.is_active %}
+                                    <span class="badge badge-patient" style="font-size: 0.75rem; padding: 2px 8px;">Active</span>
+                                {% else %}
+                                    <span class="badge" style="background-color: var(--color-slate-200); color: var(--color-slate-700); font-size: 0.75rem; padding: 2px 8px;">Paused</span>
+                                {% endif %}
+                            </div>
+
+                            <div style="font-size: var(--font-size-base); color: var(--text-secondary); margin-bottom: var(--space-4);">
+                                <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-size: 0.85rem;">
+                                    {{ person.relationship }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Card Action Buttons -->
+                        <div style="display: flex; gap: var(--space-2); justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: var(--space-3); margin-top: auto;">
+                            <form method="post" action="{% url 'memories:toggle_familiar_person_active' person_id=person.id %}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary" style="font-size: var(--font-size-sm); min-height: 38px; padding: 4px 12px;">
+                                    {% if person.is_active %}Pause{% else %}Activate{% endif %}
+                                </button>
+                            </form>
+                            <div style="display: flex; gap: var(--space-2);">
+                                <a href="{% url 'memories:edit_familiar_person' person_id=person.id %}" class="btn btn-outline" style="font-size: var(--font-size-sm); min-height: 38px; padding: 4px 12px;">
+                                    Edit
+                                </a>
+                                <a href="{% url 'memories:delete_familiar_person' person_id=person.id %}" class="btn btn-secondary" style="font-size: var(--font-size-sm); min-height: 38px; padding: 4px 12px; color: var(--state-error-text);">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card empty-state-card" style="text-align: center; padding: var(--space-10) var(--space-6); margin-bottom: var(--space-8);">
+                <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🖼️</div>
+                <h2 style="font-size: var(--font-size-lg); color: var(--text-primary); margin-bottom: var(--space-2);">No Familiar People Added Yet</h2>
+                <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 520px; margin: 0 auto var(--space-6);">
+                    Add photographs and relationship labels for family members and loved ones to activate the Familiar Faces activity for {{ selected_member.first_name|default:selected_member.username }}.
+                </p>
+                <a href="{% url 'memories:add_familiar_person' %}?member={{ selected_member.id }}" class="btn btn-primary btn-lg">
+                    + Add First Familiar Person
+                </a>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

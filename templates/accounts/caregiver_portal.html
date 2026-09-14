@@ -1,0 +1,457 @@
+{% extends "base.html" %}
+
+{% block title %}Caregiver Dashboard - Cognicare{% endblock %}
+
+{% block content %}
+{% if not dashboard.has_members %}
+    <!-- ==============================================
+         EMPTY STATE: No Connected Members
+         ============================================== -->
+    <div class="card empty-state-card" style="text-align: center; padding: var(--space-10) var(--space-6); max-width: 680px; margin: var(--space-8) auto;">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background-color: var(--color-teal-50); color: var(--primary-main); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto var(--space-4); border: 2px solid var(--primary-border);">
+            👥
+        </div>
+        <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-2);">
+            No Member Profiles Connected Yet
+        </h1>
+        <p style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-6);">
+            Welcome to your <strong>Caregiver Portal</strong>. To begin monitoring daily activities, cognitive gameplay metrics, and routine adherence, a patient profile needs to be linked to your account.
+        </p>
+        <div class="alert alert-info" style="text-align: left; font-size: var(--font-size-sm); margin-bottom: 0;">
+            <strong>How it works:</strong> Supervision relationships are established through member pairing. Once an active member profile is connected, their gameplay analytics and daily wellness routines will appear right here.
+        </div>
+    </div>
+{% else %}
+    <!-- ==============================================
+         DASHBOARD HEADER & MEMBER SELECTOR
+         ============================================== -->
+    <div class="dashboard-header">
+        <div>
+            <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2); flex-wrap: wrap;">
+                <h1 class="card-title" style="margin-bottom: 0;">Caregiver Analytics Dashboard</h1>
+                <span class="badge badge-caregiver">Caregiver Portal</span>
+            </div>
+            <p class="card-subtitle">
+                Monitoring cognitive activity, gameplay pacing, and daily routine adherence for <strong>{{ dashboard.selected_member.first_name|default:dashboard.selected_member.username }}</strong>.
+            </p>
+        </div>
+
+        <!-- Supervised Member Selector -->
+        <div class="card member-selector-card" style="padding: var(--space-3) var(--space-5); border-radius: var(--radius-md); min-width: 260px;">
+            {% if dashboard.authorized_members|length > 1 %}
+                <form method="get" action="{% url 'accounts:caregiver_portal' %}" class="member-selector-form">
+                    <label for="member-selector" style="font-size: var(--font-size-sm); color: var(--text-muted); display: block; margin-bottom: 4px; font-weight: 600;">
+                        Switch Supervised Member:
+                    </label>
+                    <div style="display: flex; gap: var(--space-2); align-items: center;">
+                        <select id="member-selector" name="member" onchange="this.form.submit()" class="form-control" style="font-size: var(--font-size-base); padding: 6px 12px; min-height: 40px; cursor: pointer; flex-grow: 1;">
+                            {% for m in dashboard.authorized_members %}
+                                <option value="{{ m.id }}" {% if m.is_selected %}selected{% endif %}>
+                                    {{ m.name }} (@{{ m.username }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <noscript>
+                            <button type="submit" class="btn btn-secondary btn-sm" style="min-height: 40px;">Select</button>
+                        </noscript>
+                    </div>
+                </form>
+            {% else %}
+                <span style="font-size: var(--font-size-sm); color: var(--text-muted); display: block;">Supervising Member:</span>
+                <strong style="font-size: var(--font-size-base); color: var(--color-slate-900);">
+                    {{ dashboard.selected_member.first_name|default:dashboard.selected_member.username }} (@{{ dashboard.selected_member.username }})
+                </strong>
+            {% endif %}
+    </div>
+
+    <!-- ==============================================
+         FAMILIAR FACES / PHOTO MANAGEMENT ACTION
+         ============================================== -->
+    <div class="card" style="padding: var(--space-4) var(--space-6); margin-bottom: var(--space-6); background: linear-gradient(135deg, var(--bg-surface) 0%, var(--color-teal-50) 100%); border: 1px solid var(--color-teal-100); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+        <div style="max-width: 620px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span style="font-size: 1.25rem;">📷</span>
+                <strong style="font-size: var(--font-size-base); color: var(--color-teal-900);">Familiar Faces & Family Photos</strong>
+                <span class="badge badge-caregiver" style="font-size: 0.75rem;">Game Curation</span>
+            </div>
+            <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                Curate photos, names, and relationships for <strong>{{ dashboard.selected_member.first_name|default:dashboard.selected_member.username }}</strong>. At least 4 active people with photos are required to enable the Familiar Faces game.
+            </p>
+        </div>
+        <div>
+            <a href="{% url 'memories:manage_familiar_people' %}?member={{ dashboard.selected_member.id }}" class="btn btn-primary" style="min-height: 44px; display: inline-flex; align-items: center; gap: 6px;">
+                <span>Manage Photos & People &rarr;</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         OVERVIEW KEY PERFORMANCE INDICATORS (KPIs)
+         ============================================== -->
+    <section aria-label="Key Performance Indicators" style="margin-bottom: var(--space-8);">
+        <div class="grid-4">
+            <!-- 1. Games Completed -->
+            <div class="stat-widget">
+                <div class="stat-widget-label">Games Completed</div>
+                <div class="stat-widget-value" style="color: var(--color-teal-700);">
+                    {{ dashboard.total_completed_games }}
+                </div>
+                <div class="stat-widget-sub">
+                    {% if dashboard.sessions_past_7_days %}
+                        {{ dashboard.sessions_past_7_days }} completed in past 7 days
+                    {% else %}
+                        All-time completed sessions
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 2. Overall Accuracy -->
+            <div class="stat-widget">
+                <div class="stat-widget-label">Overall Accuracy</div>
+                <div class="stat-widget-value" style="color: #0369a1;">
+                    {% if dashboard.overall_avg_accuracy != None %}
+                        {{ dashboard.overall_avg_accuracy }}%
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </div>
+                <div class="stat-widget-sub">Average across completed sessions</div>
+            </div>
+
+            <!-- 3. Average Response Time (Gameplay Telemetry) -->
+            <div class="stat-widget">
+                <div class="stat-widget-label">Average Response Time</div>
+                <div class="stat-widget-value" style="color: #b45309;">
+                    {% if dashboard.avg_response_time_sec != None %}
+                        {{ dashboard.avg_response_time_sec }}s
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </div>
+                <div class="stat-widget-sub">
+                    {% if dashboard.avg_response_time_ms != None %}
+                        {{ dashboard.avg_response_time_ms }} ms average per round
+                    {% else %}
+                        Gameplay response pace
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- 4. Routine Adherence -->
+            <div class="stat-widget">
+                <div class="stat-widget-label">Routine Adherence</div>
+                <div class="stat-widget-value" style="color: #15803d;">
+                    {% if dashboard.routine_adherence_pct != None %}
+                        {{ dashboard.routine_adherence_pct }}%
+                    {% else %}
+                        &mdash;
+                    {% endif %}
+                </div>
+                <div class="stat-widget-sub">
+                    {% if dashboard.routine_total_items %}
+                        {{ dashboard.routine_completed_items }} of {{ dashboard.routine_total_items }} tasks logged today
+                    {% else %}
+                        No routine scheduled today
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         ACCURACY OVER COMPLETED SESSIONS (LINE GRAPH)
+         ============================================== -->
+    <section aria-label="Performance Progression Chart" style="margin-bottom: var(--space-8);">
+        <div class="card" style="padding: var(--space-6); background-color: var(--bg-surface); border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4);">
+                <div>
+                    <h2 class="card-title" style="margin-bottom: 2px;">Accuracy Over Completed Sessions</h2>
+                    <p class="card-subtitle">Session accuracy trend across all completed cognitive activities.</p>
+                </div>
+                {% if dashboard.chart_has_data %}
+                    <span class="badge" style="background-color: var(--color-teal-50); color: var(--primary-main); border: 1px solid var(--primary-border); font-size: 0.85rem;">
+                        {{ dashboard.chart_points|length }} Completed Session{% if dashboard.chart_points|length != 1 %}s{% endif %}
+                    </span>
+                {% endif %}
+            </div>
+
+            {% if dashboard.chart_has_data %}
+                <!-- Native Responsive SVG Line Graph (Zero External Library) -->
+                <div class="chart-wrapper" style="width: 100%; overflow-x: auto; background-color: var(--bg-surface-subtle); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-4) var(--space-2);">
+                    <svg viewBox="0 0 {{ dashboard.chart_view_width }} {{ dashboard.chart_view_height }}"
+                         style="width: 100%; height: auto; min-width: 480px; max-height: 280px; display: block;"
+                         role="img"
+                         aria-label="Line graph showing cognitive activity accuracy across completed sessions">
+                        
+                        <!-- Y-Axis Grid Lines & Percentage Labels -->
+                        {% for grid in dashboard.chart_grid_lines %}
+                            <line x1="{{ dashboard.chart_padding_left }}"
+                                  y1="{{ grid.y }}"
+                                  x2="770"
+                                  y2="{{ grid.y }}"
+                                  stroke="var(--border-subtle)"
+                                  stroke-width="1"
+                                  stroke-dasharray="4 4" />
+                            <text x="{{ dashboard.chart_padding_left|add:'-10' }}"
+                                  y="{{ grid.y|add:'4' }}"
+                                  font-size="11"
+                                  text-anchor="end"
+                                  fill="var(--text-muted)"
+                                  font-weight="600">
+                                {{ grid.pct }}%
+                            </text>
+                        {% endfor %}
+
+                        <!-- Connecting Polyline (when 2+ points exist) -->
+                        {% if dashboard.chart_points|length > 1 %}
+                            <polyline fill="none"
+                                      stroke="var(--primary-main)"
+                                      stroke-width="3.5"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      points="{{ dashboard.chart_polyline }}" />
+                        {% endif %}
+
+                        <!-- Data Points, Value Badges, and X-Axis Labels -->
+                        {% for pt in dashboard.chart_points %}
+                            <!-- Plot Point Circle -->
+                            <circle cx="{{ pt.x }}"
+                                    cy="{{ pt.y }}"
+                                    r="6"
+                                    fill="#ffffff"
+                                    stroke="var(--primary-main)"
+                                    stroke-width="3">
+                                <title>Session #{{ pt.index }}: {{ pt.game_name }} (Level {{ pt.difficulty }}) &bull; {{ pt.accuracy_int }}% accuracy on {{ pt.date }}</title>
+                            </circle>
+
+                            <!-- Score/Accuracy Value Text above point -->
+                            <text x="{{ pt.x }}"
+                                  y="{{ pt.y|add:'-12' }}"
+                                  font-size="11"
+                                  font-weight="700"
+                                  text-anchor="middle"
+                                  fill="var(--color-teal-900)">
+                                {{ pt.accuracy_int }}%
+                            </text>
+
+                            <!-- Session index / Date below X-axis -->
+                            <text x="{{ pt.x }}"
+                                  y="245"
+                                  font-size="10.5"
+                                  text-anchor="middle"
+                                  fill="var(--text-muted)">
+                                #{{ pt.index }} ({{ pt.date }})
+                            </text>
+                        {% endfor %}
+                    </svg>
+                </div>
+
+                <!-- Accessible Text / Table Representation for Screen Readers -->
+                <details style="margin-top: var(--space-3);">
+                    <summary style="font-size: var(--font-size-sm); color: var(--primary-main); cursor: pointer; font-weight: 600;">
+                        View chart data as text table
+                    </summary>
+                    <div class="table-responsive" style="margin-top: var(--space-2);">
+                        <table class="data-table" style="font-size: var(--font-size-sm);" aria-label="Completed Sessions Accuracy Table">
+                            <thead>
+                                <tr>
+                                    <th>Session #</th>
+                                    <th>Activity</th>
+                                    <th>Level</th>
+                                    <th>Completed On</th>
+                                    <th>Score</th>
+                                    <th>Accuracy</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pt in dashboard.chart_points %}
+                                    <tr>
+                                        <td>#{{ pt.index }}</td>
+                                        <td><strong>{{ pt.game_name }}</strong></td>
+                                        <td>Level {{ pt.difficulty }}</td>
+                                        <td>{{ pt.date }} {{ pt.time }}</td>
+                                        <td>{{ pt.score }} / {{ pt.max_score }}</td>
+                                        <td><strong>{{ pt.accuracy_int }}%</strong></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </details>
+            {% else %}
+                <div style="text-align: center; padding: var(--space-8) var(--space-4); background-color: var(--bg-surface-subtle); border: 1px dashed var(--border-color); border-radius: var(--radius-md);">
+                    <p style="font-size: var(--font-size-base); color: var(--text-muted); margin: 0;">
+                        No completed gameplay sessions recorded yet for {{ dashboard.selected_member.first_name|default:dashboard.selected_member.username }}.<br>
+                        Accuracy progression trends will appear here as activities are completed.
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ==============================================
+         COGNITIVE GAMES PERFORMANCE TABLE (ALL 6 GAMES)
+         ============================================== -->
+    <section aria-label="Game-Wise Performance" style="margin-bottom: var(--space-8);">
+        <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: var(--space-2);">
+                <div>
+                    <h2 class="card-title">Cognitive Games Performance</h2>
+                    <p class="card-subtitle">Activity metrics and gameplay accuracy across the cognitive domains.</p>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table" aria-label="Cognitive Games Summary Table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Game Name</th>
+                            <th scope="col">Cognitive Domain</th>
+                            <th scope="col">Current Level</th>
+                            <th scope="col">Sessions Completed</th>
+                            <th scope="col">Avg Accuracy</th>
+                            <th scope="col">Avg Response Time</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in dashboard.games_performance %}
+                            <tr>
+                                <td><strong>{{ g.name }}</strong></td>
+                                <td>{{ g.domain }}</td>
+                                <td>
+                                    {% if g.current_difficulty %}
+                                        <span class="badge badge-patient">Level {{ g.current_difficulty }}</span>
+                                    {% else %}
+                                        <span style="color: var(--text-muted); font-size: var(--font-size-sm);">&mdash;</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if g.completed_count > 0 %}
+                                        <strong>{{ g.completed_count }}</strong>
+                                    {% else %}
+                                        <span style="color: var(--text-muted); font-size: var(--font-size-sm);">0</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if g.avg_accuracy != None %}
+                                        <strong>{{ g.avg_accuracy }}%</strong>
+                                    {% else %}
+                                        <span style="color: var(--text-muted); font-size: var(--font-size-sm);">No sessions yet</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if g.avg_response_time_sec != None %}
+                                        {{ g.avg_response_time_sec }}s <span style="font-size: 0.85rem; color: var(--text-muted);">({{ g.avg_response_time_ms }} ms)</span>
+                                    {% else %}
+                                        <span style="color: var(--text-muted); font-size: var(--font-size-sm);">&mdash;</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if g.is_active %}
+                                        <span class="badge badge-patient" style="font-size: 0.85rem; padding: 3px 8px;">Active</span>
+                                    {% else %}
+                                        <span class="badge" style="background-color: var(--color-slate-100); color: var(--color-slate-600); font-size: 0.85rem; padding: 3px 8px;">Planned Activity</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==============================================
+         RECENT ACTIVITY TIMELINE & TODAY'S ROUTINE
+         ============================================== -->
+    <section aria-label="Recent Activity and Routines" style="margin-bottom: var(--space-8);">
+        <div class="grid-2">
+            <!-- Recent Gameplay Sessions Card -->
+            <div class="card">
+                <h2 class="card-title" style="margin-bottom: var(--space-4);">Recent Gameplay Activity</h2>
+                {% if dashboard.recent_sessions %}
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        {% for s in dashboard.recent_sessions %}
+                            <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; gap: var(--space-3);">
+                                <div>
+                                    <strong style="font-size: 1.05rem; color: var(--text-primary);">
+                                        {{ s.game.name }}
+                                    </strong>
+                                    <span class="badge" style="background-color: var(--color-slate-100); color: var(--text-secondary); font-size: 0.8rem; margin-left: 6px;">
+                                        Level {{ s.difficulty }}
+                                    </span>
+                                    <div style="font-size: var(--font-size-sm); color: var(--text-muted); margin-top: 2px;">
+                                        {{ s.completed_at|date:"M d, Y, g:i A" }} &bull; {{ s.score }} of {{ s.max_score }} correct ({{ s.accuracy }}%)
+                                    </div>
+                                </div>
+                                <span class="badge badge-patient" style="font-size: 0.85rem;">Completed</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div style="padding: var(--space-6) 0; text-align: center; color: var(--text-muted);">
+                        No completed gameplay sessions recorded yet.
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Today's Routine Schedule Card -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4);">
+                    <h2 class="card-title" style="margin-bottom: 0;">Today's Routine Schedule</h2>
+                    {% if dashboard.today_routine %}
+                        <span style="font-size: var(--font-size-sm); color: var(--text-muted);">
+                            {{ dashboard.today_routine.title }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                {% if dashboard.today_routine and dashboard.routine_items %}
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        {% for item in dashboard.routine_items %}
+                            <li style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; gap: var(--space-3);">
+                                <div>
+                                    <strong style="font-size: 1.05rem; color: var(--text-primary);">
+                                        {{ item.title }}
+                                    </strong>
+                                    <div style="font-size: var(--font-size-sm); color: var(--text-muted); margin-top: 2px;">
+                                        {% if item.scheduled_time %}
+                                            Scheduled: {{ item.scheduled_time|time:"g:i A" }}
+                                        {% else %}
+                                            Anytime today
+                                        {% endif %}
+                                        {% if item.is_completed and item.completed_at %}
+                                            &bull; Logged: {{ item.completed_at|date:"g:i A" }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div>
+                                    {% if item.is_completed %}
+                                        <span style="color: #15803d; font-weight: 700; font-size: 0.95rem;">
+                                            &#10003; Completed
+                                        </span>
+                                    {% else %}
+                                        <span class="badge" style="background-color: var(--color-slate-100); color: var(--text-muted); font-size: 0.85rem;">
+                                            Pending
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div style="padding: var(--space-6) 0; text-align: center; color: var(--text-muted);">
+                        No routine schedule logged for today.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endif %}
+
+<!-- Mandatory Non-Clinical Wellness Disclaimer -->
+<div class="disclaimer-box" role="note" aria-label="Platform Disclaimer">
+    <strong>Platform Notice:</strong> Cognicare is a cognitive wellness and daily engagement platform. Performance metrics and gameplay telemetry are intended to assist caregivers in tracking daily activities, game pacing, and routine engagement. They do not constitute a clinical diagnosis, medical evaluation, neurological assessment, or treatment plan.
+</div>
+{% endblock %}

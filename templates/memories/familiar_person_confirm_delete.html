@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ person.name }} - Cognicare{% endblock %}
+
+{% block content %}
+<div class="container container-narrow" style="max-width: 520px; margin: 0 auto;">
+    <div class="card" style="text-align: center; padding: var(--space-8);">
+        <div style="font-size: 3rem; margin-bottom: var(--space-3);">⚠️</div>
+        <h1 class="card-title" style="color: var(--state-error-text); margin-bottom: var(--space-2);">
+            Remove Familiar Person?
+        </h1>
+        <p style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-6);">
+            Are you sure you want to remove <strong>{{ person.name }}</strong> ({{ person.relationship }}) from {{ selected_member.first_name|default:selected_member.username }}'s familiar people pool?
+        </p>
+
+        {% if person.photo %}
+            <div style="margin-bottom: var(--space-6);">
+                <img src="{{ person.photo.url }}" alt="{{ person.name }}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid var(--border-color); display: inline-block;">
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div style="display: flex; gap: var(--space-3); justify-content: center;">
+                <a href="{% url 'memories:manage_familiar_people' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="min-height: 44px; padding: 10px 20px;">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary" style="background-color: var(--color-rose-600); border-color: var(--color-rose-600); min-height: 44px; padding: 10px 20px;">
+                    Yes, Remove Person
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

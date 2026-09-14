@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}{{ action_title }} - Cognicare{% endblock %}
+
+{% block content %}
+<div class="container container-narrow" style="max-width: 600px; margin: 0 auto;">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+        <a href="{% url 'memories:manage_familiar_people' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 16px;">
+            &larr; Back to Familiar People
+        </a>
+    </nav>
+
+    <div class="card">
+        <h1 class="card-title" style="margin-bottom: var(--space-2);">{{ action_title }}</h1>
+        <p class="card-subtitle" style="margin-bottom: var(--space-6);">
+            Please provide a clear portrait photo, the person's display name, and their relationship to {{ selected_member.first_name|default:selected_member.username }}.
+        </p>
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="member" value="{{ selected_member.id }}">
+
+            {% if form.non_field_errors %}
+                <div class="alert alert-error" style="margin-bottom: var(--space-4);">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="{{ form.name.id_for_label }}" class="form-label">
+                    Person Name:
+                </label>
+                {{ form.name }}
+                {% if form.name.errors %}
+                    <div class="field-error">{{ form.name.errors.0 }}</div>
+                {% endif %}
+                <div class="form-help">Enter how the patient knows this person (e.g. Priya, Aunt Meera, Rajesh).</div>
+            </div>
+
+            <!-- Relationship Field -->
+            <div class="form-group">
+                <label for="{{ form.relationship.id_for_label }}" class="form-label">
+                    Relationship:
+                </label>
+                {{ form.relationship }}
+                {% if form.relationship.errors %}
+                    <div class="field-error">{{ form.relationship.errors.0 }}</div>
+                {% endif %}
+                <div class="form-help">{{ form.relationship.help_text }}</div>
+            </div>
+
+            <!-- Photo Upload Field -->
+            <div class="form-group">
+                <label for="{{ form.photo.id_for_label }}" class="form-label">
+                    Portrait Photograph:
+                </label>
+                {% if is_edit and person.photo %}
+                    <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3); padding: var(--space-3); background-color: var(--bg-surface-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                        <img src="{{ person.photo.url }}" alt="{{ person.name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-sm);">
+                        <div>
+                            <div style="font-size: var(--font-size-sm); font-weight: 700; color: var(--text-primary);">Current Photograph</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Upload a new file below only if you want to replace this photo.</div>
+                        </div>
+                    </div>
+                {% endif %}
+                {{ form.photo }}
+                {% if form.photo.errors %}
+                    <div class="field-error">{{ form.photo.errors.0 }}</div>
+                {% endif %}
+                <div class="form-help">{{ form.photo.help_text }}</div>
+            </div>
+
+            <!-- Active Checkbox -->
+            <div class="form-group" style="display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-4);">
+                {{ form.is_active }}
+                <label for="{{ form.is_active.id_for_label }}" style="font-size: var(--font-size-base); font-weight: 600; color: var(--text-primary); cursor: pointer; margin-bottom: 0;">
+                    Active in Familiar Faces gameplay
+                </label>
+            </div>
+            <div class="form-help" style="margin-top: -10px; margin-bottom: var(--space-6);">
+                Unchecking pauses this person from appearing in the patient's recognition activity.
+            </div>
+
+            <!-- Actions -->
+            <div style="display: flex; gap: var(--space-3); justify-content: flex-end; margin-top: var(--space-6); border-top: 1px solid var(--border-subtle); padding-top: var(--space-4);">
+                <a href="{% url 'memories:manage_familiar_people' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="min-height: 44px;">
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-primary" style="min-height: 44px; padding: 10px 24px;">
+                    {% if is_edit %}Save Changes{% else %}Add Person{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}{{ game.name }} - Cognicare{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <!-- Breadcrumb back link -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+        <a href="{% url 'games:list' %}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 16px;">
+            &larr; Back to Activities
+        </a>
+    </nav>
+
+    <!-- Main Game Introduction Card -->
+    <article class="card" style="padding: var(--space-8); border: 2px solid var(--primary-border); background-color: var(--bg-surface);">
+        <header style="margin-bottom: var(--space-6); border-bottom: 2px solid var(--border-subtle); padding-bottom: var(--space-6);">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-2);">
+                <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin: 0;">
+                    {{ game.name }}
+                </h1>
+                <span class="badge badge-patient" style="font-size: var(--font-size-base); padding: 6px 14px;">
+                    {{ total_rounds }} Rounds
+                </span>
+            </div>
+            <p style="font-size: var(--font-size-lg); color: var(--text-secondary); line-height: 1.6; margin-top: var(--space-3);">
+                {{ game.description }}
+            </p>
+        </header>
+
+        <!-- Step-by-Step Instructions -->
+        <section aria-labelledby="instructions-heading" style="margin-bottom: var(--space-8);">
+            <h2 id="instructions-heading" style="font-size: var(--font-size-xl); color: var(--primary-main); margin-bottom: var(--space-4);">
+                How to Play
+            </h2>
+
+            <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                {% if instructions %}
+                    {% for step in instructions %}
+                        <div style="display: flex; gap: var(--space-4); align-items: flex-start;">
+                            <div style="width: 40px; height: 40px; min-width: 40px; border-radius: 50%; background-color: var(--color-teal-100); color: var(--color-teal-900); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+                                {{ step.number }}
+                            </div>
+                            <div>
+                                <strong style="font-size: var(--font-size-md); color: var(--text-primary);">{{ step.title }}</strong>
+                                <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
+                                    {{ step.description }}
+                                </p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="display: flex; gap: var(--space-4); align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; min-width: 40px; border-radius: 50%; background-color: var(--color-teal-100); color: var(--color-teal-900); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+                            1
+                        </div>
+                        <div>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Look & Remember</strong>
+                            <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
+                                You will see a small grocery list of everyday items. Take all the time you need to read and memorize them.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--space-4); align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; min-width: 40px; border-radius: 50%; background-color: var(--color-teal-100); color: var(--color-teal-900); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+                            2
+                        </div>
+                        <div>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Click "I Am Ready"</strong>
+                            <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
+                                There is no timer or hurry. When you feel confident you remember the items, click the ready button.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--space-4); align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; min-width: 40px; border-radius: 50%; background-color: var(--color-teal-100); color: var(--color-teal-900); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+                            3
+                        </div>
+                        <div>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Pick Your Items</strong>
+                            <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
+                                Tap or click the items you remember from the market shelf. You can tap again to uncheck any item.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: var(--space-4); align-items: flex-start;">
+                        <div style="width: 40px; height: 40px; min-width: 40px; border-radius: 50%; background-color: var(--color-teal-100); color: var(--color-teal-900); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.25rem;">
+                            4
+                        </div>
+                        <div>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Receive Gentle Feedback</strong>
+                            <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
+                                Click "Check My Items" to review your picks. You will complete {{ total_rounds }} short rounds.
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <!-- Start Game Action -->
+        {% if is_playable %}
+            <form method="post" action="{% url 'games:start_session' slug=game.slug %}">
+                {% csrf_token %}
+                <input type="hidden" name="difficulty" value="1">
+                <button type="submit" class="btn btn-primary btn-block btn-lg" style="font-size: var(--font-size-xl); padding: var(--space-4) var(--space-8); min-height: 64px;" aria-label="Start playing {{ game.name }}">
+                    Start Activity &rarr;
+                </button>
+            </form>
+        {% elif ready_error %}
+            <div class="alert alert-warning" role="alert" style="font-size: var(--font-size-base); line-height: 1.6; text-align: left;">
+                <strong>Photos Needed:</strong> {{ ready_error }}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="status">
+                This activity is scheduled for a future phase.
+            </div>
+        {% endif %}
+    </article>
+</div>
+{% endblock %}

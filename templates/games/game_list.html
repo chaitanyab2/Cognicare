@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Cognitive Games - Cognicare{% endblock %}
+
+{% block content %}
+<div class="games-page-container">
+    <!-- Back to My Space navigation -->
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+        <a href="{% url 'accounts:patient_portal' %}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 16px;">
+            &larr; Back to My Space
+        </a>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="welcome-hero" style="margin-bottom: var(--space-8);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+                <h1>Cognitive Activities</h1>
+                <p style="font-size: var(--font-size-md); color: var(--text-secondary); max-width: 720px; margin-top: var(--space-2);">
+                    Welcome to your calm activity center. Each game is designed for unhurried focus and memory exercise. Take as much time as you need.
+                </p>
+            </div>
+            <div>
+                <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-size: var(--font-size-base); padding: 8px 16px;">
+                    Self-Paced &bull; No Timers
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Games Grid -->
+    <section aria-label="Available Cognitive Games">
+        <div class="grid-2" style="gap: var(--space-6);">
+            {% for game in games %}
+                <article class="card game-catalog-card" style="display: flex; flex-direction: column; justify-content: space-between; padding: var(--space-6); border: 2px solid {% if game.slug in active_game_slugs %}var(--primary-border){% else %}var(--border-subtle){% endif %}; background-color: var(--bg-surface);">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-3);">
+                            <h2 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
+                                {{ game.name }}
+                            </h2>
+                            {% if game.slug in active_game_slugs %}
+                                <span class="badge badge-patient" style="font-size: 0.9rem; padding: 4px 10px;">
+                                    Ready to Play
+                                </span>
+                            {% else %}
+                                <span class="badge" style="background-color: var(--color-slate-100); color: var(--color-slate-600); border: 1px solid var(--border-color); font-size: 0.9rem; padding: 4px 10px;">
+                                    Planned Activity
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <p style="font-size: var(--font-size-base); color: var(--text-secondary); line-height: 1.6; margin-bottom: var(--space-6);">
+                            {{ game.description }}
+                        </p>
+                    </div>
+
+                    <div style="margin-top: auto; padding-top: var(--space-4); border-top: 1px solid var(--border-subtle);">
+                        {% if game.slug in active_game_slugs %}
+                            <a href="{% url 'games:detail' slug=game.slug %}" class="btn btn-primary btn-block btn-lg" aria-label="Open {{ game.name }}">
+                                Open {{ game.name }} &rarr;
+                            </a>
+                        {% else %}
+                            <button type="button" class="btn btn-outline btn-block btn-lg" disabled style="opacity: 0.65; cursor: not-allowed;" aria-label="{{ game.name }} is coming soon in a future update">
+                                Coming Soon
+                            </button>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Dignified Care Note -->
+    <aside style="margin-top: var(--space-10);" aria-label="Guidance note">
+        <div class="card" style="background-color: var(--color-teal-50); border: 1px solid var(--primary-border); padding: var(--space-5);">
+            <p style="font-size: var(--font-size-base); color: var(--color-teal-900); text-align: center; margin: 0;">
+                💡 <strong>Remember:</strong> You are in complete control of your pace. Enjoy the exercise without pressure or deadlines.
+            </p>
+        </div>
+    </aside>
+</div>
+{% endblock %}
