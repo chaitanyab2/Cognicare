@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Pattern Detective - Round {{ current_round }} of {{ total_rounds }} - Cognicare{% endblock %}
+
+{% block content %}
+<div class="gameplay-container" style="max-width: 880px; margin: 0 auto;">
+    <!-- Top Status Bar (Unhurried, no timer or score pressure) -->
+    <header class="gameplay-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6); padding: var(--space-4) var(--space-6); background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+        <div>
+            <span style="font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
+                Activity
+            </span>
+            <h1 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
+                Pattern Detective
+            </h1>
+        </div>
+        <div>
+            <span id="round-indicator" class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
+                Round {{ current_round }} of {{ total_rounds }}
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Game Board Container -->
+    <main id="game-board" class="card" style="padding: var(--space-8); border: 2px solid var(--primary-border); background-color: var(--bg-surface);" aria-live="polite">
+
+        <!-- ==============================================
+             STAGE 1: PATTERN DISCOVERY & SELECTION STAGE
+             ============================================== -->
+        <section id="pattern-stage" class="game-stage" aria-labelledby="puzzle-heading">
+            <!-- Prompt & Guidance -->
+            <div style="text-align: center; margin-bottom: var(--space-6);">
+                <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); margin-bottom: var(--space-3); font-size: 1rem; padding: 4px 14px;">
+                    Reasoning & Visual Logic
+                </span>
+                <h2 id="puzzle-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-top: var(--space-2);">
+                    {{ round_data.prompt }}
+                </h2>
+                <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 640px; margin: var(--space-2) auto 0; line-height: 1.5;">
+                    Look at the harmonious visual arrangement below, then choose the tile that belongs in the missing space.
+                </p>
+            </div>
+
+            <!-- Pattern Display Card -->
+            <div class="pattern-display-card" role="region" aria-label="Visual pattern puzzle">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: var(--space-4);">
+                    <span id="pattern-title" class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-size: 0.9rem; padding: 3px 12px;">
+                        {{ round_data.title }}
+                    </span>
+                    <button type="button" id="btn-speak-prompt" class="btn btn-secondary" style="min-height: 36px; padding: 2px 12px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;" aria-label="Listen to pattern description" title="Listen to pattern description">
+                        <span aria-hidden="true">🔊</span> Listen
+                    </button>
+                </div>
+
+                <!-- Visual Pattern Presentation (Sequence or Matrix) -->
+                <div id="pattern-visual-container" style="width: 100%; display: flex; justify-content: center; margin: var(--space-2) 0 var(--space-4);">
+                    {% if round_data.layout == 'matrix_2x2' %}
+                        <!-- 2x2 Matrix Layout -->
+                        <div class="pattern-matrix-grid" role="group" aria-label="Pattern matrix 2 by 2">
+                            {% for row in round_data.matrix %}
+                                {% for item in row %}
+                                    {% if item.is_missing %}
+                                        <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="Missing tile marked with question mark">
+                                            <div class="missing-badge" aria-hidden="true">?</div>
+                                            <span class="missing-label">Missing Tile</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="pattern-tile-display" role="img" aria-label="{{ item.name }}">
+                                            <div class="pattern-tile-svg">{{ item.svg|safe }}</div>
+                                            <span class="pattern-tile-label">{{ item.name }}</span>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <!-- Linear Sequence Layout -->
+                        <div class="pattern-sequence-strip" role="group" aria-label="Pattern sequence strip">
+                            {% for item in round_data.sequence %}
+                                {% if item.is_missing %}
+                                    <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="Missing tile marked with question mark">
+                                        <div class="missing-badge" aria-hidden="true">?</div>
+                                        <span class="missing-label">Missing Tile</span>
+                                    </div>
+                                {% else %}
+                                    <div class="pattern-tile-display" role="img" aria-label="{{ item.name }}">
+                                        <div class="pattern-tile-svg">{{ item.svg|safe }}</div>
+                                        <span class="pattern-tile-label">{{ item.name }}</span>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Choice Options Section -->
+            <div style="margin-bottom: var(--space-8);">
+                <div style="text-align: center; margin-bottom: var(--space-4);">
+                    <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0; font-weight: 700;">
+                        Choose the Tile That Belongs in the Missing Space:
+                    </h3>
+                </div>
+
+                <div id="choice-tiles-grid"
+                     class="choice-tiles-grid"
+                     role="group"
+                     aria-label="Answer choices">
+                    {% for choice in round_data.choices %}
+                        <button type="button"
+                                class="pattern-choice-tile"
+                                data-tile-id="{{ choice.id }}"
+                                data-tile-name="{{ choice.name }}"
+                                aria-label="{{ choice.name }}"
+                                aria-pressed="false">
+                            <div class="pattern-choice-check" aria-hidden="true">✓</div>
+                            <div class="pattern-choice-svg">{{ choice.svg|safe }}</div>
+                            <span class="pattern-choice-name">{{ choice.name }}</span>
+                            <button type="button"
+                                    class="pattern-tile-audio-btn"
+                                    data-speak-text="{{ choice.name }}"
+                                    aria-label="Listen to {{ choice.name }}"
+                                    title="Listen to {{ choice.name }}"
+                                    tabindex="-1">
+                                <span aria-hidden="true">🔊</span>
+                            </button>
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Submit Confirmation Action -->
+            <div style="text-align: center;">
+                <button type="button"
+                        id="btn-confirm-selection"
+                        class="btn btn-primary btn-lg"
+                        style="min-height: 56px; min-width: 260px; font-size: var(--font-size-lg);"
+                        disabled
+                        aria-label="Confirm my selected tile">
+                    Confirm My Selection
+                </button>
+                <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin-top: var(--space-2);">
+                    You can tap any tile to change your choice anytime before confirming.
+                </p>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             STAGE 2: GENTLE ENCOURAGING FEEDBACK STAGE
+             ============================================== -->
+        <section id="feedback-stage" class="game-stage" style="display: none; text-align: center;" aria-live="assertive">
+            <!-- Congratulatory/Encouraging Icon Container -->
+            <div id="feedback-icon-container" style="width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto var(--space-4); background-color: var(--color-teal-100); color: var(--color-teal-900);">
+                ✨
+            </div>
+
+            <h2 id="feedback-message-heading" style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-3);">
+                Harmonious Pattern!
+            </h2>
+
+            <div style="max-width: 620px; margin: 0 auto var(--space-6);">
+                <p id="feedback-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                    <!-- Filled dynamically -->
+                </p>
+                <div style="margin-top: var(--space-3);">
+                    <button type="button" id="btn-speak-feedback" class="btn btn-secondary" style="min-height: 36px; padding: 2px 14px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;" aria-label="Listen to feedback" title="Listen to feedback">
+                        <span aria-hidden="true">🔊</span> Listen to Explanation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pattern Harmonious Match Showcase -->
+            <div class="concept-card" style="max-width: 480px; margin: 0 auto var(--space-8); padding: var(--space-6);">
+                <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700; display: block; margin-bottom: var(--space-2);">
+                    Harmonious Tile
+                </span>
+                <div id="feedback-target-box" style="display: flex; flex-direction: column; align-items: center; gap: var(--space-2);">
+                    <div id="feedback-target-svg" style="width: 64px; height: 64px;">
+                        <!-- SVG injected dynamically -->
+                    </div>
+                    <div id="feedback-target-name" style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+                        <!-- Target name injected dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Action Button -->
+            <div>
+                <button type="button"
+                        id="btn-next-action"
+                        class="btn btn-primary btn-lg"
+                        style="min-height: 56px; min-width: 240px; font-size: var(--font-size-lg);"
+                        aria-label="Continue to next round">
+                    Continue to Next Round &rarr;
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation Out / Return to Activities -->
+    <div style="margin-top: var(--space-6); text-align: center;">
+        <a href="{% url 'games:list' %}" class="btn btn-secondary" style="min-height: 44px; padding: 8px 20px;">
+            &larr; Exit to Activities
+        </a>
+    </div>
+</div>
+
+<!-- Game Session Metadata for Engine JS -->
+<div id="game-metadata"
+     data-session-id="{{ session.id }}"
+     data-current-round="{{ current_round }}"
+     data-total-rounds="{{ total_rounds }}"
+     data-submit-url="{% url 'games:submit_round' session_id=session.id %}"
+     data-complete-url="{% url 'games:complete_session' session_id=session.id %}"
+     data-results-url="{% url 'games:results' session_id=session.id %}"
+     style="display: none;">
+</div>
+
+<!-- Initial Round JSON Data Cache -->
+{{ round_data|json_script:"initial-round-data" }}
+
+<!-- Engine Script -->
+<script src="{% static 'js/pattern_detective.js' %}"></script>
+{% endblock %}

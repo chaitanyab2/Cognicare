@@ -1649,6 +1649,9 @@ class WordConnectionsEngine:
         }
 
 
+        }
+
+
 # Global registry of game engines for modular expansion
 GAME_ENGINES = {
     MemoryMarketEngine.SLUG: MemoryMarketEngine,
@@ -1656,6 +1659,7 @@ GAME_ENGINES = {
     FamiliarFacesEngine.SLUG: FamiliarFacesEngine,
     FocusFinderEngine.SLUG: FocusFinderEngine,
     WordConnectionsEngine.SLUG: WordConnectionsEngine,
+    PatternDetectiveEngine.SLUG: PatternDetectiveEngine,
 }
 
 
@@ -1748,6 +1752,15 @@ def record_round_submission(session, round_number, actual_selected_ids, response
             'target_word_id': round_data.get('target_word_id', ''),
             'distractor_word_ids': round_data.get('distractor_ids', []),
             'choice_word_ids': round_data.get('choice_ids', []),
+        }
+    elif session.game.slug == 'pattern-detective':
+        stimulus_payload = {
+            'puzzle_id': round_data.get('puzzle_id', ''),
+            'pattern_type': round_data.get('pattern_type', ''),
+            'target_tile_id': round_data.get('target_tile_id', ''),
+            'distractor_tile_ids': round_data.get('distractor_tile_ids', []),
+            'choice_tile_ids': round_data.get('choice_tile_ids', []),
+            'grid_layout': round_data.get('layout', 'linear_sequence'),
         }
     else:
         stimulus_payload = round_data

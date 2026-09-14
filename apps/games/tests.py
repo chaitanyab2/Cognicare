@@ -2011,3 +2011,531 @@ class WordConnectionsSessionFlowTests(TestCase):
         self.assertEqual(wc_metrics['current_difficulty'], 5)
         self.assertEqual(wc_metrics['avg_accuracy'], 100.0)
         self.assertEqual(wc_metrics['avg_response_time_ms'], 2400)
+
+
+
+# ==============================================================================
+# Phase 11: Pattern Detective (Visual Pattern Recognition) Tests
+# ==============================================================================
+
+from apps.games.services import PATTERN_DETECTIVE_CATALOG, PatternDetectiveEngine
+
+
+class PatternDetectiveCatalogTests(TestCase):
+    """Verifies content integrity, difficulty distribution, and SVG validity for Pattern Detective."""
+
+    def test_catalog_size_and_difficulty_distribution(self):
+        """Catalog must contain at least 25 puzzles, exactly 5 per difficulty level (1-5)."""
+        self.assertGreaterEqual(len(PATTERN_DETECTIVE_CATALOG), 25)
+        diff_counts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        for pid, puzzle in PATTERN_DETECTIVE_CATALOG.items():
+            diff = puzzle['difficulty']
+            self.assertIn(diff, diff_counts, f"Invalid difficulty {diff} in {pid}")
+            diff_counts[diff] += 1
+
+        for diff, count in diff_counts.items():
+            self.assertEqual(count, 5, f"Expected exactly 5 puzzles for difficulty {diff}, got {count}")
+
+    def test_puzzle_structure_and_valid_svg(self):
+        """Every puzzle must have valid structure, non-empty text, and valid XML SVG."""
+        for pid, puzzle in PATTERN_DETECTIVE_CATALOG.items():
+            self.assertIn('title', puzzle)
+            self.assertIn('prompt', puzzle)
+            self.assertIn('explanation', puzzle)
+            self.assertIn('pattern_type', puzzle)
+            self.assertIn('layout', puzzle)
+            self.assertIn(puzzle['layout'], ('linear_sequence', 'matrix_2x2'))
+
+            # Check target
+            target = puzzle['target_tile']
+            self.assertIn('id', target)
+            self.assertIn('name', target)
+            self.assertIn('svg', target)
+            self.assertTrue(len(target['svg']) > 0)
+            # Must parse as XML without error
+            ET.fromstring(target['svg'])
+
+            # Check distractors
+            for d in puzzle['distractors']:
+                self.assertIn('id', d)
+                self.assertIn('name', d)
+                self.assertIn('svg', d)
+                self.assertTrue(len(d['svg']) > 0)
+                ET.fromstring(d['svg'])
+
+    def test_choice_counts_and_target_uniqueness(self):
+        """Choices count matches difficulty specification: L1=3, L2=4, L3=4, L4=5, L5=6."""
+        expected_choices = {1: 3, 2: 4, 3: 4, 4: 5, 5: 6}
+        for pid, puzzle in PATTERN_DETECTIVE_CATALOG.items():
+            diff = puzzle['difficulty']
+            target = puzzle['target_tile']
+            distractors = puzzle['distractors']
+            self.assertEqual(len(distractors), expected_choices[diff] - 1)
+
+            choices = [target] + distractors
+            choice_ids = [c['id'] for c in choices]
+            # No duplicate IDs
+            self.assertEqual(len(choice_ids), len(set(choice_ids)), f"Duplicate choice IDs in {pid}")
+            # Target not in distractors
+            self.assertNotIn(target['id'], [d['id'] for d in distractors])
+
+
+class PatternDetectiveEngineTests(TestCase):
+    """Tests for PatternDetectiveEngine logic, deterministic session planning, and evaluation."""
+
+    def setUp(self):
+        self.member = CustomUser.objects.create_user(
+            username='pd_player',
+            email='pd@example.com',
+            password='Password123!',
+            role=Role.PATIENT
+        )
+        self.game = Game.objects.get(slug='pattern-detective')
+
+    def test_deterministic_session_plan(self):
+        """Same session ID and difficulty generates identical 3 distinct puzzles."""
+        session1 = GameSession.objects.create(
+            member=self.member,
+            game=self.game,
+            difficulty=3,
+            status=GameSession.Status.IN_PROGRESS
+        )
+        plan1 = PatternDetectiveEngine.get_session_plan(session1)
+        plan2 = PatternDetectiveEngine.get_session_plan(session1)
+
+        self.assertEqual(len(plan1), 3)
+        self.assertEqual(len(plan2), 3)
+
+        pids1 = [plan1[r]['puzzle_id'] for r in range(1, 4)]
+        pids2 = [plan2[r]['puzzle_id'] for r in range(1, 4)]
+
+        # Must be 3 distinct puzzles
+        self.assertEqual(len(set(pids1)), 3)
+        # Deterministic
+        self.assertEqual(pids1, pids2)
+
+    def test_round_data_retrieval(self):
+        """Valid round numbers return plan; invalid numbers raise ValueError."""
+        session = GameSession.objects.create(
+            member=self.member,
+            game=self.game,
+            difficulty=1,
+            status=GameSession.Status.IN_PROGRESS
+        )
+        for r in range(1, 4):
+            data = PatternDetectiveEngine.get_round_data(r, session=session)
+            self.assertEqual(data['round_number'], r)
+            self.assertEqual(data['total_rounds'], 3)
+            self.assertIn('target_tile_id', data)
+            self.assertIn('choices', data)
+
+        with self.assertRaises(ValueError):
+            PatternDetectiveEngine.get_round_data(0, session=session)
+        with self.assertRaises(ValueError):
+            PatternDetectiveEngine.get_round_data(4, session=session)
+
+    def test_server_authoritative_evaluation_correct(self):
+        """Correct selection returns is_correct=True, score=1, mistake_count=0."""
+        session = GameSession.objects.create(
+            member=self.member,
+            game=self.game,
+            difficulty=2,
+            status=GameSession.Status.IN_PROGRESS
+        )
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_tile_id']
+
+        result = PatternDetectiveEngine.evaluate_round(1, [t1], 2100, session=session)
+        self.assertTrue(result['is_correct'])
+        self.assertEqual(result['score'], 1)
+        self.assertEqual(result['max_score'], 1)
+        self.assertEqual(result['mistake_count'], 0)
+        self.assertEqual(result['correct_ids'], [t1])
+        self.assertEqual(result['distractor_ids'], [])
+        self.assertEqual(result['feedback_tone'], 'success')
+
+    def test_server_authoritative_evaluation_incorrect(self):
+        """Incorrect selection returns is_correct=False, score=0, mistake_count=1."""
+        session = GameSession.objects.create(
+            member=self.member,
+            game=self.game,
+            difficulty=2,
+            status=GameSession.Status.IN_PROGRESS
+        )
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        d1 = plan[1]['distractor_tile_ids'][0]
+
+        result = PatternDetectiveEngine.evaluate_round(1, [d1], 2400, session=session)
+        self.assertFalse(result['is_correct'])
+        self.assertEqual(result['score'], 0)
+        self.assertEqual(result['max_score'], 1)
+        self.assertEqual(result['mistake_count'], 1)
+        self.assertEqual(result['correct_ids'], [])
+        self.assertEqual(result['distractor_ids'], [d1])
+        self.assertEqual(result['feedback_tone'], 'encouraging')
+
+    def test_alien_and_multiple_and_empty_selection_evaluation(self):
+        """Empty, multiple, or foreign IDs return is_correct=False, score=0 without error."""
+        session = GameSession.objects.create(
+            member=self.member,
+            game=self.game,
+            difficulty=4,
+            status=GameSession.Status.IN_PROGRESS
+        )
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_tile_id']
+
+        # Empty
+        res_empty = PatternDetectiveEngine.evaluate_round(1, [], 1000, session=session)
+        self.assertFalse(res_empty['is_correct'])
+        self.assertEqual(res_empty['score'], 0)
+
+        # Multiple
+        res_multi = PatternDetectiveEngine.evaluate_round(1, [t1, 'alien_tile'], 1000, session=session)
+        self.assertFalse(res_multi['is_correct'])
+        self.assertEqual(res_multi['score'], 0)
+
+        # Alien ID
+        res_alien = PatternDetectiveEngine.evaluate_round(1, ['completely_alien_id'], 1000, session=session)
+        self.assertFalse(res_alien['is_correct'])
+        self.assertEqual(res_alien['score'], 0)
+
+
+class PatternDetectiveViewsTests(TestCase):
+    """Integration and view tests for Pattern Detective lifecycle, UI, security, and privacy."""
+
+    def setUp(self):
+        self.client = Client()
+        self.member = CustomUser.objects.create_user(
+            username='player_pd',
+            email='player_pd@example.com',
+            password='Password123!',
+            role=Role.PATIENT
+        )
+        self.other_member = CustomUser.objects.create_user(
+            username='other_pd',
+            email='other_pd@example.com',
+            password='Password123!',
+            role=Role.PATIENT
+        )
+        self.caregiver = CustomUser.objects.create_user(
+            username='caregiver_pd',
+            email='caregiver_pd@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER
+        )
+        CaregiverMemberRelationship.objects.create(
+            caregiver=self.caregiver,
+            member=self.member,
+            is_active=True
+        )
+        self.game = Game.objects.get(slug='pattern-detective')
+
+    def test_detail_view_shows_instructions_and_is_playable(self):
+        """Detail view renders step-by-step instructions and start button for patient."""
+        self.client.login(username='player_pd', password='Password123!')
+        res = self.client.get(reverse('games:detail', kwargs={'slug': 'pattern-detective'}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'Pattern Detective')
+        self.assertContains(res, 'Observe the Visual Pattern')
+        self.assertContains(res, 'Start Activity')
+        self.assertTrue(res.context['is_playable'])
+
+    def test_start_session_creates_fresh_in_progress_session(self):
+        """Starting session creates a fresh IN_PROGRESS session and redirects to gameplay."""
+        self.client.login(username='player_pd', password='Password123!')
+        res = self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 2}
+        )
+        self.assertEqual(res.status_code, 302)
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        self.assertEqual(session.status, GameSession.Status.IN_PROGRESS)
+        self.assertEqual(session.difficulty, 2)
+        self.assertEqual(session.max_score, 3)
+        self.assertRedirects(res, reverse('games:play', kwargs={'session_id': session.id}))
+
+    def test_gameplay_view_renders_pattern_and_choices(self):
+        """Active gameplay view serves the template with prompt and pattern choices."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertTemplateUsed(res, 'games/pattern_detective.html')
+        self.assertContains(res, 'Pattern Detective')
+        self.assertContains(res, 'Round 1 of 3')
+        self.assertContains(res, 'Confirm My Selection')
+
+    def test_full_three_round_gameplay_flow_and_results(self):
+        """Completing 3 rounds finalizes session and displays results page correctly."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 3}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_tile_id']
+        t2 = plan[2]['target_tile_id']
+        d3 = plan[3]['distractor_tile_ids'][0]
+
+        # Round 1: Correct
+        res1 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1800}),
+            content_type='application/json'
+        )
+        self.assertEqual(res1.status_code, 200)
+        self.assertTrue(res1.json()['evaluation']['is_correct'])
+        self.assertTrue(res1.json()['has_next_round'])
+
+        # Round 2: Correct
+        res2 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 2, 'selected_ids': [t2], 'response_time_ms': 2100}),
+            content_type='application/json'
+        )
+        self.assertEqual(res2.status_code, 200)
+        self.assertTrue(res2.json()['evaluation']['is_correct'])
+        self.assertTrue(res2.json()['has_next_round'])
+
+        # Round 3: Incorrect
+        res3 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 3, 'selected_ids': [d3], 'response_time_ms': 2500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res3.status_code, 200)
+        self.assertFalse(res3.json()['evaluation']['is_correct'])
+        self.assertFalse(res3.json()['has_next_round'])
+
+        # Finalize
+        comp_res = self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+        self.assertEqual(comp_res.status_code, 200)
+
+        session.refresh_from_db()
+        self.assertEqual(session.status, GameSession.Status.COMPLETED)
+        self.assertEqual(session.score, 2)
+        self.assertEqual(session.max_score, 3)
+        self.assertEqual(session.accuracy, Decimal('66.67'))
+        self.assertEqual(session.total_time_ms, 6400)
+
+        # Results page inspection
+        results_res = self.client.get(reverse('games:results', kwargs={'session_id': session.id}))
+        self.assertEqual(results_res.status_code, 200)
+        self.assertContains(results_res, 'Patterns Solved')
+        self.assertContains(results_res, '✓ Pattern Completed')
+
+    def test_duplicate_submission_blocked(self):
+        """Submitting the same round twice returns HTTP 400."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_tile_id']
+
+        res1 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res1.status_code, 200)
+
+        res2 = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1500}),
+            content_type='application/json'
+        )
+        self.assertEqual(res2.status_code, 400)
+
+    def test_tamper_rejection_on_completed_session(self):
+        """Submitting to a completed session is rejected."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        for r in range(1, 4):
+            t = plan[r]['target_tile_id']
+            self.client.post(
+                reverse('games:submit_round', kwargs={'session_id': session.id}),
+                data=json.dumps({'round_number': r, 'selected_ids': [t], 'response_time_ms': 1000}),
+                content_type='application/json'
+            )
+        self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+
+        tamper_res = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': ['leaf_teal'], 'response_time_ms': 1000}),
+            content_type='application/json'
+        )
+        self.assertEqual(tamper_res.status_code, 400)
+
+    def test_premature_completion_rejected(self):
+        """Cannot complete session before 3 rounds are submitted."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        res = self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+        self.assertEqual(res.status_code, 400)
+
+    def test_caregiver_cannot_start_or_play(self):
+        """Caregivers cannot initiate or play Pattern Detective."""
+        self.client.login(username='caregiver_pd', password='Password123!')
+        res_detail = self.client.get(reverse('games:detail', kwargs={'slug': 'pattern-detective'}))
+        self.assertEqual(res_detail.status_code, 403)
+
+        res_start = self.client.post(reverse('games:start_session', kwargs={'slug': 'pattern-detective'}))
+        self.assertEqual(res_start.status_code, 403)
+
+    def test_another_patient_cannot_access_session(self):
+        """A different patient cannot view or submit to another member's session."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        self.client.login(username='other_pd', password='Password123!')
+        res_play = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res_play.status_code, 404)
+
+        res_sub = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': ['leaf_teal'], 'response_time_ms': 1000}),
+            content_type='application/json'
+        )
+        self.assertEqual(res_sub.status_code, 404)
+
+    def test_client_supplied_score_ignored(self):
+        """Server ignores client-supplied score, is_correct, and accuracy fields."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        d1 = plan[1]['distractor_tile_ids'][0]
+
+        # Client submits incorrect ID but claims score=99, is_correct=True
+        tampered_res = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({
+                'round_number': 1,
+                'selected_ids': [d1],
+                'response_time_ms': 1200,
+                'score': 99,
+                'is_correct': True,
+                'accuracy': 100.0
+            }),
+            content_type='application/json'
+        )
+        self.assertEqual(tampered_res.status_code, 200)
+        eval_data = tampered_res.json()['evaluation']
+        self.assertFalse(eval_data['is_correct'])
+        self.assertEqual(eval_data['score'], 0)
+
+        round_obj = session.rounds.get(round_number=1)
+        self.assertFalse(round_obj.is_correct)
+
+    def test_telemetry_privacy_invariants(self):
+        """GameRound.stimulus_data contains ONLY stable IDs and metadata; no SVG, HTML, or PII."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 2}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        t1 = plan[1]['target_tile_id']
+
+        sub_res = self.client.post(
+            reverse('games:submit_round', kwargs={'session_id': session.id}),
+            data=json.dumps({'round_number': 1, 'selected_ids': [t1], 'response_time_ms': 1900}),
+            content_type='application/json'
+        )
+        self.assertEqual(sub_res.status_code, 200)
+
+        round_obj = session.rounds.get(round_number=1)
+        stimulus = round_obj.stimulus_data
+
+        # Verify key presence and structure
+        self.assertIn('puzzle_id', stimulus)
+        self.assertIn('pattern_type', stimulus)
+        self.assertIn('target_tile_id', stimulus)
+        self.assertEqual(stimulus['target_tile_id'], t1)
+        self.assertIn('distractor_tile_ids', stimulus)
+        self.assertIn('choice_tile_ids', stimulus)
+        self.assertEqual(len(stimulus['choice_tile_ids']), 4)  # Diff 2 has 4 choices
+
+        # Verify strict absence of SVG, HTML, or PII
+        stimulus_str = json.dumps(stimulus)
+        self.assertNotIn('<svg', stimulus_str)
+        self.assertNotIn('</svg>', stimulus_str)
+        self.assertNotIn('user_id', stimulus)
+        self.assertNotIn('username', stimulus)
+        self.assertNotIn('player_pd', stimulus_str)
+        self.assertNotIn('explanation', stimulus)
+        self.assertNotIn('prompt', stimulus)
+
+        # Expected and actual responses
+        self.assertEqual(round_obj.expected_response, {'target_ids': [t1]})
+        self.assertEqual(round_obj.actual_response['selected_ids'], [t1])
+        self.assertEqual(round_obj.actual_response['correct_ids'], [t1])
+        self.assertTrue(round_obj.is_correct)
+
+    def test_caregiver_dashboard_reflects_pattern_detective(self):
+        """Caregiver dashboard automatically aggregates completed Pattern Detective sessions under 'Reasoning & Logic'."""
+        self.client.login(username='player_pd', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 4}
+        )
+        session = GameSession.objects.filter(member=self.member, game=self.game).latest('created_at')
+
+        plan = PatternDetectiveEngine.get_session_plan(session=session)
+        for r in range(1, 4):
+            t = plan[r]['target_tile_id']
+            self.client.post(
+                reverse('games:submit_round', kwargs={'session_id': session.id}),
+                data=json.dumps({'round_number': r, 'selected_ids': [t], 'response_time_ms': 2200}),
+                content_type='application/json'
+            )
+        self.client.post(
+            reverse('games:complete_session', kwargs={'session_id': session.id}),
+            content_type='application/json'
+        )
+
+        dashboard_data = get_caregiver_dashboard_data(self.caregiver, member_id=self.member.id)
+        pd_metrics = [g for g in dashboard_data['games_performance'] if g['slug'] == 'pattern-detective'][0]
+
+        self.assertTrue(pd_metrics['is_active'])
+        self.assertEqual(pd_metrics['domain'], 'Reasoning & Logic')
+        self.assertEqual(pd_metrics['completed_count'], 1)
+        self.assertEqual(pd_metrics['current_difficulty'], 4)
+        self.assertEqual(pd_metrics['avg_accuracy'], 100.0)
+        self.assertEqual(pd_metrics['avg_response_time_ms'], 2200)
