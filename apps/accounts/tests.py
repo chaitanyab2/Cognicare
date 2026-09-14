@@ -677,3 +677,255 @@ class CaregiverDashboardTests(TestCase):
         self.assertNotContains(response, "dementia diagnosis")
         self.assertNotContains(response, "neurological disease")
 
+
+from django.conf import settings
+
+
+class InternationalizationFoundationTests(TestCase):
+    """
+    Phase 13A: Verifies Django-native internationalization foundation.
+    Checks settings, LocaleMiddleware, set_language endpoint, language switching
+    between English and Assamese, and role authentication preservation.
+    """
+
+    def test_default_language_is_english(self):
+        self.assertTrue(settings.LANGUAGE_CODE.startswith('en'))
+
+    def test_configured_languages(self):
+        lang_dict = dict(settings.LANGUAGES)
+        self.assertIn('en', lang_dict)
+        self.assertEqual(lang_dict['en'], 'English')
+        self.assertIn('as', lang_dict)
+        self.assertEqual(lang_dict['as'], 'অসমীয়া')
+
+    def test_locale_middleware_active_and_ordered(self):
+        middleware = settings.MIDDLEWARE
+        self.assertIn('django.middleware.locale.LocaleMiddleware', middleware)
+        session_idx = middleware.index('django.contrib.sessions.middleware.SessionMiddleware')
+        locale_idx = middleware.index('django.middleware.locale.LocaleMiddleware')
+        common_idx = middleware.index('django.middleware.common.CommonMiddleware')
+        self.assertLess(session_idx, locale_idx)
+        self.assertLess(locale_idx, common_idx)
+
+    def test_set_language_endpoint_available(self):
+        url = reverse('set_language')
+        self.assertEqual(url, '/i18n/setlang/')
+
+    def test_switch_to_assamese_and_render_dynamic_lang(self):
+        client = Client()
+        res_default = client.get(reverse('accounts:login'))
+        self.assertEqual(res_default.status_code, 200)
+        self.assertContains(res_default, '<html lang="en')
+
+        # Switch to Assamese
+        set_lang_url = reverse('set_language')
+        post_res = client.post(set_lang_url, data={'language': 'as'}, follow=True)
+        self.assertEqual(post_res.status_code, 200)
+        cookie_val = client.cookies.get(settings.LANGUAGE_COOKIE_NAME).value
+        self.assertEqual(cookie_val, 'as')
+
+        # Subsequent GET renders lang="as"
+        res_as = client.get(reverse('accounts:login'))
+        self.assertEqual(res_as.status_code, 200)
+        self.assertContains(res_as, '<html lang="as">')
+
+    def test_switch_back_to_english(self):
+        client = Client()
+        set_lang_url = reverse('set_language')
+
+        # Switch to Assamese
+        client.post(set_lang_url, data={'language': 'as'}, follow=True)
+        res_as = client.get(reverse('accounts:login'))
+        self.assertContains(res_as, '<html lang="as">')
+
+        # Switch back to English
+        post_en = client.post(set_lang_url, data={'language': 'en'}, follow=True)
+        self.assertEqual(post_en.status_code, 200)
+        cookie_val = client.cookies.get(settings.LANGUAGE_COOKIE_NAME).value
+        self.assertTrue(cookie_val.startswith('en'))
+
+        res_en = client.get(reverse('accounts:login'))
+        self.assertContains(res_en, '<html lang="en')
+
+    def test_auth_and_role_behavior_under_assamese(self):
+        patient = CustomUser.objects.create_user(
+            username='assamese_patient',
+            email='as_patient@example.com',
+            password='Password123!',
+            role=Role.PATIENT,
+            first_name='Ananya',
+            last_name='Barua'
+        )
+        client = Client()
+        client.post(reverse('set_language'), data={'language': 'as'}, follow=True)
+
+        login_success = client.login(username='assamese_patient', password='Password123!')
+        self.assertTrue(login_success)
+
+        portal_res = client.get(reverse('accounts:patient_portal'))
+        self.assertEqual(portal_res.status_code, 200)
+        self.assertContains(portal_res, '<html lang="as">')
+        self.assertContains(portal_res, 'Ananya')
+
+
+class LanguageSwitcherUITests(TestCase):
+    """
+    Phase 13B: Verifies Language Switcher UI rendering, markup integrity,
+    accessibility attributes, and switching mechanics.
+    """
+
+    def setUp(self):
+        self.patient = CustomUser.objects.create_user(
+            username='ui_patient',
+            email='ui_patient@example.com',
+            password='Password123!',
+            role=Role.PATIENT,
+            first_name='Ananya',
+            last_name='Barua'
+        )
+        self.caregiver = CustomUser.objects.create_user(
+            username='ui_caregiver',
+            email='ui_caregiver@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER,
+            first_name='Mary',
+            last_name='Watson'
+        )
+
+    def test_switcher_rendered_on_anonymous_login_page(self):
+        res = self.client.get(reverse('accounts:login'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'class="language-switcher-form"')
+        self.assertContains(res, 'class="lang-segmented-control"')
+        self.assertContains(res, 'action="/i18n/setlang/"')
+        self.assertContains(res, 'English')
+        self.assertContains(res, 'অসমীয়া')
+
+    def test_switcher_rendered_on_signup_pages(self):
+        res_patient_signup = self.client.get(reverse('accounts:patient_signup'))
+        self.assertEqual(res_patient_signup.status_code, 200)
+        self.assertContains(res_patient_signup, 'class="language-switcher-form"')
+
+        res_caregiver_signup = self.client.get(reverse('accounts:caregiver_signup'))
+        self.assertEqual(res_caregiver_signup.status_code, 200)
+        self.assertContains(res_caregiver_signup, 'class="language-switcher-form"')
+
+    def test_switcher_rendered_on_patient_portal(self):
+        self.client.login(username='ui_patient', password='Password123!')
+        res = self.client.get(reverse('accounts:patient_portal'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'class="language-switcher-form"')
+        self.assertContains(res, 'English')
+        self.assertContains(res, 'অসমীয়া')
+
+    def test_switcher_rendered_on_caregiver_portal(self):
+        self.client.login(username='ui_caregiver', password='Password123!')
+        res = self.client.get(reverse('accounts:caregiver_portal'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'class="language-switcher-form"')
+        self.assertContains(res, 'English')
+        self.assertContains(res, 'অসমীয়া')
+
+    def test_switcher_form_markup_structure_and_csrf(self):
+        res = self.client.get(reverse('accounts:login'))
+        self.assertContains(res, 'method="post"')
+        self.assertContains(res, 'csrfmiddlewaretoken')
+        self.assertContains(res, 'name="next"')
+        self.assertContains(res, 'name="language"')
+        self.assertContains(res, 'value="en"')
+        self.assertContains(res, 'value="as"')
+
+    def test_switcher_accessibility_and_semantic_attributes(self):
+        res = self.client.get(reverse('accounts:login'))
+        self.assertContains(res, 'aria-label="Language selection"')
+        self.assertContains(res, 'role="group"')
+        self.assertContains(res, 'aria-label="Language options"')
+        self.assertContains(res, 'lang="en"')
+        self.assertContains(res, 'lang="as"')
+        self.assertContains(res, 'aria-label="Switch to English"')
+        self.assertContains(res, 'aria-label="Switch to Assamese"')
+
+    def test_default_english_active_state(self):
+        res = self.client.get(reverse('accounts:login'))
+        self.assertEqual(res.status_code, 200)
+        content = res.content.decode('utf-8')
+        # English button is active with aria-current="true"
+        self.assertIn('value="en"', content)
+        self.assertIn('class="lang-pill-btn is-active"', content)
+        self.assertIn('aria-current="true"', content)
+        # Assamese button is not active
+        self.assertIn('value="as"', content)
+        self.assertIn('class="lang-pill-btn "', content)
+
+    def test_assamese_active_state_after_switch(self):
+        # Switch language to Assamese
+        self.client.post(reverse('set_language'), data={'language': 'as'}, follow=True)
+        res = self.client.get(reverse('accounts:login'))
+        self.assertEqual(res.status_code, 200)
+        content = res.content.decode('utf-8')
+        # Assamese button is active with aria-current="true"
+        self.assertIn('class="lang-pill-btn is-active"', content)
+        self.assertIn('aria-current="true"', content)
+        # English button is now inactive
+        self.assertIn('value="en"', content)
+        self.assertIn('class="lang-pill-btn "', content)
+
+    def test_language_switch_preserves_next_url(self):
+        target_path = reverse('accounts:login')
+        res = self.client.post(
+            reverse('set_language'),
+            data={'language': 'as', 'next': target_path}
+        )
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, target_path)
+
+        cookie = self.client.cookies.get(settings.LANGUAGE_COOKIE_NAME)
+        self.assertIsNotNone(cookie)
+        self.assertEqual(cookie.value, 'as')
+
+    def test_no_emoji_and_no_flags_in_switcher(self):
+        res = self.client.get(reverse('accounts:login'))
+        content = res.content.decode('utf-8')
+        idx = content.find('class="language-switcher-form"')
+        end_idx = content.find('</form>', idx)
+        switcher_html = content[idx:end_idx]
+        for prohibited in ['🇬🇧', '🇮🇳', '🇺🇸', '🌐', '🗣', 'Flag', 'flag']:
+            self.assertNotIn(prohibited, switcher_html)
+
+    def test_patient_and_caregiver_roles_preserved_across_language_switch(self):
+        self.client.login(username='ui_patient', password='Password123!')
+        res_pre = self.client.get(reverse('accounts:patient_portal'))
+        self.assertEqual(res_pre.status_code, 200)
+        self.assertContains(res_pre, 'Member')
+
+        # Switch to Assamese
+        self.client.post(
+            reverse('set_language'),
+            data={'language': 'as', 'next': reverse('accounts:patient_portal')}
+        )
+
+        res_post = self.client.get(reverse('accounts:patient_portal'))
+        self.assertEqual(res_post.status_code, 200)
+        self.assertContains(res_post, '<html lang="as">')
+        self.assertContains(res_post, 'Member')
+        self.assertContains(res_post, 'Ananya')
+
+    def test_unsafe_next_redirect_is_rejected(self):
+        # Ensure external malicious redirects are safely rejected by set_language
+        res_external = self.client.post(
+            reverse('set_language'),
+            data={'language': 'as', 'next': 'https://evil.com'}
+        )
+        self.assertEqual(res_external.status_code, 302)
+        self.assertEqual(res_external.url, '/')
+
+        res_proto_relative = self.client.post(
+            reverse('set_language'),
+            data={'language': 'as', 'next': '//evil.com'}
+        )
+        self.assertEqual(res_proto_relative.status_code, 302)
+        self.assertEqual(res_proto_relative.url, '/')
+
+
+
+

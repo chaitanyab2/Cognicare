@@ -1,6 +1,6 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,6 +33,7 @@
                 </a>
 
                 <nav class="user-nav" aria-label="User Navigation">
+                    {% include 'includes/language_switcher.html' %}
                     {% if user.is_authenticated %}
                         <span class="user-greeting">
                             Hello, <strong>{{ user.first_name|default:user.username }}</strong>

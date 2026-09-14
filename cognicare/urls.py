@@ -11,6 +11,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('accounts/', include('apps.accounts.urls', namespace='accounts')),
     path('games/', include('apps.games.urls', namespace='games')),
     path('memories/', include('apps.memories.urls', namespace='memories')),
