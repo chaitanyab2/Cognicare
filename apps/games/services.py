@@ -1649,6 +1649,1076 @@ class WordConnectionsEngine:
         }
 
 
+
+
+# ==========================================================================
+# Phase 11: Pattern Detective (Visual Pattern Recognition) Catalog & Engine
+# ==========================================================================
+
+import xml.etree.ElementTree as ET
+import sys
+import os
+
+# Base SVG templates (viewBox 0 0 64 64)
+# Colors:
+# Teal: #0F766E, #0D9488, #14B8A6, #CCFBF1, #F0FDFA
+# Amber: #B45309, #D97706, #F59E0B, #FDE68A, #FEF3C7
+# Indigo: #3730A3, #4338CA, #4F46E5, #C7D2FE, #EEF2FF
+# Blue: #1D4ED8, #2563EB, #3B82F6, #DBEAFE, #EFF6FF
+# Terracotta: #C2410C, #EA580C, #FB923C, #FFEDD5, #FFF7ED
+# Rose: #BE185D, #DB2777, #EC4899, #FCE7F3, #FDF2F8
+
+def make_circle(fill, stroke, stroke_w=2.5, r=22, cx=32, cy=32, extra=''):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="{cx}" cy="{cy}" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="{stroke_w}"/>
+  {extra}
+</svg>'''
+
+def make_square(fill, stroke, stroke_w=2.5, x=12, y=12, w=40, h=40, rx=4, extra=''):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{rx}" fill="{fill}" stroke="{stroke}" stroke-width="{stroke_w}"/>
+  {extra}
+</svg>'''
+
+def make_triangle(fill, stroke, stroke_w=2.5, extra=''):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M32 10L54 50H10L32 10Z" fill="{fill}" stroke="{stroke}" stroke-width="{stroke_w}" stroke-linejoin="round"/>
+  {extra}
+</svg>'''
+
+def make_diamond(fill, stroke, stroke_w=2.5, extra=''):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M32 8L54 32L32 56L10 32L32 8Z" fill="{fill}" stroke="{stroke}" stroke-width="{stroke_w}"/>
+  {extra}
+</svg>'''
+
+def make_sun(fill, stroke, ray_stroke):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="32" cy="32" r="14" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>
+  <path d="M32 6V14M32 50V58M6 32H14M50 32H58M14 14L20 20M44 44L50 50M14 50L20 44M44 20L50 14" stroke="{ray_stroke}" stroke-width="3" stroke-linecap="round"/>
+</svg>'''
+
+def make_leaf(fill, stroke):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M32 10C20 18 16 34 32 54C48 34 44 18 32 10Z" fill="{fill}" stroke="{stroke}" stroke-width="3"/>
+  <path d="M32 20V46M32 30L24 24M32 38L40 32" stroke="{stroke}" stroke-width="2.5" stroke-linecap="round"/>
+</svg>'''
+
+def make_star(fill, stroke):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M32 8L38 24L55 24L41 35L46 51L32 41L18 51L23 35L9 24L26 24L32 8Z" fill="{fill}" stroke="{stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>'''
+
+def make_cross(fill, stroke):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M24 10H40V24H54V40H40V54H24V40H10V24H24V10Z" fill="{fill}" stroke="{stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+</svg>'''
+
+def make_lotus(fill, stroke, inner_fill, inner_stroke):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M32 14C36 24 44 32 48 44C38 46 34 40 32 36C30 40 26 46 16 44C20 32 28 24 32 14Z" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>
+  <path d="M32 28C38 34 46 38 44 48C36 48 34 44 32 40C30 44 28 48 20 48C18 38 26 34 32 28Z" fill="{inner_fill}" stroke="{inner_stroke}" stroke-width="2"/>
+</svg>'''
+
+def make_diya(fill, stroke, flame_fill, flame_stroke):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M12 36C12 48 24 54 32 54C40 54 52 48 52 36H12Z" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>
+  <path d="M32 14C35 22 40 26 36 34C34 36 30 36 28 34C24 26 29 22 32 14Z" fill="{flame_fill}" stroke="{flame_stroke}" stroke-width="2"/>
+</svg>'''
+
+def make_ring(stroke, stroke_w=5, r=22):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="32" cy="32" r="{r}" stroke="{stroke}" stroke-width="{stroke_w}" fill="none"/>
+</svg>'''
+
+def make_dot(fill, stroke, r=16):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="32" cy="32" r="{r}" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>
+</svg>'''
+
+def make_pointer(rotation_deg, stroke='#0F766E', fill='#CCFBF1'):
+    # rotation around center 32, 32
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g transform="rotate({rotation_deg} 32 32)">
+    <circle cx="32" cy="32" r="22" fill="{fill}" stroke="{stroke}" stroke-width="2"/>
+    <path d="M32 14L40 28H34V46H30V28H24L32 14Z" fill="{stroke}" stroke="{stroke}" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+</svg>'''
+
+def make_crescent(rotation_deg, fill='#FEF3C7', stroke='#D97706'):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g transform="rotate({rotation_deg} 32 32)">
+    <path d="M32 12C43.0457 12 52 20.9543 52 32C52 43.0457 43.0457 52 32 52C28.2 52 24.6 50.9 21.6 49C29.6 46.5 35.4 39.5 35.4 32C35.4 24.5 29.6 17.5 21.6 15C24.6 13.1 28.2 12 32 12Z" fill="{fill}" stroke="{stroke}" stroke-width="2"/>
+  </g>
+</svg>'''
+
+def make_feather(is_right, stroke='#0F766E', fill='#CCFBF1'):
+    # left vs right reflection
+    scale_x = '1' if is_right else '-1'
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <g transform="translate(32 32) scale({scale_x} 1) translate(-32 -32)">
+    <path d="M22 52C22 52 24 36 34 26C42 18 48 12 48 12C48 12 44 20 40 30C36 40 28 48 22 52Z" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>
+    <path d="M22 52L48 12" stroke="{stroke}" stroke-width="2" stroke-linecap="round"/>
+    <path d="M30 40L38 42M34 32L42 34M38 24L44 26" stroke="{stroke}" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>'''
+
+def make_pinwheel_quadrant(active_quadrant):
+    # active_quadrant: 'top', 'right', 'bottom', 'left', or 'all'
+    c_off = '#E2E8F0'
+    s_off = '#94A3B8'
+    c_on = '#F59E0B'
+    s_on = '#B45309'
+    
+    t_c, t_s = (c_on, s_on) if (active_quadrant in ('top', 'all')) else (c_off, s_off)
+    r_c, r_s = (c_on, s_on) if (active_quadrant in ('right', 'all')) else (c_off, s_off)
+    b_c, b_s = (c_on, s_on) if (active_quadrant in ('bottom', 'all')) else (c_off, s_off)
+    l_c, l_s = (c_on, s_on) if (active_quadrant in ('left', 'all')) else (c_off, s_off)
+    
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="32" cy="18" r="9" fill="{t_c}" stroke="{t_s}" stroke-width="2"/>
+  <circle cx="46" cy="32" r="9" fill="{r_c}" stroke="{r_s}" stroke-width="2"/>
+  <circle cx="32" cy="46" r="9" fill="{b_c}" stroke="{b_s}" stroke-width="2"/>
+  <circle cx="18" cy="32" r="9" fill="{l_c}" stroke="{l_s}" stroke-width="2"/>
+  <circle cx="32" cy="32" r="5" fill="#334155"/>
+</svg>'''
+
+def make_count_stars(count, fill='#FEF3C7', stroke='#D97706'):
+    # Renders 1 to 5 stars neatly arranged
+    coords = {
+        1: [(32, 32)],
+        2: [(20, 32), (44, 32)],
+        3: [(16, 32), (32, 32), (48, 32)],
+        4: [(20, 20), (44, 20), (20, 44), (44, 44)],
+        5: [(20, 20), (44, 20), (32, 32), (20, 44), (44, 44)],
+    }.get(count, [(32, 32)])
+    
+    paths = []
+    r = 7 if count > 3 else (9 if count > 1 else 13)
+    for cx, cy in coords:
+        paths.append(f'''<polygon points="{cx},{cy-r} {cx+r*0.35},{cy-r*0.3} {cx+r},{cy-r*0.25} {cx+r*0.5},{cy+r*0.3} {cx+r*0.65},{cy+r} {cx},{cy+r*0.55} {cx-r*0.65},{cy+r} {cx-r*0.5},{cy+r*0.3} {cx-r},{cy-r*0.25} {cx-r*0.35},{cy-r*0.3}" fill="{fill}" stroke="{stroke}" stroke-width="1.5"/>''')
+    
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  {' '.join(paths)}
+</svg>'''
+
+def make_striped_circle(stroke='#4338CA', fill='#EEF2FF'):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="32" cy="32" r="22" fill="{fill}" stroke="{stroke}" stroke-width="3"/>
+  <line x1="20" y1="18" x2="44" y2="46" stroke="{stroke}" stroke-width="2.5"/>
+  <line x1="14" y1="32" x2="32" y2="50" stroke="{stroke}" stroke-width="2.5"/>
+  <line x1="32" y1="14" x2="50" y2="32" stroke="{stroke}" stroke-width="2.5"/>
+</svg>'''
+
+def make_striped_triangle(stroke='#4338CA', fill='#EEF2FF'):
+    return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M32 10L54 50H10L32 10Z" fill="{fill}" stroke="{stroke}" stroke-width="3" stroke-linejoin="round"/>
+  <line x1="24" y1="24" x2="40" y2="50" stroke="{stroke}" stroke-width="2.5"/>
+  <line x1="16" y1="40" x2="28" y2="50" stroke="{stroke}" stroke-width="2.5"/>
+  <line x1="32" y1="14" x2="50" y2="46" stroke="{stroke}" stroke-width="2.5"/>
+</svg>'''
+
+def make_shape_with_bar(shape_type, stroke='#0F766E', fill='#CCFBF1'):
+    if shape_type == 'circle':
+        return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="32" cy="32" r="20" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>
+  <line x1="8" y1="32" x2="56" y2="32" stroke="{stroke}" stroke-width="4" stroke-linecap="round"/>
+</svg>'''
+    elif shape_type == 'triangle':
+        return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <path d="M32 12L52 50H12L32 12Z" fill="{fill}" stroke="{stroke}" stroke-width="2.5" stroke-linejoin="round"/>
+  <line x1="8" y1="36" x2="56" y2="36" stroke="{stroke}" stroke-width="4" stroke-linecap="round"/>
+</svg>'''
+    elif shape_type == 'square':
+        return f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <rect x="14" y="14" width="36" height="36" rx="4" fill="{fill}" stroke="{stroke}" stroke-width="2.5"/>
+  <line x1="8" y1="32" x2="56" y2="32" stroke="{stroke}" stroke-width="4" stroke-linecap="round"/>
+</svg>'''
+
+PATTERN_DETECTIVE_CATALOG = {
+    # -------------------------------------------------------------
+    # LEVEL 1: Simple Alternating Sequences (3 choices)
+    # -------------------------------------------------------------
+    'lvl1_sun_leaf_alternate': {
+        'puzzle_id': 'lvl1_sun_leaf_alternate',
+        'difficulty': 1,
+        'pattern_type': 'linear_alternating',
+        'layout': 'linear_sequence',
+        'title': 'Sun & Leaf Alternation',
+        'prompt': 'Look at how the sun and leaf take turns. Which tile comes next?',
+        'sequence': [
+            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'tile_id': 'leaf_teal', 'name': 'Teal Leaf', 'svg': make_leaf('#CCFBF1', '#0F766E')},
+            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'leaf_teal',
+            'name': 'Teal Leaf',
+            'svg': make_leaf('#CCFBF1', '#0F766E'),
+        },
+        'distractors': [
+            {'id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'id': 'star_amber', 'name': 'Amber Star', 'svg': make_star('#FEF3C7', '#D97706')},
+        ],
+        'explanation': 'The pattern alternates between the Golden Sun and Teal Leaf. After the Sun, the next tile is the Teal Leaf.',
+    },
+
+    'lvl1_circle_square_alternate': {
+        'puzzle_id': 'lvl1_circle_square_alternate',
+        'difficulty': 1,
+        'pattern_type': 'linear_alternating',
+        'layout': 'linear_sequence',
+        'title': 'Circle & Square Rhythm',
+        'prompt': 'Which shape continues this alternating rhythm?',
+        'sequence': [
+            {'tile_id': 'circle_blue', 'name': 'Blue Circle', 'svg': make_circle('#DBEAFE', '#1D4ED8')},
+            {'tile_id': 'square_terracotta', 'name': 'Terracotta Square', 'svg': make_square('#FFEDD5', '#C2410C')},
+            {'tile_id': 'circle_blue', 'name': 'Blue Circle', 'svg': make_circle('#DBEAFE', '#1D4ED8')},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'square_terracotta',
+            'name': 'Terracotta Square',
+            'svg': make_square('#FFEDD5', '#C2410C'),
+        },
+        'distractors': [
+            {'id': 'circle_blue', 'name': 'Blue Circle', 'svg': make_circle('#DBEAFE', '#1D4ED8')},
+            {'id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#E0F2FE', '#0284C7')},
+        ],
+        'explanation': 'The pattern alternates between a Blue Circle and a Terracotta Square. The missing shape is the Terracotta Square.',
+    },
+
+    'lvl1_lotus_diya_alternate': {
+        'puzzle_id': 'lvl1_lotus_diya_alternate',
+        'difficulty': 1,
+        'pattern_type': 'linear_alternating',
+        'layout': 'linear_sequence',
+        'title': 'Lotus & Diya Lamp',
+        'prompt': 'The gentle garden alternates between a lotus flower and a diya lamp. Which one comes next?',
+        'sequence': [
+            {'tile_id': 'lotus_pink', 'name': 'Pink Lotus', 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
+            {'tile_id': 'diya_gold', 'name': 'Golden Diya', 'svg': make_diya('#FEF3C7', '#B45309', '#F59E0B', '#B45309')},
+            {'tile_id': 'lotus_pink', 'name': 'Pink Lotus', 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'diya_gold',
+            'name': 'Golden Diya',
+            'svg': make_diya('#FEF3C7', '#B45309', '#F59E0B', '#B45309'),
+        },
+        'distractors': [
+            {'id': 'lotus_pink', 'name': 'Pink Lotus', 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
+            {'id': 'leaf_teal', 'name': 'Teal Leaf', 'svg': make_leaf('#CCFBF1', '#0F766E')},
+        ],
+        'explanation': 'The sequence alternates between the Pink Lotus and the Golden Diya. The missing tile is the Golden Diya.',
+    },
+
+    'lvl1_diamond_cross_alternate': {
+        'puzzle_id': 'lvl1_diamond_cross_alternate',
+        'difficulty': 1,
+        'pattern_type': 'linear_alternating',
+        'layout': 'linear_sequence',
+        'title': 'Diamond & Cross Border',
+        'prompt': 'Which motif completes this balanced alternating border?',
+        'sequence': [
+            {'tile_id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'tile_id': 'cross_amber', 'name': 'Amber Cross', 'svg': make_cross('#FEF3C7', '#D97706')},
+            {'tile_id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'cross_amber',
+            'name': 'Amber Cross',
+            'svg': make_cross('#FEF3C7', '#D97706'),
+        },
+        'distractors': [
+            {'id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'id': 'circle_amber', 'name': 'Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+        ],
+        'explanation': 'The border alternates between the Teal Diamond and the Amber Cross. The missing tile is the Amber Cross.',
+    },
+
+    'lvl1_ring_dot_alternate': {
+        'puzzle_id': 'lvl1_ring_dot_alternate',
+        'difficulty': 1,
+        'pattern_type': 'linear_alternating',
+        'layout': 'linear_sequence',
+        'title': 'Ring & Dot Harmony',
+        'prompt': 'Notice how the hollow ring and solid dot alternate. What belongs in the empty space?',
+        'sequence': [
+            {'tile_id': 'ring_indigo', 'name': 'Indigo Ring', 'svg': make_ring('#3730A3')},
+            {'tile_id': 'dot_amber', 'name': 'Amber Dot', 'svg': make_dot('#F59E0B', '#B45309')},
+            {'tile_id': 'ring_indigo', 'name': 'Indigo Ring', 'svg': make_ring('#3730A3')},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'dot_amber',
+            'name': 'Amber Dot',
+            'svg': make_dot('#F59E0B', '#B45309'),
+        },
+        'distractors': [
+            {'id': 'ring_indigo', 'name': 'Indigo Ring', 'svg': make_ring('#3730A3')},
+            {'id': 'dot_indigo', 'name': 'Indigo Dot', 'svg': make_dot('#3730A3', '#1E1B4B')},
+        ],
+        'explanation': 'The pattern alternates between the Indigo Ring and the Amber Dot. Following the ring comes the Amber Dot.',
+    },
+
+    # -------------------------------------------------------------
+    # LEVEL 2: 3-Item Cycles & Progressive Sequences (4 choices)
+    # -------------------------------------------------------------
+    'lvl2_three_color_cycle': {
+        'puzzle_id': 'lvl2_three_color_cycle',
+        'difficulty': 2,
+        'pattern_type': 'linear_cycle',
+        'layout': 'linear_sequence',
+        'title': 'Tri-Color Blossom Cycle',
+        'prompt': 'Three colors repeat in order: Gold, Teal, and Rose. Which blossom completes the second group?',
+        'sequence': [
+            {'tile_id': 'circle_gold', 'name': 'Golden Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'tile_id': 'circle_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'tile_id': 'circle_rose', 'name': 'Rose Circle', 'svg': make_circle('#FCE7F3', '#BE185D')},
+            {'tile_id': 'circle_gold', 'name': 'Golden Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'tile_id': 'circle_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'is_missing': True, 'position': 6},
+        ],
+        'target_tile': {
+            'id': 'circle_rose',
+            'name': 'Rose Circle',
+            'svg': make_circle('#FCE7F3', '#BE185D'),
+        },
+        'distractors': [
+            {'id': 'circle_gold', 'name': 'Golden Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'id': 'circle_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'id': 'circle_indigo', 'name': 'Indigo Circle', 'svg': make_circle('#EEF2FF', '#4338CA')},
+        ],
+        'explanation': 'The cycle repeats Gold, Teal, then Rose. Following the second Teal circle comes the Rose Circle.',
+    },
+
+    'lvl2_size_growth_circles': {
+        'puzzle_id': 'lvl2_size_growth_circles',
+        'difficulty': 2,
+        'pattern_type': 'size_progression',
+        'layout': 'linear_sequence',
+        'title': 'Expanding Teal Rings',
+        'prompt': 'The teal rings expand in size with each step. Which ring continues the expansion?',
+        'sequence': [
+            {'tile_id': 'ring_teal_sm', 'name': 'Small Teal Ring', 'svg': make_ring('#0F766E', 4, 12)},
+            {'tile_id': 'ring_teal_md', 'name': 'Medium Teal Ring', 'svg': make_ring('#0F766E', 4, 18)},
+            {'tile_id': 'ring_teal_lg', 'name': 'Large Teal Ring', 'svg': make_ring('#0F766E', 4, 24)},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'ring_teal_xl',
+            'name': 'Extra Large Teal Ring',
+            'svg': make_ring('#0F766E', 4, 29),
+        },
+        'distractors': [
+            {'id': 'ring_teal_sm', 'name': 'Small Teal Ring', 'svg': make_ring('#0F766E', 4, 12)},
+            {'id': 'ring_teal_md', 'name': 'Medium Teal Ring', 'svg': make_ring('#0F766E', 4, 18)},
+            {'id': 'square_teal_lg', 'name': 'Large Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+        ],
+        'explanation': 'Each ring grows progressively wider in diameter. The next size in the expansion is the Extra Large Teal Ring.',
+    },
+
+    'lvl2_shape_cycle_tri_sq_cir': {
+        'puzzle_id': 'lvl2_shape_cycle_tri_sq_cir',
+        'difficulty': 2,
+        'pattern_type': 'linear_cycle',
+        'layout': 'linear_sequence',
+        'title': 'Geometric Trio Cycle',
+        'prompt': 'The shapes repeat in order: Triangle, Square, Circle. Which shape follows the Triangle?',
+        'sequence': [
+            {'tile_id': 'tri_amber', 'name': 'Amber Triangle', 'svg': make_triangle('#FEF3C7', '#D97706')},
+            {'tile_id': 'sq_teal', 'name': 'Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'tile_id': 'cir_indigo', 'name': 'Indigo Circle', 'svg': make_circle('#EEF2FF', '#3730A3')},
+            {'tile_id': 'tri_amber', 'name': 'Amber Triangle', 'svg': make_triangle('#FEF3C7', '#D97706')},
+            {'is_missing': True, 'position': 5},
+        ],
+        'target_tile': {
+            'id': 'sq_teal',
+            'name': 'Teal Square',
+            'svg': make_square('#CCFBF1', '#0F766E'),
+        },
+        'distractors': [
+            {'id': 'cir_indigo', 'name': 'Indigo Circle', 'svg': make_circle('#EEF2FF', '#3730A3')},
+            {'id': 'tri_amber', 'name': 'Amber Triangle', 'svg': make_triangle('#FEF3C7', '#D97706')},
+            {'id': 'star_amber', 'name': 'Amber Star', 'svg': make_star('#FEF3C7', '#D97706')},
+        ],
+        'explanation': 'The pattern sequence is Triangle, Square, Circle. After the second Triangle appears, the Square follows next.',
+    },
+
+    'lvl2_count_progression_dots': {
+        'puzzle_id': 'lvl2_count_progression_dots',
+        'difficulty': 2,
+        'pattern_type': 'count_progression',
+        'layout': 'linear_sequence',
+        'title': 'Counting Golden Stars',
+        'prompt': 'Each tile gains one golden star. Which tile continues the counting series?',
+        'sequence': [
+            {'tile_id': 'stars_1', 'name': '1 Golden Star', 'svg': make_count_stars(1)},
+            {'tile_id': 'stars_2', 'name': '2 Golden Stars', 'svg': make_count_stars(2)},
+            {'tile_id': 'stars_3', 'name': '3 Golden Stars', 'svg': make_count_stars(3)},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'stars_4',
+            'name': '4 Golden Stars',
+            'svg': make_count_stars(4),
+        },
+        'distractors': [
+            {'id': 'stars_1', 'name': '1 Golden Star', 'svg': make_count_stars(1)},
+            {'id': 'stars_3', 'name': '3 Golden Stars', 'svg': make_count_stars(3)},
+            {'id': 'stars_5', 'name': '5 Golden Stars', 'svg': make_count_stars(5)},
+        ],
+        'explanation': 'The number of stars increases by one on each step (1, 2, 3). The missing tile contains 4 Golden Stars.',
+    },
+
+    'lvl2_celestial_trio_cycle': {
+        'puzzle_id': 'lvl2_celestial_trio_cycle',
+        'difficulty': 2,
+        'pattern_type': 'linear_cycle',
+        'layout': 'linear_sequence',
+        'title': 'Celestial Trio Cycle',
+        'prompt': 'The sky symbols repeat in a trio: Sun, Star, Moon. What symbol follows the Sun?',
+        'sequence': [
+            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'tile_id': 'star_amber', 'name': 'Amber Star', 'svg': make_star('#FEF3C7', '#D97706')},
+            {'tile_id': 'crescent_teal', 'name': 'Teal Moon', 'svg': make_crescent(0, '#CCFBF1', '#0F766E')},
+            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'is_missing': True, 'position': 5},
+        ],
+        'target_tile': {
+            'id': 'star_amber',
+            'name': 'Amber Star',
+            'svg': make_star('#FEF3C7', '#D97706'),
+        },
+        'distractors': [
+            {'id': 'crescent_teal', 'name': 'Teal Moon', 'svg': make_crescent(0, '#CCFBF1', '#0F766E')},
+            {'id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
+        ],
+        'explanation': 'The recurring group is Sun, Star, Moon. After the Sun returns, the Amber Star belongs in the next position.',
+    },
+
+    # -------------------------------------------------------------
+    # LEVEL 3: 2D Relationships & Analogy Matrices (4 choices)
+    # -------------------------------------------------------------
+    'lvl3_matrix_shape_color': {
+        'puzzle_id': 'lvl3_matrix_shape_color',
+        'difficulty': 3,
+        'pattern_type': 'matrix_analogy',
+        'layout': 'matrix_2x2',
+        'title': 'Shape & Color Harmony Grid',
+        'prompt': 'Examine the rows and columns. Which shape and color combination completes the grid?',
+        'matrix': [
+            [
+                {'tile_id': 'cir_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
+                {'tile_id': 'cir_amber', 'name': 'Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+            ],
+            [
+                {'tile_id': 'sq_teal', 'name': 'Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'sq_amber',
+            'name': 'Amber Square',
+            'svg': make_square('#FEF3C7', '#D97706'),
+        },
+        'distractors': [
+            {'id': 'cir_amber', 'name': 'Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'id': 'sq_teal', 'name': 'Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'id': 'sq_indigo', 'name': 'Indigo Square', 'svg': make_square('#EEF2FF', '#4338CA')},
+        ],
+        'explanation': 'Row 1 has Circles and Row 2 has Squares. Column 1 is Teal and Column 2 is Amber. The matching tile is the Amber Square.',
+    },
+
+    'lvl3_analogy_solid_to_outline': {
+        'puzzle_id': 'lvl3_analogy_solid_to_outline',
+        'difficulty': 3,
+        'pattern_type': 'matrix_analogy',
+        'layout': 'matrix_2x2',
+        'title': 'Solid to Outline Analogy',
+        'prompt': 'The top row changes from a solid shape to an outline. What happens to the rose blossom?',
+        'matrix': [
+            [
+                {'tile_id': 'dia_solid', 'name': 'Solid Diamond', 'svg': make_diamond('#0F766E', '#0F766E')},
+                {'tile_id': 'dia_outline', 'name': 'Outline Diamond', 'svg': make_diamond('none', '#0F766E', 4)},
+            ],
+            [
+                {'tile_id': 'cir_solid', 'name': 'Solid Circle', 'svg': make_circle('#BE185D', '#BE185D')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'cir_outline',
+            'name': 'Outline Circle',
+            'svg': make_circle('none', '#BE185D', 4),
+        },
+        'distractors': [
+            {'id': 'cir_solid', 'name': 'Solid Circle', 'svg': make_circle('#BE185D', '#BE185D')},
+            {'id': 'dia_outline', 'name': 'Outline Diamond', 'svg': make_diamond('none', '#0F766E', 4)},
+            {'id': 'sq_outline', 'name': 'Outline Square', 'svg': make_square('none', '#BE185D', 4)},
+        ],
+        'explanation': 'Across each row, a solid filled shape becomes a hollow outline. The solid circle transforms into an Outline Circle.',
+    },
+
+    'lvl3_matrix_motif_fill': {
+        'puzzle_id': 'lvl3_matrix_motif_fill',
+        'difficulty': 3,
+        'pattern_type': 'matrix_analogy',
+        'layout': 'matrix_2x2',
+        'title': 'Motif & Color Correspondence',
+        'prompt': 'Look at the motifs in each row and the colors in each column. Which tile fits the empty corner?',
+        'matrix': [
+            [
+                {'tile_id': 'leaf_teal', 'name': 'Teal Leaf', 'svg': make_leaf('#CCFBF1', '#0F766E')},
+                {'tile_id': 'leaf_amber', 'name': 'Amber Leaf', 'svg': make_leaf('#FEF3C7', '#D97706')},
+            ],
+            [
+                {'tile_id': 'sun_teal', 'name': 'Teal Sun', 'svg': make_sun('#CCFBF1', '#0F766E', '#0F766E')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'sun_amber',
+            'name': 'Amber Sun',
+            'svg': make_sun('#FEF3C7', '#D97706', '#D97706'),
+        },
+        'distractors': [
+            {'id': 'sun_teal', 'name': 'Teal Sun', 'svg': make_sun('#CCFBF1', '#0F766E', '#0F766E')},
+            {'id': 'leaf_amber', 'name': 'Amber Leaf', 'svg': make_leaf('#FEF3C7', '#D97706')},
+            {'id': 'sun_rose', 'name': 'Rose Sun', 'svg': make_sun('#FCE7F3', '#BE185D', '#BE185D')},
+        ],
+        'explanation': 'Row 1 displays leaves and Row 2 displays suns. Column 1 is teal and Column 2 is amber. The missing tile is the Amber Sun.',
+    },
+
+    'lvl3_striped_pattern_matrix': {
+        'puzzle_id': 'lvl3_striped_pattern_matrix',
+        'difficulty': 3,
+        'pattern_type': 'matrix_analogy',
+        'layout': 'matrix_2x2',
+        'title': 'Texture Transformation Grid',
+        'prompt': 'Notice how the first shape gains diagonal stripes in the second column. What belongs in the lower right?',
+        'matrix': [
+            [
+                {'tile_id': 'cir_plain', 'name': 'Plain Indigo Circle', 'svg': make_circle('#EEF2FF', '#4338CA')},
+                {'tile_id': 'cir_striped', 'name': 'Striped Indigo Circle', 'svg': make_striped_circle('#4338CA', '#EEF2FF')},
+            ],
+            [
+                {'tile_id': 'tri_plain', 'name': 'Plain Indigo Triangle', 'svg': make_triangle('#EEF2FF', '#4338CA')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'tri_striped',
+            'name': 'Striped Indigo Triangle',
+            'svg': make_striped_triangle('#4338CA', '#EEF2FF'),
+        },
+        'distractors': [
+            {'id': 'tri_plain', 'name': 'Plain Indigo Triangle', 'svg': make_triangle('#EEF2FF', '#4338CA')},
+            {'id': 'cir_striped', 'name': 'Striped Indigo Circle', 'svg': make_striped_circle('#4338CA', '#EEF2FF')},
+            {'id': 'sq_striped', 'name': 'Striped Indigo Square', 'svg': make_square('#EEF2FF', '#4338CA')},
+        ],
+        'explanation': 'Moving horizontally adds diagonal stripes across the shape. The plain indigo triangle becomes the Striped Indigo Triangle.',
+    },
+
+    'lvl3_inner_core_matrix': {
+        'puzzle_id': 'lvl3_inner_core_matrix',
+        'difficulty': 3,
+        'pattern_type': 'matrix_analogy',
+        'layout': 'matrix_2x2',
+        'title': 'Central Core Relationship',
+        'prompt': 'A central dot is placed inside the shape in the second column. What happens to the terracotta square?',
+        'matrix': [
+            [
+                {'tile_id': 'cir_empty', 'name': 'Hollow Teal Circle', 'svg': make_ring('#0F766E', 4)},
+                {'tile_id': 'cir_with_dot', 'name': 'Teal Circle with Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+            ],
+            [
+                {'tile_id': 'sq_empty', 'name': 'Hollow Terracotta Square', 'svg': make_square('none', '#C2410C', 4)},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'sq_with_dot',
+            'name': 'Terracotta Square with Dot',
+            'svg': make_square('#FFEDD5', '#C2410C', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#C2410C"/>'),
+        },
+        'distractors': [
+            {'id': 'sq_empty', 'name': 'Hollow Terracotta Square', 'svg': make_square('none', '#C2410C', 4)},
+            {'id': 'cir_with_dot', 'name': 'Teal Circle with Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+            {'id': 'tri_with_dot', 'name': 'Triangle with Dot', 'svg': make_triangle('#FFEDD5', '#C2410C', 2.5, '<circle cx="32" cy="36" r="6" fill="#C2410C"/>')},
+        ],
+        'explanation': 'The pattern adds a central solid dot inside the outer border. The square gains a central dot, becoming Terracotta Square with Dot.',
+    },
+
+    # -------------------------------------------------------------
+    # LEVEL 4: Rotation, Symmetry & Direction (5 choices)
+    # -------------------------------------------------------------
+    'lvl4_arrow_rotation_cw': {
+        'puzzle_id': 'lvl4_arrow_rotation_cw',
+        'difficulty': 4,
+        'pattern_type': 'rotation_sequence',
+        'layout': 'linear_sequence',
+        'title': 'Clockwise Compass Turning',
+        'prompt': 'The pointer turns clockwise by a quarter-turn at each step: Up, Right, Down. Which direction points next?',
+        'sequence': [
+            {'tile_id': 'pointer_up', 'name': 'Pointer Up', 'svg': make_pointer(0)},
+            {'tile_id': 'pointer_right', 'name': 'Pointer Right', 'svg': make_pointer(90)},
+            {'tile_id': 'pointer_down', 'name': 'Pointer Down', 'svg': make_pointer(180)},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'pointer_left',
+            'name': 'Pointer Left',
+            'svg': make_pointer(270),
+        },
+        'distractors': [
+            {'id': 'pointer_up', 'name': 'Pointer Up', 'svg': make_pointer(0)},
+            {'id': 'pointer_right', 'name': 'Pointer Right', 'svg': make_pointer(90)},
+            {'id': 'pointer_down', 'name': 'Pointer Down', 'svg': make_pointer(180)},
+            {'id': 'pointer_diag', 'name': 'Pointer Diagonal', 'svg': make_pointer(45)},
+        ],
+        'explanation': 'The pointer rotates 90 degrees clockwise each turn (Up, Right, Down). The next quarter-turn points to the Left.',
+    },
+
+    'lvl4_crescent_rotation': {
+        'puzzle_id': 'lvl4_crescent_rotation',
+        'difficulty': 4,
+        'pattern_type': 'rotation_sequence',
+        'layout': 'linear_sequence',
+        'title': 'Turning Golden Crescent',
+        'prompt': 'The curved crescent turns clockwise step by step. Which crescent shows the next quarter turn?',
+        'sequence': [
+            {'tile_id': 'cres_up', 'name': 'Crescent Opening Up', 'svg': make_crescent(0)},
+            {'tile_id': 'cres_right', 'name': 'Crescent Opening Right', 'svg': make_crescent(90)},
+            {'tile_id': 'cres_down', 'name': 'Crescent Opening Down', 'svg': make_crescent(180)},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'cres_left',
+            'name': 'Crescent Opening Left',
+            'svg': make_crescent(270),
+        },
+        'distractors': [
+            {'id': 'cres_up', 'name': 'Crescent Opening Up', 'svg': make_crescent(0)},
+            {'id': 'cres_right', 'name': 'Crescent Opening Right', 'svg': make_crescent(90)},
+            {'id': 'cres_down', 'name': 'Crescent Opening Down', 'svg': make_crescent(180)},
+            {'id': 'cir_full', 'name': 'Full Moon Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+        ],
+        'explanation': 'The crescent opening rotates clockwise by 90 degrees each step. Following the downward opening is the Crescent Opening Left.',
+    },
+
+    'lvl4_symmetric_reflection': {
+        'puzzle_id': 'lvl4_symmetric_reflection',
+        'difficulty': 4,
+        'pattern_type': 'symmetry_reflection',
+        'layout': 'matrix_2x2',
+        'title': 'Mirror Reflection Symmetry',
+        'prompt': 'Shapes mirror each other across the columns. What mirrors the left-pointing curved feather?',
+        'matrix': [
+            [
+                {'tile_id': 'feather_left', 'name': 'Left Feather', 'svg': make_feather(False)},
+                {'tile_id': 'feather_right', 'name': 'Right Feather', 'svg': make_feather(True)},
+            ],
+            [
+                {'tile_id': 'feather_left_terracotta', 'name': 'Left Terracotta Feather', 'svg': make_feather(False, '#C2410C', '#FFEDD5')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'feather_right_terracotta',
+            'name': 'Right Terracotta Feather',
+            'svg': make_feather(True, '#C2410C', '#FFEDD5'),
+        },
+        'distractors': [
+            {'id': 'feather_left_terracotta', 'name': 'Left Terracotta Feather', 'svg': make_feather(False, '#C2410C', '#FFEDD5')},
+            {'id': 'feather_right', 'name': 'Right Teal Feather', 'svg': make_feather(True)},
+            {'id': 'feather_left', 'name': 'Left Teal Feather', 'svg': make_feather(False)},
+            {'id': 'pointer_right', 'name': 'Pointer Right', 'svg': make_pointer(90)},
+        ],
+        'explanation': 'Each row consists of a left-facing motif mirrored into a right-facing motif of the same color. The answer is Right Terracotta Feather.',
+    },
+
+    'lvl4_pinwheel_quadrant': {
+        'puzzle_id': 'lvl4_pinwheel_quadrant',
+        'difficulty': 4,
+        'pattern_type': 'rotation_sequence',
+        'layout': 'linear_sequence',
+        'title': 'Four-Petal Clockwise Shift',
+        'prompt': 'The golden petal moves clockwise: Top, Right, Bottom. Where does it light up next?',
+        'sequence': [
+            {'tile_id': 'pin_top', 'name': 'Top Petal Highlighted', 'svg': make_pinwheel_quadrant('top')},
+            {'tile_id': 'pin_right', 'name': 'Right Petal Highlighted', 'svg': make_pinwheel_quadrant('right')},
+            {'tile_id': 'pin_bottom', 'name': 'Bottom Petal Highlighted', 'svg': make_pinwheel_quadrant('bottom')},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'pin_left',
+            'name': 'Left Petal Highlighted',
+            'svg': make_pinwheel_quadrant('left'),
+        },
+        'distractors': [
+            {'id': 'pin_top', 'name': 'Top Petal Highlighted', 'svg': make_pinwheel_quadrant('top')},
+            {'id': 'pin_right', 'name': 'Right Petal Highlighted', 'svg': make_pinwheel_quadrant('right')},
+            {'id': 'pin_bottom', 'name': 'Bottom Petal Highlighted', 'svg': make_pinwheel_quadrant('bottom')},
+            {'id': 'pin_all', 'name': 'All Petals Highlighted', 'svg': make_pinwheel_quadrant('all')},
+        ],
+        'explanation': 'The golden petal advances clockwise around the 4 petals (Top, Right, Bottom). The fourth position highlights the Left Petal.',
+    },
+
+    'lvl4_diamond_tilt_alternate': {
+        'puzzle_id': 'lvl4_diamond_tilt_alternate',
+        'difficulty': 4,
+        'pattern_type': 'linear_alternating',
+        'layout': 'linear_sequence',
+        'title': 'Kolam Diamond Tilt Rhythm',
+        'prompt': 'The square alternates between upright and a 45-degree diamond tilt. Which orientation comes next?',
+        'sequence': [
+            {'tile_id': 'sq_upright', 'name': 'Upright Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'tile_id': 'dia_tilted', 'name': 'Tilted Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'tile_id': 'sq_upright', 'name': 'Upright Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'dia_tilted',
+            'name': 'Tilted Diamond',
+            'svg': make_diamond('#CCFBF1', '#0F766E'),
+        },
+        'distractors': [
+            {'id': 'sq_upright', 'name': 'Upright Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'id': 'tri_teal', 'name': 'Teal Triangle', 'svg': make_triangle('#CCFBF1', '#0F766E')},
+            {'id': 'cir_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'id': 'cross_teal', 'name': 'Teal Cross', 'svg': make_cross('#CCFBF1', '#0F766E')},
+        ],
+        'explanation': 'The motif alternates between an upright square and a 45-degree tilted diamond. After the upright square comes the Tilted Diamond.',
+    },
+
+    # -------------------------------------------------------------
+    # LEVEL 5: Dual Attributes & Composite Transformations (6 choices)
+    # -------------------------------------------------------------
+    'lvl5_dual_attr_shape_count': {
+        'puzzle_id': 'lvl5_dual_attr_shape_count',
+        'difficulty': 5,
+        'pattern_type': 'dual_attribute_matrix',
+        'layout': 'matrix_2x2',
+        'title': 'Motif & Count Matrix',
+        'prompt': 'Rows set the motif (Sun vs. Star); columns set the count (1 item vs. 2 items). What completes the corner?',
+        'matrix': [
+            [
+                {'tile_id': 'sun_1', 'name': '1 Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+                {'tile_id': 'sun_2', 'name': '2 Golden Suns', 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="20" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+  <circle cx="44" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+</svg>'''},
+            ],
+            [
+                {'tile_id': 'star_1', 'name': '1 Amber Star', 'svg': make_count_stars(1)},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'star_2',
+            'name': '2 Amber Stars',
+            'svg': make_count_stars(2),
+        },
+        'distractors': [
+            {'id': 'star_1', 'name': '1 Amber Star', 'svg': make_count_stars(1)},
+            {'id': 'sun_2', 'name': '2 Golden Suns', 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="20" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+  <circle cx="44" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
+</svg>'''},
+            {'id': 'star_3', 'name': '3 Amber Stars', 'svg': make_count_stars(3)},
+            {'id': 'sun_1', 'name': '1 Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'id': 'cir_2', 'name': '2 Teal Circles', 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+  <circle cx="20" cy="32" r="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+  <circle cx="44" cy="32" r="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
+</svg>'''},
+        ],
+        'explanation': 'Row 2 requires stars, and Column 2 requires a pair of items (count of 2). The matching combination is 2 Amber Stars.',
+    },
+
+    'lvl5_concentric_frame_core': {
+        'puzzle_id': 'lvl5_concentric_frame_core',
+        'difficulty': 5,
+        'pattern_type': 'dual_attribute_matrix',
+        'layout': 'matrix_2x2',
+        'title': 'Frame & Core Synthesis',
+        'prompt': 'The outer frame is set by the row; the inner symbol is set by the column. What belongs in the lower corner?',
+        'matrix': [
+            [
+                {'tile_id': 'cir_dot', 'name': 'Circle with Inner Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+                {'tile_id': 'cir_star', 'name': 'Circle with Inner Star', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
+            ],
+            [
+                {'tile_id': 'sq_dot', 'name': 'Square with Inner Dot', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'sq_star',
+            'name': 'Square with Inner Star',
+            'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>'),
+        },
+        'distractors': [
+            {'id': 'sq_dot', 'name': 'Square with Inner Dot', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+            {'id': 'cir_star', 'name': 'Circle with Inner Star', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
+            {'id': 'cir_dot', 'name': 'Circle with Inner Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+            {'id': 'sq_cross', 'name': 'Square with Inner Cross', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<line x1="26" y1="32" x2="38" y2="32" stroke="#0F766E" stroke-width="3"/><line x1="32" y1="26" x2="32" y2="38" stroke="#0F766E" stroke-width="3"/>')},
+            {'id': 'dia_star', 'name': 'Diamond with Inner Star', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
+        ],
+        'explanation': 'Row 2 uses square frames, and Column 2 uses inner stars. The synthesis is the Square with Inner Star.',
+    },
+
+    'lvl5_color_inversion_analogy': {
+        'puzzle_id': 'lvl5_color_inversion_analogy',
+        'difficulty': 5,
+        'pattern_type': 'dual_attribute_matrix',
+        'layout': 'matrix_2x2',
+        'title': 'Color Inversion Analogy',
+        'prompt': 'Examine the color exchange across the top row. What happens when the diamond colors exchange?',
+        'matrix': [
+            [
+                {'tile_id': 'ring_t_dot_a', 'name': 'Teal Ring with Amber Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+                {'tile_id': 'ring_a_dot_t', 'name': 'Amber Ring with Teal Dot', 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
+            ],
+            [
+                {'tile_id': 'dia_t_dot_a', 'name': 'Teal Diamond with Amber Dot', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'dia_a_dot_t',
+            'name': 'Amber Diamond with Teal Dot',
+            'svg': make_diamond('#FEF3C7', '#D97706', 2.5, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>'),
+        },
+        'distractors': [
+            {'id': 'dia_t_dot_a', 'name': 'Teal Diamond with Amber Dot', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+            {'id': 'ring_a_dot_t', 'name': 'Amber Ring with Teal Dot', 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
+            {'id': 'dia_a_dot_a', 'name': 'Amber Diamond with Amber Dot', 'svg': make_diamond('#FEF3C7', '#D97706', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+            {'id': 'dia_t_dot_t', 'name': 'Teal Diamond with Teal Dot', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
+            {'id': 'dia_indigo_dot_rose', 'name': 'Indigo Diamond with Rose Dot', 'svg': make_diamond('#EEF2FF', '#4338CA', 2.5, '<circle cx="32" cy="32" r="8" fill="#BE185D" stroke="#831843" stroke-width="1.5"/>')},
+        ],
+        'explanation': 'Across each row, the outer color and inner dot color swap places. The Teal Diamond with Amber Dot swaps into an Amber Diamond with Teal Dot.',
+    },
+
+    'lvl5_geometric_overlay': {
+        'puzzle_id': 'lvl5_geometric_overlay',
+        'difficulty': 5,
+        'pattern_type': 'dual_attribute_matrix',
+        'layout': 'matrix_2x2',
+        'title': 'Motif Overlay Combination',
+        'prompt': 'Column 1 shows a base shape; Column 2 adds a horizontal crossbar. Which tile completes the triangle row?',
+        'matrix': [
+            [
+                {'tile_id': 'cir_base', 'name': 'Plain Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
+                {'tile_id': 'cir_bar', 'name': 'Circle with Crossbar', 'svg': make_shape_with_bar('circle')},
+            ],
+            [
+                {'tile_id': 'tri_base', 'name': 'Plain Triangle', 'svg': make_triangle('#CCFBF1', '#0F766E')},
+                {'is_missing': True, 'position': 4},
+            ],
+        ],
+        'target_tile': {
+            'id': 'tri_bar',
+            'name': 'Triangle with Crossbar',
+            'svg': make_shape_with_bar('triangle'),
+        },
+        'distractors': [
+            {'id': 'tri_base', 'name': 'Plain Triangle', 'svg': make_triangle('#CCFBF1', '#0F766E')},
+            {'id': 'cir_bar', 'name': 'Circle with Crossbar', 'svg': make_shape_with_bar('circle')},
+            {'id': 'sq_bar', 'name': 'Square with Crossbar', 'svg': make_shape_with_bar('square')},
+            {'id': 'tri_dot', 'name': 'Triangle with Dot', 'svg': make_triangle('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="34" r="6" fill="#0F766E"/>')},
+            {'id': 'tri_solid', 'name': 'Solid Triangle', 'svg': make_triangle('#0F766E', '#0F766E')},
+        ],
+        'explanation': 'Across each row, a horizontal crossbar is layered across the base shape. Triangle plus crossbar produces Triangle with Crossbar.',
+    },
+
+    'lvl5_triple_rhythm_harmony': {
+        'puzzle_id': 'lvl5_triple_rhythm_harmony',
+        'difficulty': 5,
+        'pattern_type': 'linear_alternating',
+        'layout': 'linear_sequence',
+        'title': 'Triple Attribute Alternation',
+        'prompt': 'Notice the synchronized changes: Size (Large, Small), Color (Teal, Amber), and Shape (Circle, Square). What follows the Large Teal Circle?',
+        'sequence': [
+            {'tile_id': 'cir_lg_teal', 'name': 'Large Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
+            {'tile_id': 'sq_sm_amber', 'name': 'Small Amber Square', 'svg': make_square('#FEF3C7', '#D97706', 2.5, 20, 20, 24, 24, 3)},
+            {'tile_id': 'cir_lg_teal', 'name': 'Large Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
+            {'is_missing': True, 'position': 4},
+        ],
+        'target_tile': {
+            'id': 'sq_sm_amber',
+            'name': 'Small Amber Square',
+            'svg': make_square('#FEF3C7', '#D97706', 2.5, 20, 20, 24, 24, 3),
+        },
+        'distractors': [
+            {'id': 'cir_lg_teal', 'name': 'Large Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
+            {'id': 'sq_lg_amber', 'name': 'Large Amber Square', 'svg': make_square('#FEF3C7', '#D97706', 3, 12, 12, 40, 40, 4)},
+            {'id': 'sq_sm_teal', 'name': 'Small Teal Square', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 20, 20, 24, 24, 3)},
+            {'id': 'cir_sm_amber', 'name': 'Small Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 14)},
+            {'id': 'cir_lg_amber', 'name': 'Large Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706', 3, 24)},
+        ],
+        'explanation': 'The pattern synchronizes Size, Color, and Shape in alternation. Following the Large Teal Circle comes the Small Amber Square.',
+    },
+}
+
+
+class PatternDetectiveEngine:
+    """
+    Game Engine for Pattern Detective (Abstract Reasoning & Visual-Spatial Logic).
+    Elder-friendly visual pattern recognition activity completing harmonious geometric
+    and cultural pattern sequences with deterministic generation across 5 difficulty levels.
+    """
+    SLUG = 'pattern-detective'
+    TOTAL_ROUNDS = 3
+    TOTAL_MAX_SCORE = 3
+    TEMPLATE_NAME = 'games/pattern_detective.html'
+
+    CHOICE_COUNTS = {
+        1: 3,
+        2: 4,
+        3: 4,
+        4: 5,
+        5: 6,
+    }
+
+    @classmethod
+    def get_instructions(cls):
+        """
+        Elder-friendly step-by-step instructions for the Pattern Detective intro screen.
+        """
+        return [
+            {
+                'number': 1,
+                'title': "Observe the Visual Pattern",
+                'description': "Look at the harmonious sequence of symbols or grid on the main display card.",
+            },
+            {
+                'number': 2,
+                'title': "Identify the Missing Position",
+                'description': "Notice the empty space marked with a question card. Consider which symbol naturally belongs there.",
+            },
+            {
+                'number': 3,
+                'title': "Select Your Choice",
+                'description': "Tap the symbol card that fits best. You can change your choice anytime without penalty.",
+            },
+            {
+                'number': 4,
+                'title': "Confirm & Enjoy Feedback",
+                'description': "Press \"Confirm My Selection\" to review your choice and complete 3 pleasant rounds.",
+            },
+        ]
+
+    @classmethod
+    def get_session_plan(cls, session=None, difficulty=1):
+        """
+        Deterministically plans 3 rounds for a session.
+        Uses session ID and difficulty as seed so results are reproducible.
+        Ensures 3 distinct puzzles across rounds.
+        """
+        if session and hasattr(session, 'difficulty'):
+            diff = session.difficulty
+        else:
+            diff = difficulty
+
+        diff = max(1, min(5, diff))
+        s_id = session.id if (session and session.id) else 1
+        base_seed = s_id * 1000 + diff * 10
+        rng_session = random.Random(base_seed)
+
+        diff_keys = sorted([k for k, v in PATTERN_DETECTIVE_CATALOG.items() if v['difficulty'] == diff])
+        chosen_keys = rng_session.sample(diff_keys, cls.TOTAL_ROUNDS)
+
+        plan = {}
+        for r in range(1, cls.TOTAL_ROUNDS + 1):
+            p_key = chosen_keys[r - 1]
+            puzzle = PATTERN_DETECTIVE_CATALOG[p_key]
+            target_tile = puzzle['target_tile']
+            target_id = target_tile['id']
+            distractors = puzzle['distractors']
+
+            choices = [target_tile] + distractors
+            rng_round = random.Random(base_seed + r)
+            rng_round.shuffle(choices)
+
+            plan[r] = {
+                'puzzle_id': p_key,
+                'difficulty': diff,
+                'pattern_type': puzzle['pattern_type'],
+                'layout': puzzle['layout'],
+                'title': puzzle['title'],
+                'prompt': puzzle['prompt'],
+                'sequence': puzzle.get('sequence', []),
+                'matrix': puzzle.get('matrix', []),
+                'target_tile_id': target_id,
+                'target_tile': target_tile,
+                'target_ids': [target_id],
+                'distractor_tile_ids': [d['id'] for d in distractors],
+                'choices': choices,
+                'choice_tile_ids': [c['id'] for c in choices],
+                'choice_ids': [c['id'] for c in choices],
+                'explanation': puzzle['explanation'],
+            }
+        return plan
+
+    @classmethod
+    def get_round_data(cls, round_number, session=None):
+        if round_number not in (1, 2, 3):
+            raise ValueError(f"Invalid round number {round_number}. Max rounds is {cls.TOTAL_ROUNDS}.")
+
+        plan = cls.get_session_plan(session=session)
+        round_plan = dict(plan[round_number])
+        round_plan['round_number'] = round_number
+        round_plan['total_rounds'] = cls.TOTAL_ROUNDS
+        return round_plan
+
+    @classmethod
+    def evaluate_round(cls, round_number, actual_selected_ids, response_time_ms, session=None):
+        if round_number not in (1, 2, 3):
+            raise ValueError(f"Invalid round number {round_number}.")
+
+        round_data = cls.get_round_data(round_number, session=session)
+        target_id = round_data['target_ids'][0]
+        target_name = round_data['target_tile']['name']
+        explanation = round_data['explanation']
+
+        norm_selected = [str(x) for x in actual_selected_ids]
+        is_correct = (len(norm_selected) == 1 and norm_selected[0] == target_id)
+
+        if is_correct:
+            correct_ids = [target_id]
+            distractor_ids = []
+            missed_ids = []
+            mistake_count = 0
+            score = 1
+            feedback_message = f"Splendid! {explanation}"
+            feedback_tone = "success"
+        else:
+            correct_ids = []
+            distractor_ids = norm_selected
+            missed_ids = [target_id]
+            mistake_count = 1
+            score = 0
+            feedback_message = f"Good effort! The harmonious choice is {target_name}. {explanation}"
+            feedback_tone = "encouraging"
+
+        return {
+            'is_correct': is_correct,
+            'score': score,
+            'max_score': 1,
+            'mistake_count': mistake_count,
+            'correct_ids': correct_ids,
+            'distractor_ids': distractor_ids,
+            'missed_ids': missed_ids,
+            'misplaced_ids': [],
+            'target_name': target_name,
+            'explanation': explanation,
+            'feedback_message': feedback_message,
+            'feedback_tone': feedback_tone,
         }
 
 

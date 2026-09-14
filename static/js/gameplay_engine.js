@@ -52,6 +52,8 @@
     const feedbackHeading = document.getElementById('feedback-message-heading');
     const feedbackText = document.getElementById('feedback-text');
     const feedbackIconContainer = document.getElementById('feedback-icon-container');
+    const btnSpeakTargets = document.getElementById('btn-speak-targets');
+    const btnSpeakFeedback = document.getElementById('btn-speak-feedback');
 
     // Silent telemetry variables (strictly for pacing/telemetry, never shown to user)
     let selectionStartTime = null;
@@ -95,9 +97,48 @@
     // Initial binding
     bindCardEvents();
 
+    // Helper to get text description of shopping targets for voice read-aloud
+    function getTargetsText() {
+        if (!targetItemsList) return 'Please take your time to remember the shopping items.';
+        const cards = targetItemsList.querySelectorAll('.target-display-card');
+        const items = [];
+        cards.forEach(c => {
+            const nameEl = c.querySelector('h3');
+            const descEl = c.querySelector('p');
+            if (nameEl) {
+                const name = nameEl.textContent.trim();
+                const desc = descEl ? descEl.textContent.trim() : '';
+                items.push(desc ? (name + ', ' + desc) : name);
+            }
+        });
+        if (items.length === 0) return 'Please take your time to remember the shopping items.';
+        return 'Please take your time to remember these items: ' + items.join('. ') + '.';
+    }
+
+    // Voice Read-Aloud Listeners
+    if (btnSpeakTargets) {
+        btnSpeakTargets.addEventListener('click', function () {
+            if (window.CognicareVoice) {
+                window.CognicareVoice.toggle(getTargetsText(), btnSpeakTargets);
+            }
+        });
+    }
+
+    if (btnSpeakFeedback) {
+        btnSpeakFeedback.addEventListener('click', function () {
+            if (window.CognicareVoice) {
+                const heading = feedbackHeading ? feedbackHeading.textContent.trim() : '';
+                const body = feedbackText ? feedbackText.textContent.trim() : '';
+                const msg = (heading ? heading + '. ' : '') + body;
+                window.CognicareVoice.toggle(msg, btnSpeakFeedback);
+            }
+        });
+    }
+
     // Stage 1 -> Stage 2: Member is ready
     if (btnReady) {
         btnReady.addEventListener('click', function () {
+            if (window.CognicareVoice) window.CognicareVoice.stop();
             memoryStage.style.display = 'none';
             selectionStage.style.display = 'block';
             feedbackStage.style.display = 'none';
@@ -112,6 +153,7 @@
     if (btnSubmitRound) {
         btnSubmitRound.addEventListener('click', function () {
             if (isSubmitting) return;
+            if (window.CognicareVoice) window.CognicareVoice.stop();
 
             // Compute silent latency
             const responseTimeMs = selectionStartTime ? Math.max(0, Date.now() - selectionStartTime) : 0;
@@ -205,6 +247,7 @@
     // Stage 3 -> Next Round or Final Results
     if (btnNextAction) {
         btnNextAction.addEventListener('click', function () {
+            if (window.CognicareVoice) window.CognicareVoice.stop();
             if (hasNextRound && nextRoundDataCache) {
                 // Setup next round
                 currentRound = nextRoundDataCache.round_number;

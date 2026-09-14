@@ -40,6 +40,13 @@
                 <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 620px; margin: var(--space-2) auto 0; line-height: 1.5;">
                     Look at the picture below and choose the person's name and relationship.
                 </p>
+                <div style="margin-top: var(--space-3);">
+                    <button type="button" id="btn-speak-prompt" class="btn-voice" aria-label="Listen to question prompt and options">
+                        <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                        <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
+                        <span class="voice-label">Listen</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Central Large Photo Frame -->
@@ -68,7 +75,7 @@
                                 data-person-id="{{ choice.id }}"
                                 aria-pressed="false"
                                 style="min-height: 68px; padding: var(--space-4) var(--space-5); border: 2px solid var(--border-color); border-radius: var(--radius-md); background-color: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; text-align: left; cursor: pointer; transition: all 0.15s ease; gap: var(--space-3);">
-                            <div>
+                            <div style="flex-grow: 1;">
                                 <div class="choice-name" style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); line-height: 1.3;">
                                     {{ choice.name }}
                                 </div>
@@ -78,8 +85,14 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <div class="choice-radio-indicator" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <div class="radio-inner-dot" style="width: 12px; height: 12px; border-radius: 50%; background-color: var(--primary-main); display: none;"></div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span role="button" tabindex="0" class="choice-voice-btn" data-voice-speak="{{ choice.name }}{% if choice.relationship %}, {{ choice.relationship }}{% endif %}" aria-label="Listen to {{ choice.name }}" title="Listen to {{ choice.name }}">
+                                    <svg class="voice-icon voice-icon-speaker" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                                    <svg class="voice-icon voice-icon-stop" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
+                                </span>
+                                <div class="choice-radio-indicator" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <div class="radio-inner-dot" style="width: 12px; height: 12px; border-radius: 50%; background-color: var(--primary-main); display: none;"></div>
+                                </div>
                             </div>
                         </button>
                     {% endfor %}
@@ -110,9 +123,16 @@
                 <h2 id="feedback-message-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
                     Wonderful!
                 </h2>
-                <p id="feedback-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); max-width: 600px; margin: 0 auto var(--space-6); line-height: 1.6;">
+                <p id="feedback-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); max-width: 600px; margin: 0 auto var(--space-4); line-height: 1.6;">
                     Thank you for looking at this memory together.
                 </p>
+                <div style="margin-bottom: var(--space-6);">
+                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="Listen to feedback and person information">
+                        <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                        <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
+                        <span class="voice-label">Listen</span>
+                    </button>
+                </div>
 
                 <!-- Feedback Photo and Person Details Card -->
                 <div class="card" style="max-width: 440px; margin: 0 auto var(--space-8); padding: var(--space-5); background-color: var(--color-teal-50); border: 1px solid var(--primary-border); display: flex; align-items: center; gap: var(--space-4); text-align: left;">

@@ -55,6 +55,9 @@
     const feedbackPersonName = document.getElementById('feedback-person-name');
     const feedbackPersonRelationship = document.getElementById('feedback-person-relationship');
     const btnNextAction = document.getElementById('btn-next-action');
+    const questionHeading = document.getElementById('question-heading');
+    const btnSpeakPrompt = document.getElementById('btn-speak-prompt');
+    const btnSpeakFeedback = document.getElementById('btn-speak-feedback');
 
     // State variables
     let selectedPersonId = null;
@@ -63,6 +66,42 @@
     let hasNextRound = false;
     let nextRoundDataCache = null;
 
+    // Helper to get text description of prompt and choices for voice read-aloud
+    function getPromptText() {
+        const heading = questionHeading ? questionHeading.textContent.trim() : 'Who is this familiar person?';
+        const choiceEls = choicesContainer ? choicesContainer.querySelectorAll('.choice-name') : [];
+        const names = [];
+        choiceEls.forEach(el => names.push(el.textContent.trim()));
+        let text = heading + '. Look at the picture and choose the person\'s name and relationship.';
+        if (names.length > 0) {
+            text += ' The choices are: ' + names.join(', ') + '.';
+        }
+        return text;
+    }
+
+    // Voice Read-Aloud Listeners
+    if (btnSpeakPrompt) {
+        btnSpeakPrompt.addEventListener('click', function () {
+            if (window.CognicareVoice) {
+                window.CognicareVoice.toggle(getPromptText(), btnSpeakPrompt);
+            }
+        });
+    }
+
+    if (btnSpeakFeedback) {
+        btnSpeakFeedback.addEventListener('click', function () {
+            if (window.CognicareVoice) {
+                const heading = feedbackHeading ? feedbackHeading.textContent.trim() : '';
+                const text = feedbackText ? feedbackText.textContent.trim() : '';
+                const name = feedbackPersonName ? feedbackPersonName.textContent.trim() : '';
+                const rel = feedbackPersonRelationship ? feedbackPersonRelationship.textContent.trim() : '';
+                const personInfo = name ? (' That is ' + name + (rel ? ', ' + rel : '') + '.') : '';
+                const msg = (heading ? heading + '.' : '') + personInfo + ' ' + text;
+                window.CognicareVoice.toggle(msg.trim(), btnSpeakFeedback);
+            }
+        });
+    }
+
     /**
      * Attaches click handlers to choice buttons
      */
@@ -70,7 +109,11 @@
         if (!choicesContainer) return;
         const buttons = choicesContainer.querySelectorAll('.familiar-choice-btn');
         buttons.forEach(btn => {
-            btn.addEventListener('click', function () {
+            btn.addEventListener('click', function (e) {
+                if (e.target.closest('.choice-voice-btn')) {
+                    e.stopPropagation();
+                    return;
+                }
                 const personId = this.dataset.personId;
                 selectChoice(personId);
             });
@@ -130,8 +173,12 @@
             btn.setAttribute('aria-pressed', 'false');
             btn.style.cssText = 'min-height: 68px; padding: var(--space-4) var(--space-5); border: 2px solid var(--border-color); border-radius: var(--radius-md); background-color: var(--bg-surface); display: flex; justify-content: space-between; align-items: center; text-align: left; cursor: pointer; transition: all 0.15s ease; gap: var(--space-3);';
 
+            const speakText = choice.name + (choice.relationship ? (', ' + choice.relationship) : '');
+            const speakerSvg = window.CognicareVoice ? window.CognicareVoice.getSpeakerSvg() : '';
+            const stopSvg = window.CognicareVoice ? window.CognicareVoice.getStopSvg() : '';
+
             btn.innerHTML = `
-                <div>
+                <div style="flex-grow: 1;">
                     <div class="choice-name" style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); line-height: 1.3;">
                         ${escapeHtml(choice.name)}
                     </div>
@@ -141,12 +188,22 @@
                         </div>
                     ` : ''}
                 </div>
-                <div class="choice-radio-indicator" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <div class="radio-inner-dot" style="width: 12px; height: 12px; border-radius: 50%; background-color: var(--primary-main); display: none;"></div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span role="button" tabindex="0" class="choice-voice-btn" data-voice-speak="${escapeHtml(speakText)}" aria-label="Listen to ${escapeHtml(choice.name)}" title="Listen to ${escapeHtml(choice.name)}">
+                        ${speakerSvg}
+                        ${stopSvg}
+                    </span>
+                    <div class="choice-radio-indicator" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <div class="radio-inner-dot" style="width: 12px; height: 12px; border-radius: 50%; background-color: var(--primary-main); display: none;"></div>
+                    </div>
                 </div>
             `;
 
-            btn.addEventListener('click', function () {
+            btn.addEventListener('click', function (e) {
+                if (e.target.closest('.choice-voice-btn')) {
+                    e.stopPropagation();
+                    return;
+                }
                 selectChoice(choice.id);
             });
 
@@ -167,6 +224,7 @@
     if (btnConfirmChoice) {
         btnConfirmChoice.addEventListener('click', function () {
             if (!selectedPersonId || isSubmitting) return;
+            if (window.CognicareVoice) window.CognicareVoice.stop();
 
             isSubmitting = true;
             btnConfirmChoice.disabled = true;
@@ -260,6 +318,7 @@
      */
     if (btnNextAction) {
         btnNextAction.addEventListener('click', function () {
+            if (window.CognicareVoice) window.CognicareVoice.stop();
             if (hasNextRound && nextRoundDataCache) {
                 currentRound = nextRoundDataCache.round_number;
                 roundIndicator.textContent = 'Round ' + currentRound + ' of ' + totalRounds;

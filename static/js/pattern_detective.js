@@ -88,11 +88,14 @@
         const tiles = choiceTilesGrid.querySelectorAll('.pattern-choice-tile');
         tiles.forEach(tile => {
             tile.addEventListener('click', function (e) {
-                // If user clicked the small audio button, speak name without changing selection
+                // If user clicked the audio button, speak name without changing selection
                 if (e.target.closest('.pattern-tile-audio-btn')) {
                     e.stopPropagation();
+                    const audioBtn = e.target.closest('.pattern-tile-audio-btn');
                     const speakText = tile.dataset.tileName;
-                    speakTextSnippet(speakText);
+                    if (window.CognicareVoice && speakText) {
+                        window.CognicareVoice.toggle(speakText, audioBtn);
+                    }
                     return;
                 }
                 const tileId = this.dataset.tileId;
@@ -123,28 +126,27 @@
     }
 
     /**
-     * Web Speech API synthesis hook
+     * Speaks the current pattern title and prompt via CognicareVoice
      */
-    function speakTextSnippet(text) {
-        if (!('speechSynthesis' in window) || !text) return;
-        try {
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.9;
-            utterance.pitch = 1.0;
-            window.speechSynthesis.speak(utterance);
-        } catch (e) {
-            console.warn('Speech synthesis error:', e);
+    function speakCurrentPrompt() {
+        const title = patternTitle ? patternTitle.textContent.trim() : '';
+        const prompt = puzzleHeading ? puzzleHeading.textContent.trim() : '';
+        const promptText = (prompt ? prompt + '. ' : '') + title;
+        if (window.CognicareVoice && promptText) {
+            window.CognicareVoice.toggle(promptText, btnSpeakPrompt);
         }
     }
 
-    /**
-     * Speaks the current pattern title, prompt, and layout
-     */
-    function speakCurrentPrompt() {
-        if (!currentRoundData) return;
-        const promptText = (currentRoundData.prompt || '') + '. ' + (currentRoundData.title || '');
-        speakTextSnippet(promptText);
+    if (btnSpeakFeedback) {
+        btnSpeakFeedback.addEventListener('click', function () {
+            const heading = feedbackHeading ? feedbackHeading.textContent.trim() : '';
+            const msg = feedbackText ? feedbackText.textContent.trim() : '';
+            const tileName = feedbackTargetName ? feedbackTargetName.textContent.trim() : '';
+            const text = (heading ? heading + '. ' : '') + (tileName ? 'The harmonious tile was ' + tileName + '. ' : '') + msg;
+            if (window.CognicareVoice && text) {
+                window.CognicareVoice.toggle(text.trim(), btnSpeakFeedback);
+            }
+        });
     }
 
     /**
@@ -219,6 +221,9 @@
         // Render choice tiles
         if (choiceTilesGrid) {
             let choiceHtml = '';
+            const speakerSvg = window.CognicareVoice ? window.CognicareVoice.getSpeakerSvg() : '';
+            const stopSvg = window.CognicareVoice ? window.CognicareVoice.getStopSvg() : '';
+
             (data.choices || []).forEach(choice => {
                 choiceHtml += `
                     <button type="button"
@@ -230,14 +235,15 @@
                         <div class="pattern-choice-check" aria-hidden="true">✓</div>
                         <div class="pattern-choice-svg">${choice.svg}</div>
                         <span class="pattern-choice-name">${choice.name}</span>
-                        <button type="button"
-                                class="pattern-tile-audio-btn"
-                                data-speak-text="${choice.name}"
-                                aria-label="Listen to ${choice.name}"
-                                title="Listen to ${choice.name}"
-                                tabindex="-1">
-                            <span aria-hidden="true">🔊</span>
-                        </button>
+                        <span role="button"
+                              tabindex="0"
+                              class="pattern-tile-audio-btn choice-voice-btn"
+                              data-voice-speak="${choice.name}"
+                              aria-label="Listen to ${choice.name}"
+                              title="Listen to ${choice.name}">
+                            ${speakerSvg}
+                            ${stopSvg}
+                        </span>
                     </button>
                 `;
             });
@@ -258,6 +264,7 @@
      */
     function submitSelection() {
         if (!selectedTileId || isSubmitting) return;
+        if (window.CognicareVoice) window.CognicareVoice.stop();
         isSubmitting = true;
 
         if (btnConfirmSelection) {
@@ -377,6 +384,7 @@
      * Handles Next Action button click
      */
     function handleNextAction() {
+        if (window.CognicareVoice) window.CognicareVoice.stop();
         const action = btnNextAction.dataset.action;
 
         if (action === 'next_round') {

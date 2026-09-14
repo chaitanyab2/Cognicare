@@ -2539,3 +2539,246 @@ class PatternDetectiveViewsTests(TestCase):
         self.assertEqual(pd_metrics['current_difficulty'], 4)
         self.assertEqual(pd_metrics['avg_accuracy'], 100.0)
         self.assertEqual(pd_metrics['avg_response_time_ms'], 2200)
+
+
+class GlobalVoiceSystemTests(TestCase):
+    """Verifies Phase 12: Global Cognicare Voice System across all games and shared views."""
+
+    def setUp(self):
+        self.member = CustomUser.objects.create_user(
+            username='player_voice',
+            email='pv@example.com',
+            password='Password123!',
+            role=Role.PATIENT
+        )
+        self.caregiver = CustomUser.objects.create_user(
+            username='caregiver_voice',
+            email='cv@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER
+        )
+        self.member.assigned_caregiver = self.caregiver
+        self.member.save()
+
+    def test_base_template_loads_voice_script(self):
+        """Confirms cognicare-voice.js is loaded in base.html."""
+        self.client.login(username='player_voice', password='Password123!')
+        res = self.client.get(reverse('games:list'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'js/cognicare-voice.js')
+
+    def test_all_game_detail_pages_have_voice_buttons(self):
+        """Verifies that all 6 games have voice listen buttons on their detail / instruction page."""
+        self.client.login(username='player_voice', password='Password123!')
+        slugs = [
+            'memory-market',
+            'daily-life-journey',
+            'familiar-faces',
+            'focus-finder',
+            'word-connections',
+            'pattern-detective',
+        ]
+        for slug in slugs:
+            res = self.client.get(reverse('games:detail', kwargs={'slug': slug}))
+            self.assertEqual(res.status_code, 200, f"Detail page failed for {slug}")
+            self.assertContains(res, 'btn-voice', msg_prefix=f"{slug} missing btn-voice")
+            self.assertContains(res, 'data-voice-target="#game-overview-text"', msg_prefix=f"{slug} missing overview voice")
+            self.assertContains(res, 'data-voice-target="#instructions-content"', msg_prefix=f"{slug} missing instructions voice")
+
+    def test_game_results_page_has_voice_button(self):
+        """Verifies results page contains voice read-aloud button for summary and encouragement."""
+        self.client.login(username='player_voice', password='Password123!')
+        game = Game.objects.get(slug='memory-market')
+        session = GameSession.objects.create(
+            member=self.member,
+            game=game,
+            difficulty=1,
+            status=GameSession.Status.COMPLETED,
+            score=3,
+            max_score=3,
+            started_at=timezone.now(),
+            completed_at=timezone.now(),
+        )
+        for r in range(1, 4):
+            GameRound.objects.create(
+                session=session,
+                round_number=r,
+                is_correct=True,
+                response_time_ms=1200,
+            )
+        res = self.client.get(reverse('games:results', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'id="btn-speak-results"')
+        self.assertContains(res, 'btn-voice')
+        self.assertContains(res, 'data-voice-speak')
+
+    def test_memory_market_template_voice_hooks(self):
+        """Confirms Memory Market active game page renders voice buttons in memory, selection, and feedback stages."""
+        self.client.login(username='player_voice', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'memory-market'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game__slug='memory-market').latest('created_at')
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'id="btn-speak-targets"')
+        self.assertContains(res, 'id="btn-speak-selection-prompt"')
+        self.assertContains(res, 'id="btn-speak-feedback"')
+        self.assertContains(res, 'js/gameplay_engine.js')
+
+    def test_daily_life_journey_template_voice_hooks(self):
+        """Confirms Daily Life Journey active game page renders voice buttons for scenario and feedback."""
+        self.client.login(username='player_voice', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'daily-life-journey'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game__slug='daily-life-journey').latest('created_at')
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'id="btn-speak-scenario"')
+        self.assertContains(res, 'id="btn-speak-feedback"')
+        self.assertContains(res, 'js/daily_life_journey.js')
+
+    def test_familiar_faces_template_voice_hooks(self):
+        """Confirms Familiar Faces renders question voice button, feedback voice button, and choice voice buttons."""
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        from apps.memories.models import FamiliarPerson
+        self.client.login(username='player_voice', password='Password123!')
+        for i in range(1, 6):
+            photo = SimpleUploadedFile(
+                name=f'person_voice_{i}.jpg',
+                content=b'\xff\xd8\xff\xe0' + b'0' * 500,
+                content_type='image/jpeg'
+            )
+            FamiliarPerson.objects.create(
+                member=self.member,
+                name=f'Relative {i}',
+                relationship=f'Relation {i}',
+                photo=photo,
+                is_active=True
+            )
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'familiar-faces'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game__slug='familiar-faces').latest('created_at')
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'id="btn-speak-prompt"')
+        self.assertContains(res, 'id="btn-speak-feedback"')
+        self.assertContains(res, 'choice-voice-btn')
+        self.assertContains(res, 'js/familiar_faces.js')
+
+    def test_focus_finder_template_voice_hooks(self):
+        """Confirms Focus Finder renders target voice button and feedback voice button with .btn-voice."""
+        self.client.login(username='player_voice', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'focus-finder'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game__slug='focus-finder').latest('created_at')
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'id="btn-speak-target"')
+        self.assertContains(res, 'id="btn-speak-feedback"')
+        self.assertContains(res, 'class="btn-voice"')
+        self.assertContains(res, 'js/focus_finder.js')
+
+    def test_word_connections_template_voice_hooks(self):
+        """Confirms Word Connections renders prompt voice button, feedback voice button, and word card audio buttons."""
+        self.client.login(username='player_voice', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'word-connections'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game__slug='word-connections').latest('created_at')
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'id="btn-speak-prompt"')
+        self.assertContains(res, 'id="btn-speak-feedback"')
+        self.assertContains(res, 'word-card-audio-btn')
+        self.assertContains(res, 'js/word_connections.js')
+
+    def test_pattern_detective_template_voice_hooks(self):
+        """Confirms Pattern Detective renders prompt voice button, feedback voice button, and choice audio buttons."""
+        self.client.login(username='player_voice', password='Password123!')
+        self.client.post(
+            reverse('games:start_session', kwargs={'slug': 'pattern-detective'}),
+            data={'difficulty': 1}
+        )
+        session = GameSession.objects.filter(member=self.member, game__slug='pattern-detective').latest('created_at')
+        res = self.client.get(reverse('games:play', kwargs={'session_id': session.id}))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'id="btn-speak-prompt"')
+        self.assertContains(res, 'id="btn-speak-feedback"')
+        self.assertContains(res, 'pattern-tile-audio-btn')
+        self.assertContains(res, 'js/pattern_detective.js')
+
+    def test_zero_emoji_in_voice_controls_across_templates(self):
+        """Confirms strictly zero emoji characters in all game templates, base, detail, and results."""
+        import os
+        from django.conf import settings
+
+        template_files = [
+            'base.html',
+            'games/game_detail.html',
+            'games/game_results.html',
+            'games/memory_market.html',
+            'games/daily_life_journey.html',
+            'games/familiar_faces.html',
+            'games/focus_finder.html',
+            'games/word_connections.html',
+            'games/pattern_detective.html',
+        ]
+        forbidden_emojis = ['🔊', '⏹', '🗣']
+
+        for rel_path in template_files:
+            full_path = os.path.join(settings.BASE_DIR, 'templates', rel_path)
+            with open(full_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            for emoji in forbidden_emojis:
+                self.assertNotIn(
+                    emoji,
+                    content,
+                    f"Template {rel_path} must not contain emoji '{emoji}'"
+                )
+
+    def test_voice_singleton_js_content_and_safety(self):
+        """Inspects static/js/cognicare-voice.js for required safety and singleton architecture."""
+        import os
+        from django.conf import settings
+
+        voice_js_path = os.path.join(settings.BASE_DIR, 'static', 'js', 'cognicare-voice.js')
+        self.assertTrue(os.path.exists(voice_js_path), "cognicare-voice.js must exist")
+
+        with open(voice_js_path, 'r', encoding='utf-8') as f:
+            code = f.read()
+
+        self.assertIn('window.CognicareVoice', code)
+        self.assertIn('isSupported', code)
+        self.assertIn('isSpeaking', code)
+        self.assertIn('speak(', code)
+        self.assertIn('stop(', code)
+        self.assertIn('toggle(', code)
+        self.assertIn('pagehide', code)
+        self.assertIn('beforeunload', code)
+        self.assertIn('_activeUtterance', code)
+        self.assertIn('0.9', code)
+
+    def test_voice_css_styles_exist(self):
+        """Inspects static/css/cognicare.css for Phase 12 voice styles."""
+        import os
+        from django.conf import settings
+
+        css_path = os.path.join(settings.BASE_DIR, 'static', 'css', 'cognicare.css')
+        with open(css_path, 'r', encoding='utf-8') as f:
+            css = f.read()
+
+        self.assertIn('.btn-voice', css)
+        self.assertIn('.btn-voice.is-speaking', css)
+        self.assertIn('.btn-voice-sm', css)
+        self.assertIn('.choice-voice-btn', css)
+        self.assertIn('min-height: 44px', css)
+

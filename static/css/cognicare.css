@@ -1445,3 +1445,134 @@ main {
         font-size: 0.85rem;
     }
 }
+
+/* ==========================================================================
+   Phase 12: Global Cognicare Voice System Styles
+   ========================================================================== */
+
+/* Primary Voice Button */
+.btn-voice {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 16px;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--color-teal-900);
+    background-color: var(--bg-surface);
+    border: 2px solid var(--primary-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    user-select: none;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.btn-voice:hover {
+    background-color: var(--color-teal-50);
+    border-color: var(--primary-main);
+    color: var(--color-teal-950);
+}
+
+.btn-voice:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+/* Speaking State: high-contrast, calm, active indicator */
+.btn-voice.is-speaking {
+    background-color: var(--color-teal-100) !important;
+    border-color: var(--primary-main) !important;
+    color: var(--color-teal-950) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.25) !important;
+    animation: voice-pulse 2s infinite ease-in-out;
+}
+
+@keyframes voice-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.35);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(13, 148, 136, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(13, 148, 136, 0);
+    }
+}
+
+/* Small / Compact Voice Button (for choice options, items, shelf cards) */
+.btn-voice-sm {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+}
+
+.voice-icon {
+    flex-shrink: 0;
+    stroke-width: 2.2;
+}
+
+.voice-icon-speaker {
+    display: inline-block;
+}
+
+.voice-icon-stop {
+    display: none;
+}
+
+.is-speaking .voice-icon-speaker {
+    display: none !important;
+}
+
+.is-speaking .voice-icon-stop {
+    display: inline-block !important;
+}
+
+/* Discrete audio button inside choice cards */
+.choice-voice-btn,
+.word-card-audio-btn,
+.pattern-tile-audio-btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background-color: var(--color-slate-50);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 6px;
+    margin: 0;
+}
+
+.choice-voice-btn:hover,
+.word-card-audio-btn:hover,
+.pattern-tile-audio-btn:hover {
+    background-color: var(--color-teal-50);
+    border-color: var(--primary-main);
+    color: var(--color-teal-900);
+}
+
+.choice-voice-btn:focus-visible,
+.word-card-audio-btn:focus-visible,
+.pattern-tile-audio-btn:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+.choice-voice-btn.is-speaking,
+.word-card-audio-btn.is-speaking,
+.pattern-tile-audio-btn.is-speaking {
+    background-color: var(--color-teal-100) !important;
+    border-color: var(--primary-main) !important;
+    color: var(--color-teal-950) !important;
+}
+

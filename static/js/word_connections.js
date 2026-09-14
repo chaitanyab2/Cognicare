@@ -90,11 +90,14 @@
         const cards = wordChipGrid.querySelectorAll('.word-card');
         cards.forEach(card => {
             card.addEventListener('click', function (e) {
-                // If user clicked the small audio icon specifically, play audio instead of changing selection
+                // If user clicked the audio icon specifically, play audio instead of changing selection
                 if (e.target.closest('.word-card-audio-btn')) {
                     e.stopPropagation();
+                    const audioBtn = e.target.closest('.word-card-audio-btn');
                     const speakText = card.dataset.wordText;
-                    speakTextSnippet(speakText);
+                    if (window.CognicareVoice && speakText) {
+                        window.CognicareVoice.toggle(speakText, audioBtn);
+                    }
                     return;
                 }
                 const wordId = this.dataset.wordId;
@@ -124,31 +127,27 @@
         }
     }
 
-    /**
-     * Web Speech API hook for accessibility
-     */
-    function speakTextSnippet(text) {
-        if (!('speechSynthesis' in window) || !text) return;
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.9;
-        utterance.pitch = 1.0;
-        window.speechSynthesis.speak(utterance);
-    }
-
+    // Voice Read-Aloud Listeners
     if (btnSpeakPrompt) {
         btnSpeakPrompt.addEventListener('click', function () {
             const title = conceptTitle ? conceptTitle.textContent.trim() : '';
             const clue = conceptClue ? conceptClue.textContent.trim() : '';
-            const fullText = title + '. ' + clue;
-            speakTextSnippet(fullText);
+            const fullText = (title ? title + '. ' : '') + clue;
+            if (window.CognicareVoice) {
+                window.CognicareVoice.toggle(fullText, btnSpeakPrompt);
+            }
         });
     }
 
     if (btnSpeakFeedback) {
         btnSpeakFeedback.addEventListener('click', function () {
+            const heading = feedbackHeading ? feedbackHeading.textContent.trim() : '';
             const msg = feedbackText ? feedbackText.textContent.trim() : '';
-            speakTextSnippet(msg);
+            const word = feedbackTargetWord ? feedbackTargetWord.textContent.trim() : '';
+            const fullText = (heading ? heading + '. ' : '') + (word ? 'The connection was ' + word + '. ' : '') + msg;
+            if (window.CognicareVoice) {
+                window.CognicareVoice.toggle(fullText.trim(), btnSpeakFeedback);
+            }
         });
     }
 
@@ -157,6 +156,7 @@
      */
     async function submitSelection() {
         if (!selectedWordId || isSubmitting) return;
+        if (window.CognicareVoice) window.CognicareVoice.stop();
 
         isSubmitting = true;
         if (btnConfirmSelection) {
@@ -259,6 +259,9 @@
         // Render choices grid
         if (wordChipGrid) {
             wordChipGrid.innerHTML = '';
+            const speakerSvg = window.CognicareVoice ? window.CognicareVoice.getSpeakerSvg() : '';
+            const stopSvg = window.CognicareVoice ? window.CognicareVoice.getStopSvg() : '';
+
             roundData.choices.forEach(choice => {
                 const button = document.createElement('button');
                 button.type = 'button';
@@ -271,20 +274,24 @@
                 button.innerHTML = `
                     <div class="word-card-check" aria-hidden="true">✓</div>
                     <span class="word-card-text">${choice.word}</span>
-                    <button type="button"
-                            class="word-card-audio-btn"
-                            data-speak-text="${choice.word}"
-                            aria-label="Listen to ${choice.word}"
-                            title="Listen to ${choice.word}"
-                            tabindex="-1">
-                        <span aria-hidden="true">🔊</span>
-                    </button>
+                    <span role="button"
+                          tabindex="0"
+                          class="word-card-audio-btn choice-voice-btn"
+                          data-voice-speak="${choice.word}"
+                          aria-label="Listen to ${choice.word}"
+                          title="Listen to ${choice.word}">
+                        ${speakerSvg}
+                        ${stopSvg}
+                    </span>
                 `;
 
                 button.addEventListener('click', function (e) {
                     if (e.target.closest('.word-card-audio-btn')) {
                         e.stopPropagation();
-                        speakTextSnippet(choice.word);
+                        const audioEl = e.target.closest('.word-card-audio-btn');
+                        if (window.CognicareVoice) {
+                            window.CognicareVoice.toggle(choice.word, audioEl);
+                        }
                         return;
                     }
                     selectWordCard(choice.id);
@@ -339,6 +346,7 @@
 
     if (btnNextAction) {
         btnNextAction.addEventListener('click', function () {
+            if (window.CognicareVoice) window.CognicareVoice.stop();
             if (nextRoundDataCache) {
                 const nextData = nextRoundDataCache;
                 nextRoundDataCache = null;

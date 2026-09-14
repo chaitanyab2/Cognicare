@@ -71,6 +71,8 @@
     const feedbackIconContainer = document.getElementById('feedback-icon-container');
     const feedbackBreakdown = document.getElementById('feedback-breakdown');
     const btnNextAction = document.getElementById('btn-next-action');
+    const btnSpeakScenario = document.getElementById('btn-speak-scenario');
+    const btnSpeakFeedback = document.getElementById('btn-speak-feedback');
 
     // State Variables
     let orderedSequence = []; // Array of step IDs placed by member: ['tea_boil', ...]
@@ -264,6 +266,36 @@
         });
     }
 
+    // Voice Read-Aloud Listeners
+    function getScenarioText() {
+        const title = scenarioHeading ? scenarioHeading.textContent.trim() : '';
+        const inst = scenarioInstruction ? scenarioInstruction.textContent.trim() : '';
+        let text = title + '. ' + inst;
+        if (currentSteps && currentSteps.length > 0) {
+            text += ' Available steps: ' + currentSteps.map(s => s.title + ', ' + s.description).join('. ') + '.';
+        }
+        return text;
+    }
+
+    if (btnSpeakScenario) {
+        btnSpeakScenario.addEventListener('click', function () {
+            if (window.CognicareVoice) {
+                window.CognicareVoice.toggle(getScenarioText(), btnSpeakScenario);
+            }
+        });
+    }
+
+    if (btnSpeakFeedback) {
+        btnSpeakFeedback.addEventListener('click', function () {
+            if (window.CognicareVoice) {
+                const heading = feedbackHeading ? feedbackHeading.textContent.trim() : '';
+                const body = feedbackText ? feedbackText.textContent.trim() : '';
+                const msg = (heading ? heading + '. ' : '') + body;
+                window.CognicareVoice.toggle(msg, btnSpeakFeedback);
+            }
+        });
+    }
+
     /**
      * Submits the ordered sequence to the server.
      */
@@ -271,6 +303,7 @@
         btnCheckSequence.addEventListener('click', function () {
             if (isSubmitting) return;
             if (orderedSequence.length < currentSteps.length) return;
+            if (window.CognicareVoice) window.CognicareVoice.stop();
 
             const responseTimeMs = Math.max(0, Date.now() - roundStartTime);
             isSubmitting = true;
@@ -413,6 +446,7 @@
      */
     if (btnNextAction) {
         btnNextAction.addEventListener('click', function () {
+            if (window.CognicareVoice) window.CognicareVoice.stop();
             if (hasNextRound && nextRoundDataCache) {
                 // Setup next round
                 currentRound = nextRoundDataCache.round_number;

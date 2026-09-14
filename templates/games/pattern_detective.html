@@ -48,8 +48,10 @@
                     <span id="pattern-title" class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-size: 0.9rem; padding: 3px 12px;">
                         {{ round_data.title }}
                     </span>
-                    <button type="button" id="btn-speak-prompt" class="btn btn-secondary" style="min-height: 36px; padding: 2px 12px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px;" aria-label="Listen to pattern description" title="Listen to pattern description">
-                        <span aria-hidden="true">🔊</span> Listen
+                    <button type="button" id="btn-speak-prompt" class="btn-voice" aria-label="Listen to pattern description">
+                        <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                        <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
+                        <span class="voice-label">Listen</span>
                     </button>
                 </div>
 
@@ -117,14 +119,15 @@
                             <div class="pattern-choice-check" aria-hidden="true">✓</div>
                             <div class="pattern-choice-svg">{{ choice.svg|safe }}</div>
                             <span class="pattern-choice-name">{{ choice.name }}</span>
-                            <button type="button"
-                                    class="pattern-tile-audio-btn"
-                                    data-speak-text="{{ choice.name }}"
-                                    aria-label="Listen to {{ choice.name }}"
-                                    title="Listen to {{ choice.name }}"
-                                    tabindex="-1">
-                                <span aria-hidden="true">🔊</span>
-                            </button>
+                            <span role="button"
+                                  tabindex="0"
+                                  class="pattern-tile-audio-btn choice-voice-btn"
+                                  data-voice-speak="{{ choice.name }}"
+                                  aria-label="Listen to {{ choice.name }}"
+                                  title="Listen to {{ choice.name }}">
+                                <svg class="voice-icon voice-icon-speaker" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                                <svg class="voice-icon voice-icon-stop" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
+                            </span>
                         </button>
                     {% endfor %}
                 </div>
@@ -164,8 +167,10 @@
                     <!-- Filled dynamically -->
                 </p>
                 <div style="margin-top: var(--space-3);">
-                    <button type="button" id="btn-speak-feedback" class="btn btn-secondary" style="min-height: 36px; padding: 2px 14px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;" aria-label="Listen to feedback" title="Listen to feedback">
-                        <span aria-hidden="true">🔊</span> Listen to Explanation
+                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="Listen to feedback explanation">
+                        <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+                        <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
+                        <span class="voice-label">Listen</span>
                     </button>
                 </div>
             </div>

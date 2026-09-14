@@ -60,6 +60,7 @@
     const feedbackItemName = document.getElementById('feedback-item-name');
     const feedbackItemCategory = document.getElementById('feedback-item-category');
     const btnNextAction = document.getElementById('btn-next-action');
+    const btnSpeakFeedback = document.getElementById('btn-speak-feedback');
 
     // State variables
     let selectedItemId = null;
@@ -117,19 +118,28 @@
      * Web Speech API hook for elderly accessibility
      */
     function speakCurrentTarget() {
-        if (!('speechSynthesis' in window)) return;
         const name = currentTarget ? currentTarget.name : (targetItemName ? targetItemName.textContent.trim() : '');
         if (!name) return;
-
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance('Find the ' + name);
-        utterance.rate = 0.9;
-        utterance.pitch = 1.0;
-        window.speechSynthesis.speak(utterance);
+        const text = 'Find the ' + name + '.';
+        if (window.CognicareVoice) {
+            window.CognicareVoice.toggle(text, btnSpeakTarget);
+        }
     }
 
     if (btnSpeakTarget) {
         btnSpeakTarget.addEventListener('click', speakCurrentTarget);
+    }
+
+    if (btnSpeakFeedback) {
+        btnSpeakFeedback.addEventListener('click', function () {
+            if (window.CognicareVoice) {
+                const heading = feedbackHeading ? feedbackHeading.textContent.trim() : '';
+                const text = feedbackText ? feedbackText.textContent.trim() : '';
+                const item = feedbackItemName ? feedbackItemName.textContent.trim() : '';
+                const msg = (heading ? heading + '. ' : '') + (item ? 'The target was ' + item + '. ' : '') + text;
+                window.CognicareVoice.toggle(msg.trim(), btnSpeakFeedback);
+            }
+        });
     }
 
     /**
@@ -137,6 +147,7 @@
      */
     async function submitSelection() {
         if (!selectedItemId || isSubmitting) return;
+        if (window.CognicareVoice) window.CognicareVoice.stop();
 
         isSubmitting = true;
         if (btnConfirmSelection) {
@@ -312,6 +323,7 @@
 
     if (btnNextAction) {
         btnNextAction.addEventListener('click', function () {
+            if (window.CognicareVoice) window.CognicareVoice.stop();
             if (nextRoundDataCache) {
                 const nextData = nextRoundDataCache;
                 nextRoundDataCache = null;
