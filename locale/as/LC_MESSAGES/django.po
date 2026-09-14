@@ -1,16 +1,263 @@
-﻿# Assamese translations for Cognicare.
+# Assamese translations for Cognicare.
 # Copyright (C) 2026 Cognicare
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Cognicare 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-14 17:45+0530\n"
-"PO-Revision-Date: 2026-09-14 17:45+0530\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2026-09-14 21:00+0530\n"
+"PO-Revision-Date: 2026-09-14 21:00+0530\n"
+"Last-Translator: Cognicare Team\n"
 "Language-Team: Assamese\n"
 "Language: as\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# Shell and Base Template
+msgid "Cognicare - Cognitive Wellness Platform"
+msgstr "Cognicare - জ্ঞানমূলক কল্যাণ মঞ্চ"
+
+msgid "Cognitive Wellness Platform"
+msgstr "জ্ঞানমূলক কল্যাণ মঞ্চ"
+
+msgid "Skip to main content"
+msgstr "প্ৰধান সমললৈ যাওক"
+
+msgid "Cognicare Home"
+msgstr "Cognicare প্ৰধান পৃষ্ঠা"
+
+msgid "Cognitive Wellness & Memory Support"
+msgstr "জ্ঞানমূলক কল্যাণ আৰু স্মৃতি সমৰ্থন"
+
+msgid "User Navigation"
+msgstr "ব্যৱহাৰকাৰী নেভিগেচন"
+
+msgid "Hello,"
+msgstr "নমস্কাৰ,"
+
+msgid "Member"
+msgstr "সদস্য"
+
+msgid "Caregiver"
+msgstr "সেৱাকাৰী"
+
+msgid "Sign Out"
+msgstr "প্ৰস্থান কৰক"
+
+msgid "Sign In"
+msgstr "প্ৰৱেশ কৰক"
+
+msgid "Multilingual Cognitive Wellness Platform"
+msgstr "বহুভাষিক জ্ঞানমূলক কল্যাণ মঞ্চ"
+
+msgid "Designed with care for elderly users and caregivers"
+msgstr "বয়োজ্যেষ্ঠ ব্যৱহাৰকাৰী আৰু সেৱাকাৰীসকলৰ বাবে সযত্নে নিৰ্মিত"
+
+# Language Switcher
+msgid "Language selection"
+msgstr "ভাষা নিৰ্বাচন"
+
+msgid "Language options"
+msgstr "ভাষাৰ বিকল্পসমূহ"
+
+msgid "Switch to English"
+msgstr "ইংৰাজী ভাষালৈ সলনি কৰক"
+
+msgid "Switch to Assamese"
+msgstr "অসমীয়া ভাষালৈ সলনি কৰক"
+
+# Authentication - Login
+msgid "Welcome Back"
+msgstr "পুনৰ স্বাগতম"
+
+msgid "Sign in to your Cognicare account to continue"
+msgstr "অগ্ৰসৰ হ'বলৈ আপোনাৰ Cognicare একাউণ্টত প্ৰৱেশ কৰক"
+
+msgid "Username"
+msgstr "ব্যৱহাৰকাৰীৰ নাম"
+
+msgid "Password"
+msgstr "পাছৱৰ্ড"
+
+msgid "Don't have an account yet?"
+msgstr "এতিয়াও একাউণ্ট নাই নেকি?"
+
+msgid "Register as Member"
+msgstr "সদস্য হিচাপে পঞ্জীয়ন কৰক"
+
+msgid "Register as Caregiver"
+msgstr "সেৱাকাৰী হিচাপে পঞ্জীয়ন কৰক"
+
+# Authentication - Member Registration
+msgid "Member Registration"
+msgstr "সদস্য পঞ্জীয়ন"
+
+msgid "Member Account"
+msgstr "সদস্য একাউণ্ট"
+
+msgid "Join Cognicare"
+msgstr "Cognicare-ত যোগদান কৰক"
+
+msgid "Set up your personal cognitive wellness and memory profile"
+msgstr "আপোনাৰ ব্যক্তিগত জ্ঞানমূলক কল্যাণ আৰু স্মৃতি প্ৰফাইল সাজু কৰক"
+
+msgid "Choose a Username"
+msgstr "এটি ব্যৱহাৰকাৰীৰ নাম বাছক"
+
+msgid "Letters, numbers, and common characters only."
+msgstr "কেৱল আখৰ, সংখ্যা আৰু সাধাৰণ চিহ্নসমূহ ব্যৱহাৰ কৰক।"
+
+msgid "Email Address"
+msgstr "ইমেইল ঠিকনা"
+
+msgid "First Name"
+msgstr "প্ৰথম নাম"
+
+msgid "Last Name (Optional)"
+msgstr "উপাধি (ঐচ্ছিক)"
+
+msgid "Last Name"
+msgstr "উপাধি"
+
+msgid "Create a Password"
+msgstr "এটি পাছৱৰ্ড সৃষ্টি কৰক"
+
+msgid "Use at least 8 characters with letters and numbers."
+msgstr "আখৰ আৰু সংখ্যা সহ কমেও ৮টা বৰ্ণ ব্যৱহাৰ কৰক।"
+
+msgid "Confirm Password"
+msgstr "পাছৱৰ্ড নিশ্চিত কৰক"
+
+msgid "Complete Registration"
+msgstr "পঞ্জীয়ন সম্পূৰ্ণ কৰক"
+
+msgid "Already have an account?"
+msgstr "ইতিমধ্যে একাউণ্ট আছে নেকি?"
+
+msgid "Are you a family caregiver?"
+msgstr "আপুনি পৰিয়ালৰ সেৱাকাৰী নেকি?"
+
+# Authentication - Caregiver Registration
+msgid "Caregiver Registration"
+msgstr "সেৱাকাৰী পঞ্জীয়ন"
+
+msgid "Caregiver Account"
+msgstr "সেৱাকাৰী একাউণ্ট"
+
+msgid "Manage routines, memories, and wellness analytics for your loved ones"
+msgstr "আপোনাৰ আপোনজনৰ দৈনন্দিন নিয়ম, স্মৃতি আৰু কল্যাণ বিশ্লেষণ পৰিচালনা কৰক"
+
+msgid "Unique handle for caregiver dashboard access."
+msgstr "সেৱাকাৰী ডেচব’ৰ্ড প্ৰৱেশৰ বাবে অনন্য নাম।"
+
+msgid "Already registered?"
+msgstr "ইতিমধ্যে পঞ্জীয়ন কৰা আছে নেকি?"
+
+msgid "Are you registering for yourself?"
+msgstr "আপুনি নিজৰ বাবে পঞ্জীয়ন কৰিছে নেকি?"
+
+# Patient Portal - My Space
+msgid "My Space"
+msgstr "মোৰ স্থান"
+
+msgid "Welcome,"
+msgstr "স্বাগতম,"
+
+msgid "Welcome to <strong>My Space</strong> — your personal cognitive wellness and daily support space. Take your time and enjoy each activity."
+msgstr "<strong>মোৰ স্থান</strong>লৈ স্বাগতম — আপোনাৰ ব্যক্তিগত জ্ঞানমূলক কল্যাণ আৰু দৈনন্দিন সহায়ৰ স্থান। আপোনাৰ নিজৰ গতিত প্ৰতিটো কাৰ্যকলাপ উপভোগ কৰক।"
+
+msgid "Cognicare Activities"
+msgstr "Cognicare কাৰ্যকলাপসমূহ"
+
+msgid "Cognitive Games"
+msgstr "জ্ঞানমূলক খেলসমূহ"
+
+msgid "6 Games"
+msgstr "৬ টা খেল"
+
+msgid "Enjoy stimulating, unhurried activities designed to gently exercise your memory, attention, word associations, and pattern recognition."
+msgstr "আপোনাৰ স্মৃতিশক্তি, মনোযোগ, শব্দৰ সংযোগ আৰু নমুনা চিনাক্তকৰণৰ মৃদু অনুশীলনৰ বাবে নিৰ্মিত শান্ত আৰু আকৰ্ষণীয় কাৰ্যকলাপসমূহ উপভোগ কৰক।"
+
+msgid "Play Games"
+msgstr "খেলসমূহ খেলক"
+
+msgid "Explore Cognitive Games"
+msgstr "জ্ঞানমূলক খেলসমূহ চাওক"
+
+msgid "My Memories"
+msgstr "মোৰ স্মৃতিসমূহ"
+
+msgid "Photo Album"
+msgstr "ফটো এলবাম"
+
+msgid "Browse your cherished family photographs, revisit treasured hometown memories, and listen to recorded voice notes from loved ones."
+msgstr "আপোনাৰ মনপচন্দ পাৰিবাৰিক আলোকচিত্ৰসমূহ চাওক, পুৰণি গৃহচহৰৰ সোঁৱৰণি সোঁৱৰক আৰু আপোনজনৰ কণ্ঠস্বৰ বাৰ্তা শুনক।"
+
+msgid "View Memories"
+msgstr "স্মৃতিসমূহ চাওক"
+
+msgid "View My Memories"
+msgstr "মোৰ স্মৃতিসমূহ চাওক"
+
+msgid "Today's Routine"
+msgstr "আজিৰ দিনলিপি"
+
+msgid "Daily Schedule"
+msgstr "দৈনন্দিন সময়সূচী"
+
+msgid "Follow your calm daily rhythm with clear, large check-offs for morning medicines, regular hydration, nutritious meals, and restful walks."
+msgstr "ৰাতিপুৱাৰ ঔষধ, নিয়মীয়া পানী খোৱা, পুষ্টিকৰ আহাৰ আৰু প্ৰশান্তিদায়ক খোজকঢ়াৰ বাবে স্পষ্ট আৰু ডাঙৰ তালিকাৰ সৈতে আপোনাৰ শান্ত দৈনন্দিন ৰীতি অনুসৰণ কৰক।"
+
+msgid "View Routine"
+msgstr "দিনলিপি চাওক"
+
+msgid "Check Today's Routine"
+msgstr "আজিৰ দিনলিপি পৰীক্ষা কৰক"
+
+msgid "Voice Assistant"
+msgstr "কণ্ঠ সহায়ক"
+
+msgid "Hands-Free"
+msgstr "সহজ কণ্ঠস্বৰ"
+
+msgid "Speak naturally to start a game, ask about your next routine, or explore photos without typing on the keyboard."
+msgstr "কীবৰ্ডত টাইপ নকৰাকৈ এটা খেল আৰম্ভ কৰিবলৈ, আপোনাৰ পৰৱৰ্তী কামৰ বিষয়ে সুধিবলৈ বা ফটো চাবলৈ স্বাভাৱিকভাৱে কথা পাতক।"
+
+msgid "Speak to Assistant"
+msgstr "সহায়কৰ সৈতে কথা পাতক"
+
+msgid "Open Voice Assistant"
+msgstr "কণ্ঠ সহায়ক খোলক"
+
+msgid "Comfort & Dignity:"
+msgstr "আশ্বাস আৰু মৰ্যাদা:"
+
+msgid "Every activity is self-paced. There are no running timers or failure buzzers during your activities."
+msgstr "প্ৰতিটো কাৰ্যকলাপ নিজস্ব গতিত কৰিব পাৰি। আপোনাৰ কাৰ্যকলাপৰ সময়ত কোনো ক্ষিপ্ৰ সময়সীমা বা বিফলতাৰ সংকেত নাথাকে।"
+
+# Backend Messages & Errors
+msgid "Required. A valid email address."
+msgstr "প্ৰয়োজন। এটা বৈধ ইমেইল ঠিকনা।"
+
+msgid "A user with this email address already exists."
+msgstr "এই ইমেইল ঠিকনাৰে এজন ব্যৱহাৰকাৰী ইতিমধ্যে আছে।"
+
+msgid "Invalid username or password. Please try again."
+msgstr "অশুদ্ধ ব্যৱহাৰকাৰীৰ নাম বা পাছৱৰ্ড। অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।"
+
+msgid "This account is currently inactive."
+msgstr "এই একাউণ্টটো বৰ্তমান নিষ্ক্ৰিয়।"
+
+msgid "Patient account created successfully."
+msgstr "সদস্য একাউণ্ট সফলতাৰে সৃষ্টি কৰা হ'ল।"
+
+msgid "Caregiver account created successfully."
+msgstr "সেৱাকাৰী একাউণ্ট সফলতাৰে সৃষ্টি কৰা হ'ল।"
+
+msgid "You have been logged out."
+msgstr "আপুনি সফলভাৱে প্ৰস্থান কৰিলে।"
+
+msgid "You do not have permission to access this page."
+msgstr "আপোনাৰ এই পৃষ্ঠাখন চাবলৈ অনুমতি নাই।"

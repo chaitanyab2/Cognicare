@@ -2,6 +2,7 @@ from functools import wraps
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import AccessMixin
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import gettext as _
 from apps.accounts.models import Role
 
 
@@ -21,7 +22,7 @@ def role_required(allowed_roles):
                 return login_required(view_func)(request, *args, **kwargs)
             if request.user.role in allowed_roles:
                 return view_func(request, *args, **kwargs)
-            raise PermissionDenied("You do not have permission to access this page.")
+            raise PermissionDenied(_("You do not have permission to access this page."))
         return _wrapped_view
     return decorator
 
@@ -44,7 +45,7 @@ class RoleRequiredMixin(AccessMixin):
         if not request.user.is_authenticated:
             return self.handle_no_permission()
         if request.user.role not in self.allowed_roles:
-            raise PermissionDenied("You do not have permission to access this page.")
+            raise PermissionDenied(_("You do not have permission to access this page."))
         return super().dispatch(request, *args, **kwargs)
 
 

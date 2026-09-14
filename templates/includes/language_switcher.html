@@ -1,16 +1,16 @@
 {% load i18n %}
 {% get_current_language as CURRENT_LANG %}
-<form action="{% url 'set_language' %}" method="post" class="language-switcher-form" aria-label="Language selection">
+<form action="{% url 'set_language' %}" method="post" class="language-switcher-form" aria-label="{% trans 'Language selection' %}">
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ request.get_full_path|default:'/' }}">
-    <div class="lang-segmented-control" role="group" aria-label="Language options">
+    <div class="lang-segmented-control" role="group" aria-label="{% trans 'Language options' %}">
         <button type="submit"
                 name="language"
                 value="en"
                 class="lang-pill-btn {% if CURRENT_LANG|slice:':2' == 'en' %}is-active{% endif %}"
                 {% if CURRENT_LANG|slice:':2' == 'en' %}aria-current="true"{% endif %}
                 lang="en"
-                aria-label="Switch to English">
+                aria-label="{% trans 'Switch to English' %}">
             English
         </button>
         <button type="submit"
@@ -19,7 +19,7 @@
                 class="lang-pill-btn {% if CURRENT_LANG|slice:':2' == 'as' %}is-active{% endif %}"
                 {% if CURRENT_LANG|slice:':2' == 'as' %}aria-current="true"{% endif %}
                 lang="as"
-                aria-label="Switch to Assamese">
+                aria-label="{% trans 'Switch to Assamese' %}">
             অসমীয়া
         </button>
     </div>

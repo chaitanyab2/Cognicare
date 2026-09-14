@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Member Registration - Cognicare{% endblock %}
+{% block title %}{% trans "Member Registration" %} - Cognicare{% endblock %}
 
 {% block content %}
 <div class="container-narrow">
     <div class="card">
         <div class="card-header" style="text-align: center;">
-            <span class="badge badge-patient" style="margin-bottom: var(--space-3);">Member Account</span>
-            <h1 class="card-title">Join Cognicare</h1>
-            <p class="card-subtitle">Set up your personal cognitive wellness and memory profile</p>
+            <span class="badge badge-patient" style="margin-bottom: var(--space-3);">{% trans "Member Account" %}</span>
+            <h1 class="card-title">{% trans "Join Cognicare" %}</h1>
+            <p class="card-subtitle">{% trans "Set up your personal cognitive wellness and memory profile" %}</p>
         </div>
 
         {% if form.non_field_errors %}
@@ -23,19 +24,19 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="id_username" class="form-label">Choose a Username</label>
+                <label for="id_username" class="form-label">{% trans "Choose a Username" %}</label>
                 <input type="text" name="username" id="id_username" class="form-input" 
                        value="{{ form.username.value|default:'' }}" 
                        required autocomplete="username" autofocus>
                 {% if form.username.errors %}
                     <div class="field-error">{{ form.username.errors.0 }}</div>
                 {% else %}
-                    <div class="form-help">Letters, numbers, and common characters only.</div>
+                    <div class="form-help">{% trans "Letters, numbers, and common characters only." %}</div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="id_email" class="form-label">Email Address</label>
+                <label for="id_email" class="form-label">{% trans "Email Address" %}</label>
                 <input type="email" name="email" id="id_email" class="form-input" 
                        value="{{ form.email.value|default:'' }}" required autocomplete="email">
                 {% if form.email.errors %}
@@ -45,7 +46,7 @@
 
             <div class="grid-2">
                 <div class="form-group">
-                    <label for="id_first_name" class="form-label">First Name</label>
+                    <label for="id_first_name" class="form-label">{% trans "First Name" %}</label>
                     <input type="text" name="first_name" id="id_first_name" class="form-input" 
                            value="{{ form.first_name.value|default:'' }}" required autocomplete="given-name">
                     {% if form.first_name.errors %}
@@ -54,7 +55,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="id_last_name" class="form-label">Last Name (Optional)</label>
+                    <label for="id_last_name" class="form-label">{% trans "Last Name (Optional)" %}</label>
                     <input type="text" name="last_name" id="id_last_name" class="form-input" 
                            value="{{ form.last_name.value|default:'' }}" autocomplete="family-name">
                     {% if form.last_name.errors %}
@@ -64,18 +65,18 @@
             </div>
 
             <div class="form-group">
-                <label for="id_password1" class="form-label">Create a Password</label>
+                <label for="id_password1" class="form-label">{% trans "Create a Password" %}</label>
                 <input type="password" name="password1" id="id_password1" class="form-input" 
                        required autocomplete="new-password">
                 {% if form.password1.errors %}
                     <div class="field-error">{{ form.password1.errors.0 }}</div>
                 {% else %}
-                    <div class="form-help">Use at least 8 characters with letters and numbers.</div>
+                    <div class="form-help">{% trans "Use at least 8 characters with letters and numbers." %}</div>
                 {% endif %}
             </div>
 
             <div class="form-group">
-                <label for="id_password2" class="form-label">Confirm Password</label>
+                <label for="id_password2" class="form-label">{% trans "Confirm Password" %}</label>
                 <input type="password" name="password2" id="id_password2" class="form-input" 
                        required autocomplete="new-password">
                 {% if form.password2.errors %}
@@ -84,16 +85,16 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: var(--space-4);">
-                Complete Registration
+                {% trans "Complete Registration" %}
             </button>
         </form>
 
         <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-subtle); text-align: center; font-size: var(--font-size-base);">
             <p style="color: var(--text-secondary); margin-bottom: var(--space-2);">
-                Already have an account? <a href="{% url 'accounts:login' %}"><strong>Sign In</strong></a>
+                {% trans "Already have an account?" %} <a href="{% url 'accounts:login' %}"><strong>{% trans "Sign In" %}</strong></a>
             </p>
             <p style="color: var(--text-muted); font-size: var(--font-size-sm);">
-                Are you a family caregiver? <a href="{% url 'accounts:caregiver_signup' %}">Register as Caregiver</a>
+                {% trans "Are you a family caregiver?" %} <a href="{% url 'accounts:caregiver_signup' %}">{% trans "Register as Caregiver" %}</a>
             </p>
         </div>
     </div>

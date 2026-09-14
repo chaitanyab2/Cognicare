@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.translation import gettext as _
 from django.views.generic import CreateView, View
 
 from apps.accounts.decorators import patient_required, caregiver_required
@@ -50,7 +51,7 @@ class PatientSignupView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        messages.success(self.request, "Patient account created successfully.")
+        messages.success(self.request, _("Patient account created successfully."))
         return redirect(self.success_url)
 
 
@@ -63,7 +64,7 @@ class CaregiverSignupView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        messages.success(self.request, "Caregiver account created successfully.")
+        messages.success(self.request, _("Caregiver account created successfully."))
         return redirect(self.success_url)
 
 
@@ -71,12 +72,12 @@ class CustomLogoutView(View):
     """Standard logout view redirecting to login."""
     def get(self, request, *args, **kwargs):
         logout(request)
-        messages.info(request, "You have been logged out.")
+        messages.info(request, _("You have been logged out."))
         return redirect('accounts:login')
 
     def post(self, request, *args, **kwargs):
         logout(request)
-        messages.info(request, "You have been logged out.")
+        messages.info(request, _("You have been logged out."))
         return redirect('accounts:login')
 
 

@@ -4,17 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Cognicare - Cognitive Wellness Platform{% endblock %}</title>
+    <title>{% block title %}Cognicare - {% trans "Cognitive Wellness Platform" %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/cognicare.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main-content" class="skip-link">{% trans "Skip to main content" %}</a>
 
     <div class="site-wrapper">
         <header class="site-header" role="banner">
             <div class="container nav-bar">
-                <a href="{% url 'root_redirect' %}" class="brand-link" aria-label="Cognicare Home">
+                <a href="{% url 'root_redirect' %}" class="brand-link" aria-label="{% trans 'Cognicare Home' %}">
                     <div class="brand-icon" aria-hidden="true">
                         <svg class="brand-svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9.5 4a3.5 3.5 0 0 0-3.5 3.5c0 .3.04.6.1.88A3.5 3.5 0 0 0 4 11.5c0 .65.18 1.26.5 1.78A3.5 3.5 0 0 0 5 19.5c.65 0 1.26-.18 1.78-.5A3.5 3.5 0 0 0 9.5 20c.8 0 1.54-.27 2.13-.73.23-.18.37-.46.37-.75V5.48c0-.3-.14-.57-.37-.75A3.47 3.47 0 0 0 9.5 4Z"/>
@@ -28,30 +28,30 @@
                     </div>
                     <div>
                         <span class="brand-name">Cognicare</span>
-                        <span class="brand-tagline">Cognitive Wellness & Memory Support</span>
+                        <span class="brand-tagline">{% trans "Cognitive Wellness & Memory Support" %}</span>
                     </div>
                 </a>
 
-                <nav class="user-nav" aria-label="User Navigation">
+                <nav class="user-nav" aria-label="{% trans 'User Navigation' %}">
                     {% include 'includes/language_switcher.html' %}
                     {% if user.is_authenticated %}
                         <span class="user-greeting">
-                            Hello, <strong>{{ user.first_name|default:user.username }}</strong>
+                            {% trans "Hello," %} <strong>{{ user.first_name|default:user.username }}</strong>
                         </span>
                         {% if user.is_patient %}
-                            <span class="badge badge-patient">Member</span>
+                            <span class="badge badge-patient">{% trans "Member" %}</span>
                         {% elif user.is_caregiver %}
-                            <span class="badge badge-caregiver">Caregiver</span>
+                            <span class="badge badge-caregiver">{% trans "Caregiver" %}</span>
                         {% endif %}
                         <form method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-secondary" style="min-height: 44px; padding: 8px 18px;">
-                                Sign Out
+                                {% trans "Sign Out" %}
                             </button>
                         </form>
                     {% else %}
                         <a href="{% url 'accounts:login' %}" class="btn btn-outline" style="min-height: 44px; padding: 8px 18px;">
-                            Sign In
+                            {% trans "Sign In" %}
                         </a>
                     {% endif %}
                 </nav>
@@ -77,10 +77,10 @@
         <footer class="site-footer" role="contentinfo">
             <div class="container footer-content">
                 <div>
-                    <strong>Cognicare</strong> &bull; Multilingual Cognitive Wellness Platform
+                    <strong>Cognicare</strong> &bull; {% trans "Multilingual Cognitive Wellness Platform" %}
                 </div>
                 <div>
-                    Designed with care for elderly users and caregivers
+                    {% trans "Designed with care for elderly users and caregivers" %}
                 </div>
             </div>
         </footer>

@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Sign In - Cognicare{% endblock %}
+{% block title %}{% trans "Sign In" %} - Cognicare{% endblock %}
 
 {% block content %}
 <div class="container-narrow">
     <div class="card">
         <div class="card-header" style="text-align: center;">
-            <h1 class="card-title">Welcome Back</h1>
-            <p class="card-subtitle">Sign in to your Cognicare account to continue</p>
+            <h1 class="card-title">{% trans "Welcome Back" %}</h1>
+            <p class="card-subtitle">{% trans "Sign in to your Cognicare account to continue" %}</p>
         </div>
 
         {% if form.non_field_errors %}
@@ -25,7 +26,7 @@
             {% endif %}
 
             <div class="form-group">
-                <label for="id_username" class="form-label">Username</label>
+                <label for="id_username" class="form-label">{% trans "Username" %}</label>
                 <input type="text" name="username" id="id_username" class="form-input" 
                        value="{{ form.username.value|default:'' }}" 
                        required autocomplete="username" autofocus
@@ -38,7 +39,7 @@
             </div>
 
             <div class="form-group">
-                <label for="id_password" class="form-label">Password</label>
+                <label for="id_password" class="form-label">{% trans "Password" %}</label>
                 <input type="password" name="password" id="id_password" class="form-input" 
                        required autocomplete="current-password"
                        aria-describedby="password-error">
@@ -50,20 +51,20 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top: var(--space-4);">
-                Sign In
+                {% trans "Sign In" %}
             </button>
         </form>
 
         <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-subtle); text-align: center;">
             <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-bottom: var(--space-4);">
-                Don't have an account yet?
+                {% trans "Don't have an account yet?" %}
             </p>
             <div class="grid-2">
                 <a href="{% url 'accounts:patient_signup' %}" class="btn btn-outline" style="min-height: 50px;">
-                    Register as Member
+                    {% trans "Register as Member" %}
                 </a>
                 <a href="{% url 'accounts:caregiver_signup' %}" class="btn btn-outline" style="min-height: 50px;">
-                    Register as Caregiver
+                    {% trans "Register as Caregiver" %}
                 </a>
             </div>
         </div>
