@@ -91,11 +91,28 @@ def login_redirect_view(request):
     return redirect('accounts:login')
 
 
+from apps.games.personalization import get_personalized_recommendation
+
 # Verification stubs for role-based access protection (Phase 2 foundation)
 @patient_required
 def patient_portal_view(request):
     """Role-guarded endpoint for Patients."""
-    return render(request, 'accounts/patient_portal.html', {'user': request.user})
+    recommendation = get_personalized_recommendation(request.user)
+    return render(request, 'accounts/patient_portal.html', {
+        'user': request.user,
+        'recommendation': recommendation,
+    })
+
+
+@patient_required
+def voice_assistant_view(request):
+    """
+    Dedicated Voice Assistant page for Patients.
+    Provides hands-free voice navigation and accessible touch shortcuts.
+    """
+    return render(request, 'accounts/voice_assistant.html', {
+        'user': request.user,
+    })
 
 
 @caregiver_required

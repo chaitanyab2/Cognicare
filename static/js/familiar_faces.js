@@ -34,6 +34,8 @@
         return; // Not on active Familiar Faces game page
     }
 
+    const txt = (k, fallback) => (metaElem && metaElem.dataset && metaElem.dataset[k]) || fallback;
+
     const sessionId = metaElem.dataset.sessionId;
     let currentRound = parseInt(metaElem.dataset.currentRound, 10) || 1;
     const totalRounds = parseInt(metaElem.dataset.totalRounds, 10) || 3;
@@ -189,7 +191,7 @@
                     ` : ''}
                 </div>
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <span role="button" tabindex="0" class="choice-voice-btn" data-voice-speak="${escapeHtml(speakText)}" aria-label="Listen to ${escapeHtml(choice.name)}" title="Listen to ${escapeHtml(choice.name)}">
+                    <span role="button" tabindex="0" class="choice-voice-btn" data-voice-speak="${escapeHtml(speakText)}" aria-label="${txt('txtListenTo', 'Listen to')} ${escapeHtml(choice.name)}" title="${txt('txtListenTo', 'Listen to')} ${escapeHtml(choice.name)}">
                         ${speakerSvg}
                         ${stopSvg}
                     </span>
@@ -228,7 +230,7 @@
 
             isSubmitting = true;
             btnConfirmChoice.disabled = true;
-            btnConfirmChoice.textContent = 'Saving...';
+            btnConfirmChoice.textContent = txt('txtSaving', 'Saving...');
 
             const responseTimeMs = Math.max(0, Date.now() - roundStartTime);
             const csrfToken = getCookie('csrftoken') || (document.querySelector('[name=csrfmiddlewaretoken]') ? document.querySelector('[name=csrfmiddlewaretoken]').value : '');
@@ -256,7 +258,7 @@
             .then(data => {
                 isSubmitting = false;
                 btnConfirmChoice.disabled = false;
-                btnConfirmChoice.textContent = 'Confirm My Answer →';
+                btnConfirmChoice.textContent = txt('txtConfirm', 'Confirm My Answer →');
 
                 const evalData = data.evaluation;
                 hasNextRound = data.has_next_round;
@@ -264,7 +266,7 @@
 
                 // Configure feedback stage
                 if (feedbackHeading) {
-                    feedbackHeading.textContent = evalData.is_correct ? 'Wonderful!' : 'Thank You!';
+                    feedbackHeading.textContent = evalData.is_correct ? txt('txtWonderful', 'Wonderful!') : txt('txtThankYou', 'Thank You!');
                 }
                 if (feedbackText) {
                     feedbackText.textContent = evalData.feedback_message || 'Thank you for connecting with this memory.';
@@ -296,9 +298,9 @@
                 feedbackStage.style.display = 'block';
 
                 if (hasNextRound) {
-                    btnNextAction.textContent = 'Next Round →';
+                    btnNextAction.textContent = txt('txtNextRound', 'Next Round →');
                 } else {
-                    btnNextAction.textContent = 'View Summary →';
+                    btnNextAction.textContent = txt('txtViewSummary', 'View Summary →');
                 }
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -307,8 +309,8 @@
                 console.error('Submission error:', err);
                 isSubmitting = false;
                 btnConfirmChoice.disabled = false;
-                btnConfirmChoice.textContent = 'Confirm My Answer →';
-                alert('We had trouble saving your answer. Please check your connection and try again.');
+                btnConfirmChoice.textContent = txt('txtConfirm', 'Confirm My Answer →');
+                alert(txt('txtErrorSaving', 'We had trouble saving your answer. Please check your connection and try again.'));
             });
         });
     }
@@ -321,7 +323,7 @@
             if (window.CognicareVoice) window.CognicareVoice.stop();
             if (hasNextRound && nextRoundDataCache) {
                 currentRound = nextRoundDataCache.round_number;
-                roundIndicator.textContent = 'Round ' + currentRound + ' of ' + totalRounds;
+                roundIndicator.textContent = txt('txtRoundPrefix', 'Round') + ' ' + currentRound + ' ' + txt('txtOf', 'of') + ' ' + totalRounds;
 
                 if (targetPhoto && nextRoundDataCache.target_photo_url) {
                     targetPhoto.src = nextRoundDataCache.target_photo_url;
@@ -339,7 +341,7 @@
                 const csrfToken = getCookie('csrftoken') || (document.querySelector('[name=csrfmiddlewaretoken]') ? document.querySelector('[name=csrfmiddlewaretoken]').value : '');
 
                 btnNextAction.disabled = true;
-                btnNextAction.textContent = 'Finalizing...';
+                btnNextAction.textContent = txt('txtFinalizing', 'Finalizing...');
 
                 fetch(completeUrl, {
                     method: 'POST',

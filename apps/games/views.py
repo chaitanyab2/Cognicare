@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_POST, require_GET
 
+from django.utils.translation import gettext_lazy as _
 from apps.accounts.decorators import patient_required
 from apps.games.models import Game, GameSession
 from apps.games.services import (
@@ -56,8 +57,9 @@ def game_detail_view(request, slug):
         if people_count < 4:
             is_ready = False
             ready_error = (
-                f"Familiar Faces requires at least 4 photos of family members or friends. "
-                f"Currently {people_count} are ready. Please ask your caregiver to add photos in the Caregiver Portal."
+                _("Familiar Faces requires at least 4 photos of family members or friends. "
+                  "Currently %(count)s are ready. Please ask your caregiver to add photos in the Caregiver Portal.")
+                % {'count': people_count}
             )
 
     return render(request, 'games/game_detail.html', {
@@ -79,18 +81,22 @@ def start_session_view(request, slug):
     """
     game = get_object_or_404(Game, slug=slug, is_active=True)
     if game.slug not in GAME_ENGINES:
-        return HttpResponseBadRequest("This game is not yet active.")
+        return HttpResponseBadRequest(_("This game is not yet active."))
 
     if game.slug == 'familiar-faces':
         people_count = request.user.familiar_people.filter(is_active=True).exclude(photo='').count()
         if people_count < 4:
             messages.warning(
                 request,
-                f"Familiar Faces requires at least 4 active people with photos. Currently {people_count} are ready. Please ask your caregiver to add photos."
+                _("Familiar Faces requires at least 4 active people with photos. Currently %(count)s are ready. Please ask your caregiver to add photos.")
+                % {'count': people_count}
             )
             return redirect('games:detail', slug=slug)
 
-    difficulty = int(request.POST.get('difficulty', 1))
+    try:
+        difficulty = int(request.POST.get('difficulty', 1))
+    except (ValueError, TypeError):
+        difficulty = 1
     # Clamp difficulty between 1 and 5
     difficulty = max(1, min(5, difficulty))
 
@@ -117,7 +123,7 @@ def gameplay_view(request, session_id):
 
     engine = GAME_ENGINES.get(session.game.slug)
     if not engine:
-        return HttpResponseBadRequest("Unsupported game engine.")
+        return HttpResponseBadRequest(_("Unsupported game engine."))
 
     # Determine next round to present
     completed_rounds_count = session.rounds.count()
@@ -150,7 +156,7 @@ def submit_round_view(request, session_id):
     if session.status != GameSession.Status.IN_PROGRESS:
         return JsonResponse({
             'success': False,
-            'error': "Cannot submit rounds to a completed or abandoned session."
+            'error': str(_("Cannot submit rounds to a completed or abandoned session."))
         }, status=400)
 
     try:
@@ -160,7 +166,7 @@ def submit_round_view(request, session_id):
         response_time_ms = int(data.get('response_time_ms', 0))
         hints_used = int(data.get('hints_used', 0))
     except (ValueError, json.JSONDecodeError):
-        return JsonResponse({'success': False, 'error': "Invalid JSON payload."}, status=400)
+        return JsonResponse({'success': False, 'error': str(_("Invalid JSON payload."))}, status=400)
 
     try:
         result = record_round_submission(
@@ -204,7 +210,7 @@ def complete_session_view(request, session_id):
     engine = GAME_ENGINES.get(session.game.slug)
     if engine and hasattr(engine, 'TOTAL_ROUNDS'):
         if session.rounds.count() < engine.TOTAL_ROUNDS:
-            return HttpResponseBadRequest("Cannot complete session before all required rounds are finished.")
+            return HttpResponseBadRequest(_("Cannot complete session before all required rounds are finished."))
 
     finalize_game_session(session)
 
@@ -230,13 +236,13 @@ def game_results_view(request, session_id):
     if session.max_score > 0:
         ratio = session.score / session.max_score
         if ratio >= 0.8:
-            encouragement = "Remarkable effort! You had wonderful clarity and focus today."
+            encouragement = _("Remarkable effort! You had wonderful clarity and focus today.")
         elif ratio >= 0.5:
-            encouragement = "Great work! You completed most steps in natural order today."
+            encouragement = _("Great work! You completed most steps in natural order today.")
         else:
-            encouragement = "Good effort! Taking time to exercise your mind is what matters most."
+            encouragement = _("Good effort! Taking time to exercise your mind is what matters most.")
     else:
-        encouragement = "Thank you for spending time exercising with Cognicare today."
+        encouragement = _("Thank you for spending time exercising with Cognicare today.")
 
     return render(request, 'games/game_results.html', {
         'session': session,

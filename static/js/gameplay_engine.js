@@ -31,6 +31,8 @@
         return; // Not on an active game page
     }
 
+    const txt = (k, fallback) => (metaElem && metaElem.dataset && metaElem.dataset[k]) || fallback;
+
     // Session and route metadata
     const sessionId = metaElem.dataset.sessionId;
     let currentRound = parseInt(metaElem.dataset.currentRound, 10) || 1;
@@ -111,8 +113,8 @@
                 items.push(desc ? (name + ', ' + desc) : name);
             }
         });
-        if (items.length === 0) return 'Please take your time to remember the shopping items.';
-        return 'Please take your time to remember these items: ' + items.join('. ') + '.';
+        if (items.length === 0) return txt('txtListenTargetsPrefix', 'Please take your time to remember these items:');
+        return txt('txtListenTargetsPrefix', 'Please take your time to remember these items:') + ' ' + items.join('. ') + '.';
     }
 
     // Voice Read-Aloud Listeners
@@ -169,7 +171,7 @@
 
             isSubmitting = true;
             btnSubmitRound.disabled = true;
-            btnSubmitRound.textContent = 'Checking...';
+            btnSubmitRound.textContent = txt('txtChecking', 'Checking...');
 
             const payload = {
                 round_number: currentRound,
@@ -197,10 +199,10 @@
             .then(data => {
                 isSubmitting = false;
                 btnSubmitRound.disabled = false;
-                btnSubmitRound.textContent = 'Check My Items →';
+                btnSubmitRound.textContent = txt('txtCheckItems', 'Check My Items →');
 
                 if (!data.success) {
-                    alert(data.error || 'There was a problem checking your selections. Please try again.');
+                    alert(data.error || txt('txtErrorChecking', 'There was a problem checking your selections. Please try again.'));
                     return;
                 }
 
@@ -215,21 +217,21 @@
                 feedbackText.textContent = evalData.feedback_message || 'Thank you for exercising your memory today.';
 
                 if (evalData.is_correct) {
-                    feedbackHeading.textContent = 'Well Done!';
+                    feedbackHeading.textContent = txt('txtWellDone', 'Well Done!');
                     feedbackIconContainer.textContent = '✓';
                     feedbackIconContainer.style.backgroundColor = 'var(--color-teal-100)';
                     feedbackIconContainer.style.color = 'var(--color-teal-800)';
                 } else {
-                    feedbackHeading.textContent = 'Good Effort!';
+                    feedbackHeading.textContent = txt('txtGoodEffort', 'Good Effort!');
                     feedbackIconContainer.textContent = '🌱';
                     feedbackIconContainer.style.backgroundColor = '#fef3c7';
                     feedbackIconContainer.style.color = '#92400e';
                 }
 
                 if (hasNextRound) {
-                    btnNextAction.textContent = 'Next Round →';
+                    btnNextAction.textContent = txt('txtNextRound', 'Next Round →');
                 } else {
-                    btnNextAction.textContent = 'View Summary →';
+                    btnNextAction.textContent = txt('txtViewSummary', 'View Summary →');
                 }
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -238,8 +240,8 @@
                 console.error('Submission error:', err);
                 isSubmitting = false;
                 btnSubmitRound.disabled = false;
-                btnSubmitRound.textContent = 'Check My Items →';
-                alert('We had trouble saving your answer. Please check your connection and try again.');
+                btnSubmitRound.textContent = txt('txtCheckItems', 'Check My Items →');
+                alert(txt('txtErrorSaving', 'We had trouble saving your answer. Please check your connection and try again.'));
             });
         });
     }
@@ -251,7 +253,7 @@
             if (hasNextRound && nextRoundDataCache) {
                 // Setup next round
                 currentRound = nextRoundDataCache.round_number;
-                roundIndicator.textContent = 'Round ' + currentRound + ' of ' + totalRounds;
+                roundIndicator.textContent = txt('txtRoundPrefix', 'Round') + ' ' + currentRound + ' ' + txt('txtOf', 'of') + ' ' + totalRounds;
 
                 // Render new Target items in memory stage
                 targetItemsList.innerHTML = '';
@@ -315,7 +317,7 @@
             } else {
                 // Final round completed: complete session and redirect to results
                 btnNextAction.disabled = true;
-                btnNextAction.textContent = 'Loading Summary...';
+                btnNextAction.textContent = txt('txtLoadingSummary', 'Loading Summary...');
 
                 const csrfToken = getCookie('csrftoken') || '';
                 fetch(completeUrl, {

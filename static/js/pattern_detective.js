@@ -34,6 +34,8 @@
         return; // Not on active Pattern Detective game page
     }
 
+    const txt = (k, fallback) => (metaElem && metaElem.dataset && metaElem.dataset[k]) || fallback;
+
     const sessionId = metaElem.dataset.sessionId;
     let currentRound = parseInt(metaElem.dataset.currentRound, 10) || 1;
     const totalRounds = parseInt(metaElem.dataset.totalRounds, 10) || 3;
@@ -160,7 +162,7 @@
         }
 
         if (roundIndicator) {
-            roundIndicator.textContent = `Round ${data.round_number} of ${data.total_rounds || totalRounds}`;
+            roundIndicator.textContent = `${txt('txtRoundPrefix', 'Round')} ${data.round_number} ${txt('txtOf', 'of')} ${data.total_rounds || totalRounds}`;
         }
         if (puzzleHeading) {
             puzzleHeading.textContent = data.prompt;
@@ -177,9 +179,9 @@
                     (row || []).forEach(item => {
                         if (item.is_missing) {
                             html += `
-                                <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="Missing tile marked with question mark">
+                                <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="${txt('txtMissingAria', 'Missing tile marked with question mark')}">
                                     <div class="missing-badge" aria-hidden="true">?</div>
-                                    <span class="missing-label">Missing Tile</span>
+                                    <span class="missing-label">${txt('txtMissingTile', 'Missing Tile')}</span>
                                 </div>
                             `;
                         } else {
@@ -199,9 +201,9 @@
                 (data.sequence || []).forEach(item => {
                     if (item.is_missing) {
                         html += `
-                            <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="Missing tile marked with question mark">
+                            <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="${txt('txtMissingAria', 'Missing tile marked with question mark')}">
                                 <div class="missing-badge" aria-hidden="true">?</div>
-                                <span class="missing-label">Missing Tile</span>
+                                <span class="missing-label">${txt('txtMissingTile', 'Missing Tile')}</span>
                             </div>
                         `;
                     } else {
@@ -239,8 +241,8 @@
                               tabindex="0"
                               class="pattern-tile-audio-btn choice-voice-btn"
                               data-voice-speak="${choice.name}"
-                              aria-label="Listen to ${choice.name}"
-                              title="Listen to ${choice.name}">
+                              aria-label="${txt('txtListenTo', 'Listen to')} ${choice.name}"
+                              title="${txt('txtListenTo', 'Listen to')} ${choice.name}">
                             ${speakerSvg}
                             ${stopSvg}
                         </span>
@@ -269,7 +271,7 @@
 
         if (btnConfirmSelection) {
             btnConfirmSelection.disabled = true;
-            btnConfirmSelection.textContent = 'Checking...';
+            btnConfirmSelection.textContent = txt('txtSaving', 'Checking...');
         }
 
         const latencyMs = Math.max(0, Date.now() - roundStartTime);
@@ -299,11 +301,11 @@
         })
         .then(data => {
             if (!data.success) {
-                alert(data.error || 'A problem occurred while recording your selection.');
+                alert(data.error || txt('txtErrorSaving', 'A problem occurred while recording your selection.'));
                 isSubmitting = false;
                 if (btnConfirmSelection) {
                     btnConfirmSelection.disabled = false;
-                    btnConfirmSelection.textContent = 'Confirm My Selection';
+                    btnConfirmSelection.textContent = txt('txtConfirm', 'Confirm My Selection');
                 }
                 return;
             }
@@ -316,11 +318,11 @@
         })
         .catch(err => {
             console.error('Submission error:', err);
-            alert('A network communication issue occurred. Please try confirming again.');
+            alert(txt('txtErrorSaving', 'A network communication issue occurred. Please try confirming again.'));
             isSubmitting = false;
             if (btnConfirmSelection) {
                 btnConfirmSelection.disabled = false;
-                btnConfirmSelection.textContent = 'Confirm My Selection';
+                btnConfirmSelection.textContent = txt('txtConfirm', 'Confirm My Selection');
             }
         });
     }
@@ -348,7 +350,7 @@
         }
 
         if (feedbackHeading) {
-            feedbackHeading.textContent = isCorrect ? 'Harmonious Match!' : 'Thoughtful Effort!';
+            feedbackHeading.textContent = isCorrect ? txt('txtHarmonious', 'Harmonious Match!') : txt('txtGoodEffort', 'Thoughtful Effort!');
         }
 
         if (feedbackText) {
@@ -368,11 +370,11 @@
 
         if (btnNextAction) {
             if (data.has_next_round) {
-                btnNextAction.textContent = `Continue to Round ${data.next_round_number} →`;
+                btnNextAction.textContent = txt('txtNextRound', 'Continue to Next Round →');
                 btnNextAction.dataset.action = 'next_round';
                 btnNextAction.dataset.nextRoundNumber = data.next_round_number;
             } else {
-                btnNextAction.textContent = 'View Activity Results →';
+                btnNextAction.textContent = txt('txtViewSummary', 'View Activity Results →');
                 btnNextAction.dataset.action = 'complete_session';
             }
         }
@@ -398,7 +400,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else if (action === 'complete_session') {
             btnNextAction.disabled = true;
-            btnNextAction.textContent = 'Finalizing Results...';
+            btnNextAction.textContent = txt('txtFinalizing', 'Finalizing Results...');
 
             const csrfToken = getCookie('csrftoken');
             fetch(completeUrl, {

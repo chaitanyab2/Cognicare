@@ -116,7 +116,7 @@
                             <div>
                                 <div class="person-photo-wrapper" style="width: 100%; height: 200px; border-radius: var(--radius-md); overflow: hidden; background-color: var(--color-slate-100); border: 1px solid var(--border-color); margin-bottom: var(--space-4); display: flex; align-items: center; justify-content: center;">
                                     {% if person.photo %}
-                                        <img src="{{ person.photo.url }}" alt="{{ person.name }} ({{ person.relationship }})" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                        <img src="{{ person.photo.url }}" alt="{{ person.name }} ({{ person.relationship }})" style="width: 100%; height: 100%; object-fit: contain; display: block;">
                                     {% else %}
                                         <div style="font-size: 3rem; color: var(--text-muted);">👤</div>
                                     {% endif %}
@@ -143,15 +143,15 @@
                             <div style="display: flex; gap: var(--space-2); justify-content: space-between; border-top: 1px solid var(--border-subtle); padding-top: var(--space-3); margin-top: auto;">
                                 <form method="post" action="{% url 'memories:toggle_familiar_person_active' person_id=person.id %}" style="margin: 0;">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-secondary" style="font-size: var(--font-size-sm); min-height: 38px; padding: 4px 12px;">
+                                    <button type="submit" class="btn btn-secondary" style="font-size: var(--font-size-sm); min-height: 44px; padding: 4px 12px; display: inline-flex; align-items: center;">
                                         {% if person.is_active %}{% trans "Pause" %}{% else %}{% trans "Activate" %}{% endif %}
                                     </button>
                                 </form>
                                 <div style="display: flex; gap: var(--space-2);">
-                                    <a href="{% url 'memories:edit_familiar_person' person_id=person.id %}" class="btn btn-outline" style="font-size: var(--font-size-sm); min-height: 38px; padding: 4px 12px;">
+                                    <a href="{% url 'memories:edit_familiar_person' person_id=person.id %}" class="btn btn-outline" style="font-size: var(--font-size-sm); min-height: 44px; padding: 4px 12px; display: inline-flex; align-items: center;">
                                         {% trans "Edit" %}
                                     </a>
-                                    <a href="{% url 'memories:delete_familiar_person' person_id=person.id %}" class="btn btn-secondary" style="font-size: var(--font-size-sm); min-height: 38px; padding: 4px 12px; color: var(--state-error-text);">
+                                    <a href="{% url 'memories:delete_familiar_person' person_id=person.id %}" class="btn btn-secondary" style="font-size: var(--font-size-sm); min-height: 44px; padding: 4px 12px; display: inline-flex; align-items: center; color: var(--state-error-text);">
                                         {% trans "Delete" %}
                                     </a>
                                 </div>

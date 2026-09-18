@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Pattern Detective - Round {{ current_round }} of {{ total_rounds }} - Cognicare{% endblock %}
+{% block title %}{% trans "Pattern Detective" %} - {% blocktrans with cur=current_round tot=total_rounds %}Round {{ cur }} of {{ tot }}{% endblocktrans %} - Cognicare{% endblock %}
 
 {% block content %}
 <div class="gameplay-container" style="max-width: 880px; margin: 0 auto;">
@@ -9,15 +10,15 @@
     <header class="gameplay-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6); padding: var(--space-4) var(--space-6); background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
         <div>
             <span style="font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
-                Activity
+                {% trans "Activity" %}
             </span>
             <h1 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
-                Pattern Detective
+                {% trans "Pattern Detective" %}
             </h1>
         </div>
         <div>
             <span id="round-indicator" class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
-                Round {{ current_round }} of {{ total_rounds }}
+                {% blocktrans with cur=current_round tot=total_rounds %}Round {{ cur }} of {{ tot }}{% endblocktrans %}
             </span>
         </div>
     </header>
@@ -32,26 +33,26 @@
             <!-- Prompt & Guidance -->
             <div style="text-align: center; margin-bottom: var(--space-6);">
                 <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); margin-bottom: var(--space-3); font-size: 1rem; padding: 4px 14px;">
-                    Reasoning & Visual Logic
+                    {% trans "Reasoning & Visual Logic" %}
                 </span>
                 <h2 id="puzzle-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-top: var(--space-2);">
                     {{ round_data.prompt }}
                 </h2>
                 <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 640px; margin: var(--space-2) auto 0; line-height: 1.5;">
-                    Look at the harmonious visual arrangement below, then choose the tile that belongs in the missing space.
+                    {% trans "Look at the harmonious visual arrangement below, then choose the tile that belongs in the missing space." %}
                 </p>
             </div>
 
             <!-- Pattern Display Card -->
-            <div class="pattern-display-card" role="region" aria-label="Visual pattern puzzle">
+            <div class="pattern-display-card" role="region" aria-label="{% trans 'Visual pattern puzzle' %}">
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: var(--space-4);">
                     <span id="pattern-title" class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-size: 0.9rem; padding: 3px 12px;">
                         {{ round_data.title }}
                     </span>
-                    <button type="button" id="btn-speak-prompt" class="btn-voice" aria-label="Listen to pattern description">
+                    <button type="button" id="btn-speak-prompt" class="btn-voice" aria-label="{% trans 'Listen to pattern description' %}">
                         <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                         <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                        <span class="voice-label">Listen</span>
+                        <span class="voice-label">{% trans "Listen" %}</span>
                     </button>
                 </div>
 
@@ -59,13 +60,13 @@
                 <div id="pattern-visual-container" style="width: 100%; display: flex; justify-content: center; margin: var(--space-2) 0 var(--space-4);">
                     {% if round_data.layout == 'matrix_2x2' %}
                         <!-- 2x2 Matrix Layout -->
-                        <div class="pattern-matrix-grid" role="group" aria-label="Pattern matrix 2 by 2">
+                        <div class="pattern-matrix-grid" role="group" aria-label="{% trans 'Pattern matrix 2 by 2' %}">
                             {% for row in round_data.matrix %}
                                 {% for item in row %}
                                     {% if item.is_missing %}
-                                        <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="Missing tile marked with question mark">
+                                        <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="{% trans 'Missing tile marked with question mark' %}">
                                             <div class="missing-badge" aria-hidden="true">?</div>
-                                            <span class="missing-label">Missing Tile</span>
+                                            <span class="missing-label">{% trans "Missing Tile" %}</span>
                                         </div>
                                     {% else %}
                                         <div class="pattern-tile-display" role="img" aria-label="{{ item.name }}">
@@ -78,12 +79,12 @@
                         </div>
                     {% else %}
                         <!-- Linear Sequence Layout -->
-                        <div class="pattern-sequence-strip" role="group" aria-label="Pattern sequence strip">
+                        <div class="pattern-sequence-strip" role="group" aria-label="{% trans 'Pattern sequence strip' %}">
                             {% for item in round_data.sequence %}
                                 {% if item.is_missing %}
-                                    <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="Missing tile marked with question mark">
+                                    <div class="pattern-tile-display pattern-tile-missing" role="img" aria-label="{% trans 'Missing tile marked with question mark' %}">
                                         <div class="missing-badge" aria-hidden="true">?</div>
-                                        <span class="missing-label">Missing Tile</span>
+                                        <span class="missing-label">{% trans "Missing Tile" %}</span>
                                     </div>
                                 {% else %}
                                     <div class="pattern-tile-display" role="img" aria-label="{{ item.name }}">
@@ -101,14 +102,14 @@
             <div style="margin-bottom: var(--space-8);">
                 <div style="text-align: center; margin-bottom: var(--space-4);">
                     <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0; font-weight: 700;">
-                        Choose the Tile That Belongs in the Missing Space:
+                        {% trans "Choose the Tile That Belongs in the Missing Space:" %}
                     </h3>
                 </div>
 
                 <div id="choice-tiles-grid"
                      class="choice-tiles-grid"
                      role="group"
-                     aria-label="Answer choices">
+                     aria-label="{% trans 'Answer choices' %}">
                     {% for choice in round_data.choices %}
                         <button type="button"
                                 class="pattern-choice-tile"
@@ -123,8 +124,8 @@
                                   tabindex="0"
                                   class="pattern-tile-audio-btn choice-voice-btn"
                                   data-voice-speak="{{ choice.name }}"
-                                  aria-label="Listen to {{ choice.name }}"
-                                  title="Listen to {{ choice.name }}">
+                                  aria-label="{% blocktrans with name=choice.name %}Listen to {{ name }}{% endblocktrans %}"
+                                  title="{% blocktrans with name=choice.name %}Listen to {{ name }}{% endblocktrans %}">
                                 <svg class="voice-icon voice-icon-speaker" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                                 <svg class="voice-icon voice-icon-stop" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
                             </span>
@@ -140,11 +141,11 @@
                         class="btn btn-primary btn-lg"
                         style="min-height: 56px; min-width: 260px; font-size: var(--font-size-lg);"
                         disabled
-                        aria-label="Confirm my selected tile">
-                    Confirm My Selection
+                        aria-label="{% trans 'Confirm my selected tile' %}">
+                    {% trans "Confirm My Selection" %}
                 </button>
                 <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin-top: var(--space-2);">
-                    You can tap any tile to change your choice anytime before confirming.
+                    {% trans "You can tap any tile to change your choice anytime before confirming." %}
                 </p>
             </div>
         </section>
@@ -159,7 +160,7 @@
             </div>
 
             <h2 id="feedback-message-heading" style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-3);">
-                Harmonious Pattern!
+                {% trans "Harmonious Pattern!" %}
             </h2>
 
             <div style="max-width: 620px; margin: 0 auto var(--space-6);">
@@ -167,10 +168,10 @@
                     <!-- Filled dynamically -->
                 </p>
                 <div style="margin-top: var(--space-3);">
-                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="Listen to feedback explanation">
+                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="{% trans 'Listen to feedback explanation' %}">
                         <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                         <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                        <span class="voice-label">Listen</span>
+                        <span class="voice-label">{% trans "Listen" %}</span>
                     </button>
                 </div>
             </div>
@@ -178,7 +179,7 @@
             <!-- Pattern Harmonious Match Showcase -->
             <div class="concept-card" style="max-width: 480px; margin: 0 auto var(--space-8); padding: var(--space-6);">
                 <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700; display: block; margin-bottom: var(--space-2);">
-                    Harmonious Tile
+                    {% trans "Harmonious Tile" %}
                 </span>
                 <div id="feedback-target-box" style="display: flex; flex-direction: column; align-items: center; gap: var(--space-2);">
                     <div id="feedback-target-svg" style="width: 64px; height: 64px;">
@@ -196,8 +197,8 @@
                         id="btn-next-action"
                         class="btn btn-primary btn-lg"
                         style="min-height: 56px; min-width: 240px; font-size: var(--font-size-lg);"
-                        aria-label="Continue to next round">
-                    Continue to Next Round &rarr;
+                        aria-label="{% trans 'Continue to next round' %}">
+                    {% trans "Continue to Next Round" %} &rarr;
                 </button>
             </div>
         </section>
@@ -207,7 +208,7 @@
     <!-- Navigation Out / Return to Activities -->
     <div style="margin-top: var(--space-6); text-align: center;">
         <a href="{% url 'games:list' %}" class="btn btn-secondary" style="min-height: 44px; padding: 8px 20px;">
-            &larr; Exit to Activities
+            &larr; {% trans "Exit to Activities" %}
         </a>
     </div>
 </div>
@@ -220,6 +221,19 @@
      data-submit-url="{% url 'games:submit_round' session_id=session.id %}"
      data-complete-url="{% url 'games:complete_session' session_id=session.id %}"
      data-results-url="{% url 'games:results' session_id=session.id %}"
+     data-txt-saving="{% trans 'Checking...' %}"
+     data-txt-confirm="{% trans 'Confirm My Selection' %}"
+     data-txt-harmonious="{% trans 'Harmonious Pattern!' %}"
+     data-txt-good-effort="{% trans 'Good Effort!' %}"
+     data-txt-next-round="{% trans 'Continue to Next Round →' %}"
+     data-txt-view-summary="{% trans 'View Activity Summary →' %}"
+     data-txt-finalizing="{% trans 'Finalizing...' %}"
+     data-txt-round-prefix="{% trans 'Round' %}"
+     data-txt-of="{% trans 'of' %}"
+     data-txt-missing-tile="{% trans 'Missing Tile' %}"
+     data-txt-missing-aria="{% trans 'Missing tile marked with question mark' %}"
+     data-txt-listen-to="{% trans 'Listen to' %}"
+     data-txt-error-saving="{% trans 'We had trouble saving your answer. Please check your connection and try again.' %}"
      style="display: none;">
 </div>
 

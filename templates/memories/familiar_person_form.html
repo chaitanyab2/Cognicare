@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}{{ action_title }} - Cognicare{% endblock %}
 
@@ -7,14 +8,14 @@
     <!-- Breadcrumb -->
     <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
         <a href="{% url 'memories:manage_familiar_people' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 16px;">
-            &larr; Back to Familiar People
+            &larr; {% trans "Back to Familiar People" %}
         </a>
     </nav>
 
     <div class="card">
         <h1 class="card-title" style="margin-bottom: var(--space-2);">{{ action_title }}</h1>
         <p class="card-subtitle" style="margin-bottom: var(--space-6);">
-            Please provide a clear portrait photo, the person's display name, and their relationship to {{ selected_member.first_name|default:selected_member.username }}.
+            {% blocktrans with name=selected_member.first_name|default:selected_member.username %}Please provide a clear portrait photo, the person's display name, and their relationship to {{ name }}.{% endblocktrans %}
         </p>
 
         <form method="post" enctype="multipart/form-data" novalidate>
@@ -29,23 +30,33 @@
                 </div>
             {% endif %}
 
-            <!-- Name Field -->
-            <div class="form-group">
-                <label for="{{ form.name.id_for_label }}" class="form-label">
-                    Person Name:
-                </label>
+            <!-- Name Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="{{ form.name.id_for_label }}" class="form-label" style="font-weight: 600; color: var(--text-primary); margin-bottom: 0;">
+                        {% trans "Person Name" %} <span style="color: #dc2626;">*</span>
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="{{ form.name.id_for_label }}" aria-label="{% trans 'Speak person name' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
                 {{ form.name }}
                 {% if form.name.errors %}
                     <div class="field-error">{{ form.name.errors.0 }}</div>
                 {% endif %}
-                <div class="form-help">Enter how the patient knows this person (e.g. Priya, Aunt Meera, Rajesh).</div>
+                <div class="form-help">{% trans "Enter how the patient knows this person (e.g. Priya, Aunt Meera, Rajesh)." %}</div>
             </div>
 
-            <!-- Relationship Field -->
-            <div class="form-group">
-                <label for="{{ form.relationship.id_for_label }}" class="form-label">
-                    Relationship:
-                </label>
+            <!-- Relationship Field with Speech-to-Text Button -->
+            <div class="form-group" style="margin-bottom: var(--space-5);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-1);">
+                    <label for="{{ form.relationship.id_for_label }}" class="form-label" style="font-weight: 600; color: var(--text-primary); margin-bottom: 0;">
+                        {% trans "Relationship" %} <span style="color: #dc2626;">*</span>
+                    </label>
+                    <button type="button" class="btn-speech" data-speech-target="{{ form.relationship.id_for_label }}" aria-label="{% trans 'Speak relationship' %}">
+                        <span class="speech-label">{% trans "Speak" %}</span>
+                    </button>
+                </div>
                 {{ form.relationship }}
                 {% if form.relationship.errors %}
                     <div class="field-error">{{ form.relationship.errors.0 }}</div>
@@ -78,20 +89,20 @@
             <div class="form-group" style="display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-4);">
                 {{ form.is_active }}
                 <label for="{{ form.is_active.id_for_label }}" style="font-size: var(--font-size-base); font-weight: 600; color: var(--text-primary); cursor: pointer; margin-bottom: 0;">
-                    Active in Familiar Faces gameplay
+                    {% trans "Active in Familiar Faces gameplay" %}
                 </label>
             </div>
             <div class="form-help" style="margin-top: -10px; margin-bottom: var(--space-6);">
-                Unchecking pauses this person from appearing in the patient's recognition activity.
+                {% trans "Unchecking pauses this person from appearing in the patient's recognition activity." %}
             </div>
 
             <!-- Actions -->
             <div style="display: flex; gap: var(--space-3); justify-content: flex-end; margin-top: var(--space-6); border-top: 1px solid var(--border-subtle); padding-top: var(--space-4);">
                 <a href="{% url 'memories:manage_familiar_people' %}?member={{ selected_member.id }}" class="btn btn-secondary" style="min-height: 44px;">
-                    Cancel
+                    {% trans "Cancel" %}
                 </a>
                 <button type="submit" class="btn btn-primary" style="min-height: 44px; padding: 10px 24px;">
-                    {% if is_edit %}Save Changes{% else %}Add Person{% endif %}
+                    {% if is_edit %}{% trans "Save Changes" %}{% else %}{% trans "Add Person" %}{% endif %}
                 </button>
             </div>
         </form>

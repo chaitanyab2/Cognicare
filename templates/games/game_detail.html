@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}{{ game.name }} - Cognicare{% endblock %}
+{% block title %}{% trans game.name %} - Cognicare{% endblock %}
 
 {% block content %}
 <div style="max-width: 800px; margin: 0 auto;">
     <!-- Breadcrumb back link -->
-    <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <nav class="breadcrumb-nav" aria-label="{% trans 'Breadcrumb' %}" style="margin-bottom: var(--space-4);">
         <a href="{% url 'games:list' %}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 16px;">
-            &larr; Back to Activities
+            &larr; {% trans "Back to Activities" %}
         </a>
     </nav>
 
@@ -16,20 +17,20 @@
         <header style="margin-bottom: var(--space-6); border-bottom: 2px solid var(--border-subtle); padding-bottom: var(--space-6);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-2);">
                 <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin: 0;">
-                    {{ game.name }}
+                    {% trans game.name %}
                 </h1>
                 <span class="badge badge-patient" style="font-size: var(--font-size-base); padding: 6px 14px;">
-                    {{ total_rounds }} Rounds
+                    {% blocktrans with count=total_rounds %}{{ count }} Rounds{% endblocktrans %}
                 </span>
             </div>
             <p id="game-overview-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); line-height: 1.6; margin-top: var(--space-3);">
-                {{ game.description }}
+                {% trans game.description %}
             </p>
             <div style="margin-top: var(--space-3);">
-                <button type="button" class="btn-voice" data-voice-target="#game-overview-text" aria-label="Listen to activity description">
+                <button type="button" class="btn-voice" data-voice-target="#game-overview-text" aria-label="{% trans 'Listen to activity description' %}">
                     <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                     <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                    <span class="voice-label">Listen</span>
+                    <span class="voice-label">{% trans "Listen" %}</span>
                 </button>
             </div>
         </header>
@@ -38,12 +39,12 @@
         <section aria-labelledby="instructions-heading" style="margin-bottom: var(--space-8);">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-4);">
                 <h2 id="instructions-heading" style="font-size: var(--font-size-xl); color: var(--primary-main); margin: 0;">
-                    How to Play
+                    {% trans "How to Play" %}
                 </h2>
-                <button type="button" class="btn-voice" data-voice-target="#instructions-content" aria-label="Listen to how to play instructions">
+                <button type="button" class="btn-voice" data-voice-target="#instructions-content" aria-label="{% trans 'Listen to how to play instructions' %}">
                     <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                     <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                    <span class="voice-label">Listen</span>
+                    <span class="voice-label">{% trans "Listen" %}</span>
                 </button>
             </div>
 
@@ -55,9 +56,9 @@
                                 {{ step.number }}
                             </div>
                             <div>
-                                <strong style="font-size: var(--font-size-md); color: var(--text-primary);">{{ step.title }}</strong>
+                                <strong style="font-size: var(--font-size-md); color: var(--text-primary);">{% trans step.title %}</strong>
                                 <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
-                                    {{ step.description }}
+                                    {% trans step.description %}
                                 </p>
                             </div>
                         </div>
@@ -68,9 +69,9 @@
                             1
                         </div>
                         <div>
-                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Look & Remember</strong>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">{% trans "Look & Remember" %}</strong>
                             <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
-                                You will see a small grocery list of everyday items. Take all the time you need to read and memorize them.
+                                {% trans "You will see a small grocery list of everyday items. Take all the time you need to read and memorize them." %}
                             </p>
                         </div>
                     </div>
@@ -80,9 +81,9 @@
                             2
                         </div>
                         <div>
-                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Click "I Am Ready"</strong>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">{% trans 'Click "I Am Ready"' %}</strong>
                             <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
-                                There is no timer or hurry. When you feel confident you remember the items, click the ready button.
+                                {% trans "There is no timer or hurry. When you feel confident you remember the items, click the ready button." %}
                             </p>
                         </div>
                     </div>
@@ -92,9 +93,9 @@
                             3
                         </div>
                         <div>
-                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Pick Your Items</strong>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">{% trans "Pick Your Items" %}</strong>
                             <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
-                                Tap or click the items you remember from the market shelf. You can tap again to uncheck any item.
+                                {% trans "Tap or click the items you remember from the market shelf. You can tap again to uncheck any item." %}
                             </p>
                         </div>
                     </div>
@@ -104,9 +105,9 @@
                             4
                         </div>
                         <div>
-                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">Receive Gentle Feedback</strong>
+                            <strong style="font-size: var(--font-size-md); color: var(--text-primary);">{% trans "Receive Gentle Feedback" %}</strong>
                             <p style="font-size: var(--font-size-base); color: var(--text-secondary); margin-top: 4px;">
-                                Click "Check My Items" to review your picks. You will complete {{ total_rounds }} short rounds.
+                                {% blocktrans with count=total_rounds %}Click "Check My Items" to review your picks. You will complete {{ count }} short rounds.{% endblocktrans %}
                             </p>
                         </div>
                     </div>
@@ -119,17 +120,17 @@
             <form method="post" action="{% url 'games:start_session' slug=game.slug %}">
                 {% csrf_token %}
                 <input type="hidden" name="difficulty" value="1">
-                <button type="submit" class="btn btn-primary btn-block btn-lg" style="font-size: var(--font-size-xl); padding: var(--space-4) var(--space-8); min-height: 64px;" aria-label="Start playing {{ game.name }}">
-                    Start Activity &rarr;
+                <button type="submit" class="btn btn-primary btn-block btn-lg" style="font-size: var(--font-size-xl); padding: var(--space-4) var(--space-8); min-height: 64px;" aria-label="{% blocktrans with name=game.name %}Start playing {{ name }}{% endblocktrans %}">
+                    {% trans "Start Activity" %} &rarr;
                 </button>
             </form>
         {% elif ready_error %}
             <div class="alert alert-warning" role="alert" style="font-size: var(--font-size-base); line-height: 1.6; text-align: left;">
-                <strong>Photos Needed:</strong> {{ ready_error }}
+                <strong>{% trans "Photos Needed:" %}</strong> {{ ready_error }}
             </div>
         {% else %}
             <div class="alert alert-info" role="status">
-                This activity is scheduled for a future phase.
+                {% trans "This activity is scheduled for a future phase." %}
             </div>
         {% endif %}
     </article>

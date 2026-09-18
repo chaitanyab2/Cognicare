@@ -1,0 +1,259 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Offline — Cognicare" %}</title>
+    <!-- Cognicare Single Theme Source Initialization -->
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('cognicare-theme');
+                var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = saved ? saved : (systemDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'icons/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
+    <meta name="theme-color" content="#0f766e">
+    <link rel="stylesheet" href="{% static 'css/cognicare.css' %}">
+    <style>
+        /* Self-contained fallback styles matching Cognicare design system */
+        :root {
+            --off-bg: #fbf9f5;
+            --off-surface: #ffffff;
+            --off-text-primary: #0f172a;
+            --off-text-secondary: #334155;
+            --off-border: #cbd5e1;
+            --off-teal: #0f766e;
+            --off-teal-hover: #115e59;
+            --off-teal-light: #f0fdfa;
+        }
+        [data-theme="dark"] {
+            --off-bg: #0b1320;
+            --off-surface: #152238;
+            --off-text-primary: #f8fafc;
+            --off-text-secondary: #cbd5e1;
+            --off-border: #2e3e57;
+            --off-teal: #14b8a6;
+            --off-teal-hover: #2dd4bf;
+            --off-teal-light: #132e35;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-page, var(--off-bg));
+            color: var(--text-primary, var(--off-text-primary));
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            box-sizing: border-box;
+            line-height: 1.5;
+        }
+        .offline-container {
+            width: 100%;
+            max-width: 580px;
+            padding: 24px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        .offline-card {
+            background-color: var(--bg-surface, var(--off-surface));
+            border: 2px solid var(--border-color, var(--off-border));
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+        .offline-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background-color: var(--off-teal-light);
+            color: var(--primary-main, var(--off-teal));
+            border: 1px solid var(--primary-border, var(--off-teal));
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .offline-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--off-teal-light);
+            color: var(--primary-main, var(--off-teal));
+            border-radius: 50%;
+        }
+        .offline-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: var(--text-primary, var(--off-text-primary));
+        }
+        .offline-text {
+            font-size: 1.15rem;
+            color: var(--text-secondary, var(--off-text-secondary));
+            margin: 0 0 28px 0;
+            line-height: 1.6;
+        }
+        .offline-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+        }
+        .offline-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            padding: 14px 24px;
+            border-radius: 12px;
+            min-height: 52px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .offline-btn-primary {
+            background-color: var(--primary-main, var(--off-teal));
+            color: #ffffff;
+            border: 2px solid transparent;
+        }
+        .offline-btn-primary:hover, .offline-btn-primary:focus-visible {
+            background-color: var(--primary-hover, var(--off-teal-hover));
+            outline: 3px solid var(--off-teal);
+            outline-offset: 2px;
+        }
+        .offline-theme-toggle {
+            background: transparent;
+            border: 1px solid var(--border-color, var(--off-border));
+            color: var(--text-secondary, var(--off-text-secondary));
+            margin-top: 18px;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .offline-theme-toggle:focus-visible {
+            outline: 3px solid var(--off-teal);
+            outline-offset: 2px;
+        }
+        .offline-brand-footer {
+            margin-top: 24px;
+            font-size: 0.95rem;
+            color: var(--text-muted, #64748b);
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <main class="offline-card" role="main">
+            <div class="offline-badge" role="status" aria-live="polite">
+                <span aria-hidden="true" style="display:inline-block; width:8px; height:8px; border-radius:50%; background-color:#ef4444;"></span>
+                {% trans "Currently Offline" %}
+            </div>
+
+            <div class="offline-icon-wrapper" aria-hidden="true">
+                <!-- Offline WiFi / Cloud Icon -->
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                    <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"></path>
+                    <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"></path>
+                    <path d="M10.71 5.05A16 16 0 0 1 22.58 9"></path>
+                    <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"></path>
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                    <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+            </div>
+
+            <h1 class="offline-title">{% trans "No Internet Connection" %}</h1>
+
+            <p class="offline-text">
+                {% trans "Cognicare needs an active internet connection to load your latest routines, memories, and activities safely. Please check your Wi-Fi or mobile data." %}
+            </p>
+
+            <div class="offline-actions">
+                <button type="button" class="offline-btn offline-btn-primary" id="reconnect-btn" onclick="handleReconnect()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    <span>{% trans "Check Connection & Reload" %}</span>
+                </button>
+            </div>
+
+            <button type="button" class="offline-theme-toggle" id="offline-theme-btn" onclick="toggleOfflineTheme()" aria-label="{% trans 'Toggle Dark Mode' %}">
+                <span id="theme-icon">🌓</span>
+                <span id="theme-text">{% trans "Switch Theme" %}</span>
+            </button>
+
+            <div class="offline-brand-footer">
+                <strong>Cognicare</strong> &bull; {% trans "Dementia Care & Cognitive Wellness" %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Offline Reconnect & Auto-reload on network recovery
+        function handleReconnect() {
+            var btn = document.getElementById('reconnect-btn');
+            if (btn) {
+                btn.innerText = 'Checking...';
+                btn.disabled = true;
+            }
+            window.location.reload();
+        }
+
+        window.addEventListener('online', function() {
+            window.location.reload();
+        });
+
+        // Theme Toggle using the exact same CognicareTheme system
+        function toggleOfflineTheme() {
+            var current = document.documentElement.getAttribute('data-theme') || 'light';
+            var next = (current === 'dark') ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try {
+                localStorage.setItem('cognicare-theme', next);
+            } catch(e) {}
+            updateThemeLabel(next);
+        }
+
+        function updateThemeLabel(theme) {
+            var icon = document.getElementById('theme-icon');
+            var text = document.getElementById('theme-text');
+            if (icon && text) {
+                icon.textContent = (theme === 'dark') ? '☀️' : '🌙';
+                text.textContent = (theme === 'dark') ? 'Light Mode' : 'Dark Mode';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var cur = document.documentElement.getAttribute('data-theme') || 'light';
+            updateThemeLabel(cur);
+        });
+    </script>
+</body>
+</html>

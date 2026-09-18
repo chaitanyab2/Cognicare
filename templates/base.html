@@ -5,6 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Cognicare - {% trans "Cognitive Wellness Platform" %}{% endblock %}</title>
+    <!-- Early theme initialization to prevent Flash of Unstyled Content / Light Theme (FOUC) -->
+    <script>
+        (function() {
+            try {
+                var saved = localStorage.getItem('cognicare-theme');
+                var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = saved ? saved : (systemDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+    <meta name="theme-color" content="#0f766e">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Cognicare">
+    <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+    <link rel="icon" type="image/png" sizes="64x64" href="{% static 'icons/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'icons/apple-touch-icon.png' %}">
     <link rel="stylesheet" href="{% static 'css/cognicare.css' %}">
     {% block extra_head %}{% endblock %}
 </head>
@@ -34,6 +55,7 @@
 
                 <nav class="user-nav" aria-label="{% trans 'User Navigation' %}">
                     {% include 'includes/language_switcher.html' %}
+                    {% include 'includes/theme_toggle.html' %}
                     {% if user.is_authenticated %}
                         <span class="user-greeting">
                             {% trans "Hello," %} <strong>{{ user.first_name|default:user.username }}</strong>
@@ -86,8 +108,12 @@
         </footer>
     </div>
 
+    {% include 'includes/pwa_install_banner.html' %}
+
     <script src="{% static 'js/cognicare-voice.js' %}"></script>
     <script src="{% static 'js/cognicare-speech.js' %}"></script>
+    <script src="{% static 'js/cognicare-theme.js' %}"></script>
+    <script src="{% static 'js/cognicare-pwa.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

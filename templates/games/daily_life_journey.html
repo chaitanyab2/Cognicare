@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Daily Life Journey - Round {{ current_round }} of {{ total_rounds }} - Cognicare{% endblock %}
+{% block title %}{% trans "Daily Life Journey" %} - {% blocktrans with cur=current_round tot=total_rounds %}Round {{ cur }} of {{ tot }}{% endblocktrans %} - Cognicare{% endblock %}
 
 {% block content %}
 <div class="gameplay-container" style="max-width: 860px; margin: 0 auto;">
@@ -9,15 +10,15 @@
     <header class="gameplay-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6); padding: var(--space-4) var(--space-6); background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
         <div>
             <span style="font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
-                Activity
+                {% trans "Activity" %}
             </span>
             <h1 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
-                Daily Life Journey
+                {% trans "Daily Life Journey" %}
             </h1>
         </div>
         <div>
             <span id="round-indicator" class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
-                Round {{ current_round }} of {{ total_rounds }}
+                {% blocktrans with cur=current_round tot=total_rounds %}Round {{ cur }} of {{ tot }}{% endblocktrans %}
             </span>
         </div>
     </header>
@@ -32,7 +33,7 @@
             <!-- Scenario Title & Calm Instructions -->
             <div style="text-align: center; margin-bottom: var(--space-6);">
                 <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); margin-bottom: var(--space-3); font-size: 1rem; padding: 4px 14px;">
-                    Step Ordering Activity
+                    {% trans "Step Ordering Activity" %}
                 </span>
                 <h2 id="scenario-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-top: var(--space-2);">
                     {{ round_data.scenario_title }}
@@ -41,10 +42,10 @@
                     {{ round_data.scenario_instruction }}
                 </p>
                 <div style="margin-top: var(--space-3);">
-                    <button type="button" id="btn-speak-scenario" class="btn-voice" aria-label="Listen to activity prompt and instructions">
+                    <button type="button" id="btn-speak-scenario" class="btn-voice" aria-label="{% trans 'Listen to activity prompt and instructions' %}">
                         <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                         <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                        <span class="voice-label">Listen</span>
+                        <span class="voice-label">{% trans "Listen" %}</span>
                     </button>
                 </div>
             </div>
@@ -53,20 +54,20 @@
             <div style="margin-bottom: var(--space-8);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3); flex-wrap: wrap; gap: var(--space-2);">
                     <h3 style="font-size: 1.15rem; color: var(--color-teal-900); margin: 0; font-weight: 700;">
-                        Your Sequence
+                        {% trans "Your Sequence" %}
                     </h3>
                     <div style="display: flex; gap: var(--space-2);">
-                        <button type="button" id="btn-undo" class="btn btn-secondary" style="min-height: 40px; padding: 6px 14px; font-size: var(--font-size-sm);" disabled aria-label="Undo last step placed">
-                            &larr; Undo
+                        <button type="button" id="btn-undo" class="btn btn-secondary" style="min-height: 40px; padding: 6px 14px; font-size: var(--font-size-sm);" disabled aria-label="{% trans 'Undo last step placed' %}">
+                            &larr; {% trans "Undo" %}
                         </button>
-                        <button type="button" id="btn-clear" class="btn btn-outline" style="min-height: 40px; padding: 6px 14px; font-size: var(--font-size-sm);" disabled aria-label="Clear entire sequence">
-                            Clear All
+                        <button type="button" id="btn-clear" class="btn btn-outline" style="min-height: 40px; padding: 6px 14px; font-size: var(--font-size-sm);" disabled aria-label="{% trans 'Clear entire sequence' %}">
+                            {% trans "Clear All" %}
                         </button>
                     </div>
                 </div>
 
                 <!-- Sequence Slots Container -->
-                <div id="sequence-tray" class="sequence-container" aria-label="Ordered steps tray">
+                <div id="sequence-tray" class="sequence-container" aria-label="{% trans 'Ordered steps tray' %}">
                     <!-- Populated dynamically by JavaScript -->
                 </div>
             </div>
@@ -75,23 +76,23 @@
             <div style="margin-bottom: var(--space-8);">
                 <div style="margin-bottom: var(--space-3);">
                     <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0; font-weight: 700;">
-                        Available Steps
+                        {% trans "Available Steps" %}
                     </h3>
                     <p style="font-size: var(--font-size-sm); color: var(--text-secondary); margin: 2px 0 0;">
-                        Tap a step to place it into your sequence.
+                        {% trans "Tap a step to place it into your sequence." %}
                     </p>
                 </div>
 
                 <!-- Steps Shelf Grid -->
-                <div id="available-steps-shelf" style="display: flex; flex-direction: column; gap: var(--space-3);" aria-label="Available steps to pick">
+                <div id="available-steps-shelf" style="display: flex; flex-direction: column; gap: var(--space-3);" aria-label="{% trans 'Available steps to pick' %}">
                     <!-- Populated dynamically by JavaScript -->
                 </div>
             </div>
 
             <!-- Check Sequence Action Button -->
             <div style="text-align: center;">
-                <button type="button" id="btn-check-sequence" class="btn btn-primary btn-lg" style="min-width: 260px; min-height: 60px; font-size: var(--font-size-lg);" disabled aria-label="Check the ordered sequence">
-                    Check My Sequence &rarr;
+                <button type="button" id="btn-check-sequence" class="btn btn-primary btn-lg" style="min-width: 260px; min-height: 60px; font-size: var(--font-size-lg);" disabled aria-label="{% trans 'Check the ordered sequence' %}">
+                    {% trans "Check My Sequence" %} &rarr;
                 </button>
             </div>
         </section>
@@ -105,28 +106,28 @@
                     ✓
                 </div>
                 <h2 id="feedback-message-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
-                    Well Done!
+                    {% trans "Well Done!" %}
                 </h2>
                 <p id="feedback-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); max-width: 600px; margin: 0 auto var(--space-4); line-height: 1.6;">
-                    Thank you for arranging the steps.
+                    {% trans "Thank you for arranging the steps." %}
                 </p>
                 <div style="margin-bottom: var(--space-6);">
-                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="Listen to feedback">
+                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="{% trans 'Listen to feedback' %}">
                         <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                         <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                        <span class="voice-label">Listen</span>
+                        <span class="voice-label">{% trans "Listen" %}</span>
                     </button>
                 </div>
 
                 <!-- Step-by-Step Sequence Breakdown -->
-                <div id="feedback-breakdown" style="max-width: 640px; margin: 0 auto var(--space-8); text-align: left;" aria-label="Sequence review">
+                <div id="feedback-breakdown" style="max-width: 640px; margin: 0 auto var(--space-8); text-align: left;" aria-label="{% trans 'Sequence review' %}">
                     <!-- Populated dynamically by JavaScript -->
                 </div>
 
                 <!-- Action Button for Next Round or Final Results -->
                 <div>
                     <button type="button" id="btn-next-action" class="btn btn-primary btn-lg" style="min-width: 260px; min-height: 60px; font-size: var(--font-size-lg);">
-                        Continue &rarr;
+                        {% trans "Continue" %} &rarr;
                     </button>
                 </div>
             </div>
@@ -135,8 +136,8 @@
 
     <!-- Navigation / Exit Options -->
     <footer style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-6);">
-        <a href="{% url 'games:list' %}" class="btn btn-secondary" onclick="return confirm('Would you like to return to the Games menu?');" style="min-height: 44px; padding: 8px 18px;">
-            &larr; Exit to Games
+        <a href="{% url 'games:list' %}" class="btn btn-secondary" onclick="return confirm('{% trans "Would you like to return to the Games menu?" %}');" style="min-height: 44px; padding: 8px 18px;">
+            &larr; {% trans "Exit to Games" %}
         </a>
     </footer>
 </div>
@@ -152,6 +153,25 @@
      data-submit-url="{% url 'games:submit_round' session_id=session.id %}"
      data-complete-url="{% url 'games:complete_session' session_id=session.id %}"
      data-results-url="{% url 'games:results' session_id=session.id %}"
+     data-txt-step="{% trans 'Step' %}"
+     data-txt-remove="{% trans 'Remove' %}"
+     data-txt-tap-available="{% trans 'Tap an available step below' %}"
+     data-txt-placed-as="{% trans 'Placed as Step' %}"
+     data-txt-tap-to-add="{% trans 'Tap to Add +' %}"
+     data-txt-checking="{% trans 'Checking Sequence...' %}"
+     data-txt-check-sequence="{% trans 'Check My Sequence →' %}"
+     data-txt-well-done="{% trans 'Well Done!' %}"
+     data-txt-good-effort="{% trans 'Good Effort!' %}"
+     data-txt-next-journey="{% trans 'Next Journey →' %}"
+     data-txt-view-summary="{% trans 'View Summary →' %}"
+     data-txt-sequence-review="{% trans 'Your Sequence Review' %}"
+     data-txt-natural-order="{% trans '✓ Natural Order' %}"
+     data-txt-misplaced="{% trans 'Misplaced' %}"
+     data-txt-round-prefix="{% trans 'Round' %}"
+     data-txt-of="{% trans 'of' %}"
+     data-txt-loading-summary="{% trans 'Loading Summary...' %}"
+     data-txt-error-checking="{% trans 'There was a problem checking your sequence. Please try again.' %}"
+     data-txt-error-saving="{% trans 'We had trouble saving your sequence. Please check your connection and try again.' %}"
      style="display: none;">
 </div>
 {% endblock %}

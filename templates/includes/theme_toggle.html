@@ -1,0 +1,16 @@
+{% load i18n %}
+<div class="theme-toggle-wrapper">
+    <button type="button"
+            id="theme-toggle"
+            class="theme-toggle-btn"
+            aria-label="{% trans 'Switch to Dark Mode' %}"
+            title="{% trans 'Toggle Dark or Light Mode' %}"
+            data-label-light="{% trans 'Switch to Light Mode' %}"
+            data-label-dark="{% trans 'Switch to Dark Mode' %}"
+            data-text-light="{% trans 'Light' %}"
+            data-text-dark="{% trans 'Dark' %}"
+            aria-pressed="false">
+        <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+        <span class="theme-toggle-text">{% trans "Dark" %}</span>
+    </button>
+</div>

@@ -11,4 +11,5 @@ urlpatterns = [
     path('redirect/', views.login_redirect_view, name='login_redirect'),
     path('portal/patient/', views.patient_portal_view, name='patient_portal'),
     path('portal/caregiver/', views.caregiver_portal_view, name='caregiver_portal'),
+    path('voice-assistant/', views.voice_assistant_view, name='voice_assistant'),
 ]

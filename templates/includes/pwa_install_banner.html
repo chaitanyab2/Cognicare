@@ -1,0 +1,20 @@
+{% load static i18n %}
+<div id="pwa-install-banner" class="pwa-banner" role="region" aria-label="{% trans 'Install App' %}" aria-hidden="true" hidden>
+    <div class="pwa-banner-content">
+        <div class="pwa-banner-icon-col">
+            <img src="{% static 'icons/icon-192.png' %}" alt="" width="48" height="48" class="pwa-banner-icon">
+        </div>
+        <div class="pwa-banner-text-col">
+            <div class="pwa-banner-title">{% trans "Install Cognicare" %}</div>
+            <div class="pwa-banner-desc">{% trans "Add to your home screen or desktop for quick, simple daily access." %}</div>
+        </div>
+        <div class="pwa-banner-actions">
+            <button type="button" id="pwa-install-btn" class="btn btn-primary pwa-btn-install">
+                {% trans "Install App" %}
+            </button>
+            <button type="button" id="pwa-dismiss-btn" class="btn btn-outline pwa-btn-dismiss" aria-label="{% trans 'Dismiss install prompt' %}">
+                {% trans "Not Now" %}
+            </button>
+        </div>
+    </div>
+</div>

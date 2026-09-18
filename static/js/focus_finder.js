@@ -34,6 +34,8 @@
         return; // Not on active Focus Finder game page
     }
 
+    const txt = (k, fallback) => (metaElem && metaElem.dataset && metaElem.dataset[k]) || fallback;
+
     const sessionId = metaElem.dataset.sessionId;
     let currentRound = parseInt(metaElem.dataset.currentRound, 10) || 1;
     const totalRounds = parseInt(metaElem.dataset.totalRounds, 10) || 3;
@@ -152,6 +154,7 @@
         isSubmitting = true;
         if (btnConfirmSelection) {
             btnConfirmSelection.disabled = true;
+            btnConfirmSelection.textContent = txt('txtSaving', 'Saving...');
         }
 
         const responseTimeMs = Math.max(0, Date.now() - roundStartTime);
@@ -175,18 +178,24 @@
 
             const data = await response.json();
             if (!data.success) {
-                alert(data.error || 'There was an issue recording your answer.');
+                alert(data.error || txt('txtErrorSaving', 'There was an issue recording your answer.'));
                 isSubmitting = false;
-                if (btnConfirmSelection) btnConfirmSelection.disabled = false;
+                if (btnConfirmSelection) {
+                    btnConfirmSelection.disabled = false;
+                    btnConfirmSelection.textContent = txt('txtConfirm', 'Confirm My Selection →');
+                }
                 return;
             }
 
             displayFeedback(data);
         } catch (error) {
             console.error('Submission error:', error);
-            alert('A network error occurred. Please try confirming again.');
+            alert(txt('txtErrorSaving', 'A network error occurred. Please try confirming again.'));
             isSubmitting = false;
-            if (btnConfirmSelection) btnConfirmSelection.disabled = false;
+            if (btnConfirmSelection) {
+                btnConfirmSelection.disabled = false;
+                btnConfirmSelection.textContent = txt('txtConfirm', 'Confirm My Selection →');
+            }
         }
     }
 
@@ -201,12 +210,12 @@
             feedbackIconContainer.innerHTML = '✓';
             feedbackIconContainer.style.backgroundColor = 'var(--color-teal-100)';
             feedbackIconContainer.style.color = 'var(--color-teal-800)';
-            feedbackHeading.textContent = 'Wonderful!';
+            feedbackHeading.textContent = txt('txtWonderful', 'Wonderful!');
         } else {
             feedbackIconContainer.innerHTML = '★';
             feedbackIconContainer.style.backgroundColor = 'var(--color-terracotta-50)';
             feedbackIconContainer.style.color = 'var(--color-terracotta-700)';
-            feedbackHeading.textContent = 'Good Effort!';
+            feedbackHeading.textContent = txt('txtGoodEffort', 'Good Effort!');
         }
 
         feedbackText.textContent = evaluation.feedback_message;
@@ -218,10 +227,10 @@
         }
 
         if (data.has_next_round) {
-            btnNextAction.textContent = 'Continue to Next Round →';
+            btnNextAction.textContent = txt('txtNextRound', 'Next Round →');
             nextRoundDataCache = data.next_round_data;
         } else {
-            btnNextAction.textContent = 'View Results →';
+            btnNextAction.textContent = txt('txtViewSummary', 'View Summary →');
             nextRoundDataCache = null;
         }
 
@@ -238,7 +247,7 @@
         currentTarget = roundData.target_item;
 
         if (roundIndicator) {
-            roundIndicator.textContent = 'Round ' + currentRound + ' of ' + totalRounds;
+            roundIndicator.textContent = txt('txtRoundPrefix', 'Round') + ' ' + currentRound + ' ' + txt('txtOf', 'of') + ' ' + totalRounds;
         }
 
         // Update target card
@@ -295,6 +304,10 @@
      * Completes the session on final round
      */
     async function completeSession() {
+        if (btnNextAction) {
+            btnNextAction.disabled = true;
+            btnNextAction.textContent = txt('txtFinalizing', 'Finalizing...');
+        }
         try {
             const response = await fetch(completeUrl, {
                 method: 'POST',

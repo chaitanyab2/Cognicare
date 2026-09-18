@@ -35,6 +35,8 @@
         return; // Not on active Daily Life Journey game page
     }
 
+    const txt = (k, fallback) => (metaElem && metaElem.dataset && metaElem.dataset[k]) || fallback;
+
     // Session and route metadata
     const sessionId = metaElem.dataset.sessionId;
     let currentRound = parseInt(metaElem.dataset.currentRound, 10) || 1;
@@ -112,20 +114,20 @@
 
                 slot.innerHTML = `
                     <div style="display: flex; align-items: center; gap: var(--space-4); flex-grow: 1;">
-                        <span class="step-number-badge" aria-label="Step ${i + 1}">
+                        <span class="step-number-badge" aria-label="${txt('txtStep', 'Step')} ${i + 1}">
                             ${i + 1}
                         </span>
                         <div>
                             <strong style="font-size: 1.15rem; color: var(--color-teal-900); display: block;">
-                                ${step ? step.title : 'Step'}
+                                ${step ? step.title : txt('txtStep', 'Step')}
                             </strong>
                             <span style="font-size: 0.95rem; color: var(--text-secondary); display: block; margin-top: 2px;">
                                 ${step ? step.description : ''}
                             </span>
                         </div>
                     </div>
-                    <button type="button" class="step-remove-btn" data-step-index="${i}" aria-label="Remove Step ${i + 1}: ${step ? step.title : ''}">
-                        Remove
+                    <button type="button" class="step-remove-btn" data-step-index="${i}" aria-label="Remove ${step ? step.title : ''}">
+                        ${txt('txtRemove', 'Remove')}
                     </button>
                 `;
 
@@ -147,7 +149,7 @@
                         </span>
                         <div>
                             <span style="font-size: 1.05rem; font-weight: 500; color: var(--text-muted);">
-                                Step ${i + 1}: Tap an available step below
+                                ${txt('txtStep', 'Step')} ${i + 1}: ${txt('txtTapAvailable', 'Tap an available step below')}
                             </span>
                         </div>
                     </div>
@@ -174,7 +176,7 @@
                             ${step.title}
                         </strong>
                         <span class="badge" style="background-color: var(--color-teal-100); color: var(--color-teal-800); font-size: 0.85rem; padding: 2px 10px;">
-                            Placed as Step ${placedIndex}
+                            ${txt('txtPlacedAs', 'Placed as Step')} ${placedIndex}
                         </span>
                     </div>
                     <p style="font-size: 0.95rem; color: var(--text-muted); margin: 0;">
@@ -189,7 +191,7 @@
                             ${step.title}
                         </strong>
                         <span class="badge" style="background-color: var(--color-slate-100); color: var(--text-secondary); font-size: 0.85rem; padding: 2px 10px;">
-                            Tap to Add +
+                            ${txt('txtTapToAdd', 'Tap to Add +')}
                         </span>
                     </div>
                     <p style="font-size: 0.95rem; color: var(--text-secondary); margin: 0;">
@@ -308,7 +310,7 @@
             const responseTimeMs = Math.max(0, Date.now() - roundStartTime);
             isSubmitting = true;
             btnCheckSequence.disabled = true;
-            btnCheckSequence.textContent = 'Checking Sequence...';
+            btnCheckSequence.textContent = txt('txtChecking', 'Checking Sequence...');
 
             const payload = {
                 round_number: currentRound,
@@ -336,10 +338,10 @@
             .then(data => {
                 isSubmitting = false;
                 btnCheckSequence.disabled = false;
-                btnCheckSequence.textContent = 'Check My Sequence →';
+                btnCheckSequence.textContent = txt('txtCheckSequence', 'Check My Sequence →');
 
                 if (!data.success) {
-                    alert(data.error || 'There was a problem checking your sequence. Please try again.');
+                    alert(data.error || txt('txtErrorChecking', 'There was a problem checking your sequence. Please try again.'));
                     return;
                 }
 
@@ -354,12 +356,12 @@
                 feedbackText.textContent = evalData.feedback_message || 'Thank you for arranging the steps.';
 
                 if (evalData.is_correct) {
-                    feedbackHeading.textContent = 'Well Done!';
+                    feedbackHeading.textContent = txt('txtWellDone', 'Well Done!');
                     feedbackIconContainer.textContent = '✓';
                     feedbackIconContainer.style.backgroundColor = 'var(--color-teal-100)';
                     feedbackIconContainer.style.color = 'var(--color-teal-800)';
                 } else {
-                    feedbackHeading.textContent = 'Good Effort!';
+                    feedbackHeading.textContent = txt('txtGoodEffort', 'Good Effort!');
                     feedbackIconContainer.textContent = '🌱';
                     feedbackIconContainer.style.backgroundColor = '#fef3c7';
                     feedbackIconContainer.style.color = '#92400e';
@@ -369,9 +371,9 @@
                 renderFeedbackBreakdown(evalData);
 
                 if (hasNextRound) {
-                    btnNextAction.textContent = 'Next Journey →';
+                    btnNextAction.textContent = txt('txtNextJourney', 'Next Journey →');
                 } else {
-                    btnNextAction.textContent = 'View Summary →';
+                    btnNextAction.textContent = txt('txtViewSummary', 'View Summary →');
                 }
 
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -380,8 +382,8 @@
                 console.error('Submission error:', err);
                 isSubmitting = false;
                 btnCheckSequence.disabled = false;
-                btnCheckSequence.textContent = 'Check My Sequence →';
-                alert('We had trouble saving your sequence. Please check your connection and try again.');
+                btnCheckSequence.textContent = txt('txtCheckSequence', 'Check My Sequence →');
+                alert(txt('txtErrorSaving', 'We had trouble saving your sequence. Please check your connection and try again.'));
             });
         });
     }
@@ -395,7 +397,7 @@
 
         const heading = document.createElement('h3');
         heading.style.cssText = 'font-size: 1.15rem; color: var(--text-primary); margin-bottom: var(--space-3); font-weight: 700;';
-        heading.textContent = 'Your Sequence Review';
+        heading.textContent = txt('txtSequenceReview', 'Your Sequence Review');
         feedbackBreakdown.appendChild(heading);
 
         const listContainer = document.createElement('div');
@@ -421,7 +423,7 @@
             row.innerHTML = `
                 <div style="display: flex; align-items: center; gap: var(--space-3);">
                     <span style="font-weight: 700; color: var(--color-teal-900); font-size: 1rem;">
-                        Step ${idx + 1}:
+                        ${txt('txtStep', 'Step')} ${idx + 1}:
                     </span>
                     <span style="font-size: 1.05rem; color: var(--text-primary);">
                         ${step ? step.title : stepId}
@@ -429,8 +431,8 @@
                 </div>
                 <div>
                     ${isStepCorrectPosition
-                        ? '<span class="badge" style="background-color: var(--state-success-bg); color: var(--state-success-text); border: 1px solid var(--state-success-border); font-size: 0.85rem; font-weight: 600;">✓ Natural Order</span>'
-                        : '<span class="badge" style="background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.85rem;">Misplaced</span>'
+                        ? `<span class="badge" style="background-color: var(--state-success-bg); color: var(--state-success-text); border: 1px solid var(--state-success-border); font-size: 0.85rem; font-weight: 600;">${txt('txtNaturalOrder', '✓ Natural Order')}</span>`
+                        : `<span class="badge" style="background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; font-size: 0.85rem;">${txt('txtMisplaced', 'Misplaced')}</span>`
                     }
                 </div>
             `;
@@ -450,7 +452,7 @@
             if (hasNextRound && nextRoundDataCache) {
                 // Setup next round
                 currentRound = nextRoundDataCache.round_number;
-                roundIndicator.textContent = 'Round ' + currentRound + ' of ' + totalRounds;
+                roundIndicator.textContent = txt('txtRoundPrefix', 'Round') + ' ' + currentRound + ' ' + txt('txtOf', 'of') + ' ' + totalRounds;
 
                 scenarioHeading.textContent = nextRoundDataCache.scenario_title;
                 scenarioInstruction.textContent = nextRoundDataCache.scenario_instruction;
@@ -468,7 +470,7 @@
                 const csrfToken = getCookie('csrftoken') || (document.querySelector('[name=csrfmiddlewaretoken]') ? document.querySelector('[name=csrfmiddlewaretoken]').value : '');
 
                 btnNextAction.disabled = true;
-                btnNextAction.textContent = 'Finalizing...';
+                btnNextAction.textContent = txt('txtLoadingSummary', 'Loading Summary...');
 
                 fetch(completeUrl, {
                     method: 'POST',

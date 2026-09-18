@@ -19,18 +19,64 @@
     </div>
 </section>
 
+{% if recommendation %}
+<!-- ==============================================
+     TODAY'S GENTLE SUGGESTION
+     Personalized Cognitive Activity Recommendation
+     ============================================== -->
+<section class="gentle-suggestion-section" aria-labelledby="suggestion-heading" style="margin-bottom: var(--space-8);">
+    <div class="card gentle-suggestion-card" style="padding: var(--space-6) var(--space-8); border: 2px solid var(--primary-border); background: linear-gradient(135deg, var(--bg-surface) 0%, var(--color-teal-50) 100%); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-6);">
+            <div style="flex: 1 1 380px; min-width: 280px;">
+                <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2); flex-wrap: wrap;">
+                    <span class="badge" style="background-color: var(--primary-main); color: #ffffff; font-weight: 700; font-size: 0.95rem; padding: 4px 12px; letter-spacing: 0.02em;">
+                        <span aria-hidden="true">⭐</span> {% trans "Today's Gentle Suggestion" %}
+                    </span>
+                    <span class="badge badge-patient" style="font-size: 0.9rem; padding: 4px 12px;">
+                        {{ recommendation.cognitive_domain }}
+                    </span>
+                    <span class="badge" style="background-color: var(--color-slate-100); color: var(--text-secondary); border: 1px solid var(--border-color); font-size: 0.9rem; padding: 4px 12px;">
+                        {% trans "Level" %} {{ recommendation.recommended_difficulty }}: {{ recommendation.difficulty_label }}
+                    </span>
+                </div>
+                <h2 id="suggestion-heading" style="font-size: var(--font-size-2xl); color: var(--text-primary); margin: var(--space-2) 0 var(--space-2);">
+                    {{ recommendation.game_name }}
+                </h2>
+                <p style="font-size: var(--font-size-lg); color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                    {{ recommendation.supportive_rationale }}
+                </p>
+            </div>
+            
+            <div class="suggestion-actions" style="display: flex; flex-direction: column; gap: var(--space-3); min-width: 220px; flex: 0 0 auto;">
+                <form method="post" action="{% url 'games:start_session' slug=recommendation.game_slug %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <input type="hidden" name="difficulty" value="{{ recommendation.recommended_difficulty }}">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" style="min-height: 56px; font-size: var(--font-size-lg); display: flex; align-items: center; justify-content: center; gap: 8px;" aria-label="{% blocktrans with game=recommendation.game_name %}Play Activity: {{ game }}{% endblocktrans %}">
+                        <span>{% trans "Play Activity" %}</span>
+                        <span aria-hidden="true">&rarr;</span>
+                    </button>
+                </form>
+                <a href="{% url 'games:detail' slug=recommendation.game_slug %}" class="btn btn-outline btn-block" style="min-height: 44px; font-size: var(--font-size-base); text-align: center;" aria-label="{% blocktrans with game=recommendation.game_name %}Read instructions for {{ game }}{% endblocktrans %}">
+                    {% trans "How to Play" %}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <!-- The 4 Core Pillars of Cognicare for Members -->
 <section aria-label="{% trans 'Cognicare Activities' %}">
     <div class="grid-2">
         <!-- 1. Cognitive Games Card Shell -->
-        <article class="feature-card">
+        <article class="feature-card feature-card-games">
             <div>
-                <div class="feature-icon-wrapper" style="background-color: var(--color-teal-100); color: var(--color-teal-800);" aria-hidden="true">
+                <div class="feature-icon-wrapper" aria-hidden="true">
                     🧩
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-2);">
                     <h2 class="feature-card-title">{% trans "Cognitive Games" %}</h2>
-                    <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-700); border: 1px solid var(--primary-border);">
+                    <span class="badge feature-badge-games">
                         {% trans "6 Games" %}
                     </span>
                 </div>
@@ -46,14 +92,14 @@
         </article>
 
         <!-- 2. My Memories Card Shell -->
-        <article class="feature-card">
+        <article class="feature-card feature-card-memories">
             <div>
-                <div class="feature-icon-wrapper" style="background-color: #fef3c7; color: #b45309;" aria-hidden="true">
+                <div class="feature-icon-wrapper" aria-hidden="true">
                     📷
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-2);">
                     <h2 class="feature-card-title">{% trans "My Memories" %}</h2>
-                    <span class="badge" style="background-color: #fffbeb; color: #b45309; border: 1px solid #fde68a;">
+                    <span class="badge feature-badge-memories">
                         {% trans "Photo Album" %}
                     </span>
                 </div>
@@ -69,14 +115,14 @@
         </article>
 
         <!-- 3. Today's Routine Card Shell -->
-        <article class="feature-card">
+        <article class="feature-card feature-card-routine">
             <div>
-                <div class="feature-icon-wrapper" style="background-color: #e0f2fe; color: #0369a1;" aria-hidden="true">
+                <div class="feature-icon-wrapper" aria-hidden="true">
                     ☀️
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-2);">
                     <h2 class="feature-card-title">{% trans "Today's Routine" %}</h2>
-                    <span class="badge" style="background-color: #f0f9ff; color: #0284c7; border: 1px solid #bae6fd;">
+                    <span class="badge feature-badge-routine">
                         {% trans "Daily Schedule" %}
                     </span>
                 </div>
@@ -92,14 +138,14 @@
         </article>
 
         <!-- 4. Voice Assistant Card Shell -->
-        <article class="feature-card">
+        <article class="feature-card feature-card-voice">
             <div>
-                <div class="feature-icon-wrapper" style="background-color: #f3e8ff; color: #7e22ce;" aria-hidden="true">
+                <div class="feature-icon-wrapper" aria-hidden="true">
                     🎙️
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-2);">
                     <h2 class="feature-card-title">{% trans "Voice Assistant" %}</h2>
-                    <span class="badge" style="background-color: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff;">
+                    <span class="badge feature-badge-voice">
                         {% trans "Hands-Free" %}
                     </span>
                 </div>
@@ -108,9 +154,9 @@
                 </p>
             </div>
             <div>
-                <button type="button" class="btn btn-outline btn-block btn-lg" onclick="alert('Voice Assistant will be activated in Phase 9.')" aria-label="{% trans 'Open Voice Assistant' %}">
-                    {% trans "Speak to Assistant" %}
-                </button>
+                <a href="{% url 'accounts:voice_assistant' %}" class="btn btn-outline btn-block btn-lg" id="open-voice-assistant-btn" aria-label="{% trans 'Open Voice Assistant' %}">
+                    {% trans "Speak to Assistant" %} &rarr;
+                </a>
             </div>
         </article>
     </div>
@@ -120,7 +166,7 @@
 <section style="margin-top: var(--space-8);">
     <div class="card" style="background-color: var(--color-teal-50); border: 1px solid var(--primary-border); padding: var(--space-6);">
         <p style="font-size: var(--font-size-base); color: var(--color-teal-900); text-align: center; margin: 0;">
-            🌱 <strong>{% trans "Comfort & Dignity:" %}</strong> {% trans "Every activity is self-paced. There are no running timers or failure buzzers during your activities." %}
+            <span aria-hidden="true">🌱</span> <strong>{% trans "Comfort & Dignity:" %}</strong> {% trans "Every activity is self-paced. There are no running timers or failure buzzers during your activities." %}
         </p>
     </div>
 </section>

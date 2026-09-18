@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="cognicare-grad-maskable" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#115e59" />
+    </linearGradient>
+  </defs>
+  <!-- Full-bleed background for maskable adaptive launcher clipping -->
+  <rect width="512" height="512" fill="url(#cognicare-grad-maskable)" />
+  <!-- Brain symbol strictly within 80% diameter safe zone (radius 204px from center) -->
+  <g transform="translate(132, 132) scale(10.3)" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9.5 4a3.5 3.5 0 0 0-3.5 3.5c0 .3.04.6.1.88A3.5 3.5 0 0 0 4 11.5c0 .65.18 1.26.5 1.78A3.5 3.5 0 0 0 5 19.5c.65 0 1.26-.18 1.78-.5A3.5 3.5 0 0 0 9.5 20c.8 0 1.54-.27 2.13-.73.23-.18.37-.46.37-.75V5.48c0-.3-.14-.57-.37-.75A3.47 3.47 0 0 0 9.5 4Z"/>
+    <path d="M14.5 4a3.5 3.5 0 0 1 3.5 3.5c0 .3-.04.6-.1.88A3.5 3.5 0 0 1 20 11.5c0 .65-.18 1.26-.5 1.78A3.5 3.5 0 0 1 19 19.5c-.65 0-1.26-.18-1.78-.5A3.5 3.5 0 0 1 14.5 20a3.47 3.47 0 0 1-2.13-.73c-.23-.18-.37-.46-.37-.75V5.48c0-.3.14-.57.37-.75A3.47 3.47 0 0 1 14.5 4Z"/>
+    <path d="M12 8v8"/>
+    <path d="M8.5 11.5h3.5"/>
+    <path d="M12 11.5h3.5"/>
+    <path d="M8 15.5h4"/>
+    <path d="M12 15.5h4"/>
+  </g>
+</svg>

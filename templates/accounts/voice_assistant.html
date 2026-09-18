@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans "Voice Assistant" %} &bull; Cognicare{% endblock %}
+
+{% block content %}
+<div class="va-page-container">
+    <!-- Back to Dashboard Navigation -->
+    <nav aria-label="{% trans 'Breadcrumb' %}" style="margin-bottom: var(--space-4);">
+        <a href="{% url 'accounts:patient_portal' %}" class="btn btn-ghost" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600; min-height: 44px;">
+            &larr; {% trans "Back to My Space" %}
+        </a>
+    </nav>
+
+    <!-- Main Voice Assistant Card -->
+    <article class="va-hero-card">
+        <header style="text-align: center; margin-bottom: var(--space-6);">
+            <div style="font-size: 2.5rem; margin-bottom: var(--space-2);" aria-hidden="true">🎙️</div>
+            <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin: 0 0 var(--space-2) 0;">
+                {% trans "Voice Assistant" %}
+            </h1>
+            <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 500px; margin: 0 auto; line-height: 1.5;">
+                {% trans "Tap the microphone below and speak naturally, or use the direct touch shortcuts below." %}
+            </p>
+        </header>
+
+        <!-- Prompt Suggestions / Guide Box -->
+        <div style="background-color: var(--color-teal-50); border: 1px solid var(--primary-border); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-6);">
+            <div style="font-weight: 700; color: var(--color-teal-950); margin-bottom: var(--space-2); font-size: var(--font-size-base); display: flex; align-items: center; gap: 8px;">
+                <span aria-hidden="true">💡</span> {% trans "Try saying:" %}
+            </div>
+            <ul style="margin: 0; padding-left: 24px; color: var(--color-teal-900); font-size: var(--font-size-sm); line-height: 1.8;">
+                <li><strong>"{% trans 'Games' %}"</strong> &bull; {% trans "to play cognitive exercises" %}</li>
+                <li><strong>"{% trans 'Routine' %}"</strong> &bull; {% trans "to check today's activities" %}</li>
+                <li><strong>"{% trans 'Memories' %}"</strong> &bull; {% trans "to view family photographs" %}</li>
+            </ul>
+        </div>
+
+        <!-- Large Accessible Microphone Button -->
+        <div style="text-align: center; margin-bottom: var(--space-6);">
+            <button type="button" id="va-mic-btn" class="btn-speech va-hero-mic-btn" aria-label="{% trans 'Tap to Speak' %}" data-txt-speak="{% trans 'Tap to Speak' %}" data-txt-listening="{% trans 'Listening... Speak now' %}">
+                <span class="speech-label">{% trans "Tap to Speak" %}</span>
+            </button>
+        </div>
+
+        <!-- Live Status & Transcript Feedback Area -->
+        <div id="va-status-area" class="va-status-card" role="status" aria-live="polite">
+            <span id="va-status-text" style="font-size: var(--font-size-base); font-weight: 500; color: var(--text-primary); line-height: 1.5;">
+                {% trans "Microphone is ready. Tap the button above to begin." %}
+            </span>
+        </div>
+
+        <!-- Direct Touch Fallback Shortcuts -->
+        <section style="border-top: 1px solid var(--border-color); padding-top: var(--space-5);">
+            <h2 style="font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin: 0 0 var(--space-3) 0; font-weight: 700;">
+                {% trans "Direct Touch Shortcuts:" %}
+            </h2>
+            <div style="display: flex; flex-direction: column; gap: var(--space-3);">
+                <a href="{% url 'games:list' %}" class="btn btn-outline va-shortcut-btn">
+                    <span style="font-size: 1.25rem;" aria-hidden="true">🧩</span>
+                    <span>{% trans "Cognitive Games" %}</span>
+                </a>
+                <a href="{% url 'routines:patient_routine' %}" class="btn btn-outline va-shortcut-btn">
+                    <span style="font-size: 1.25rem;" aria-hidden="true">📅</span>
+                    <span>{% trans "Today's Routine" %}</span>
+                </a>
+                <a href="{% url 'memories:patient_memories' %}" class="btn btn-outline va-shortcut-btn">
+                    <span style="font-size: 1.25rem;" aria-hidden="true">🖼️</span>
+                    <span>{% trans "My Memories" %}</span>
+                </a>
+            </div>
+        </section>
+    </article>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    'use strict';
+
+    {% trans "Microphone is ready. Tap the button above to begin." as msg_ready %}
+    {% trans "Listening... Please speak now." as msg_listening %}
+    {% trans "Processing speech..." as msg_processing %}
+    {% trans "Speech recognition is not supported in this browser. Please use the touch shortcuts below." as msg_unsupported %}
+    {% trans "Microphone access was denied. You can still use the touch shortcuts below." as msg_denied %}
+    {% trans "No speech was detected. Please tap the button to try again, or use the touch shortcuts below." as msg_no_speech %}
+    {% trans "Opening Cognitive Games..." as msg_nav_games %}
+    {% trans "Opening Today's Routine..." as msg_nav_routine %}
+    {% trans "Opening My Memories..." as msg_nav_memories %}
+    {% trans "You said:" as msg_heard_prefix %}
+    {% trans "Try saying Games, Routine, or Memories, or tap a shortcut below." as msg_try_again %}
+
+    function initVoiceAssistant() {
+        const micBtn = document.getElementById('va-mic-btn');
+        const statusCard = document.getElementById('va-status-area');
+        const statusText = document.getElementById('va-status-text');
+
+        const urls = {
+            games: "{% url 'games:list' %}",
+            routine: "{% url 'routines:patient_routine' %}",
+            memories: "{% url 'memories:patient_memories' %}"
+        };
+
+        const messages = {
+            ready: "{{ msg_ready|escapejs }}",
+            listening: "{{ msg_listening|escapejs }}",
+            processing: "{{ msg_processing|escapejs }}",
+            unsupported: "{{ msg_unsupported|escapejs }}",
+            denied: "{{ msg_denied|escapejs }}",
+            noSpeech: "{{ msg_no_speech|escapejs }}",
+            navGames: "{{ msg_nav_games|escapejs }}",
+            navRoutine: "{{ msg_nav_routine|escapejs }}",
+            navMemories: "{{ msg_nav_memories|escapejs }}",
+            heardPrefix: "{{ msg_heard_prefix|escapejs }}",
+            tryAgain: "{{ msg_try_again|escapejs }}"
+        };
+
+        function setStatus(text, isActive = false) {
+            statusText.textContent = text;
+            if (isActive) {
+                statusCard.classList.add('va-active');
+            } else {
+                statusCard.classList.remove('va-active');
+            }
+        }
+
+        let isNavigating = false;
+        let hasError = false;
+
+        // Process recognized speech command
+        function handleVoiceCommand(rawTranscript, isFinal = false) {
+            console.log('[VoiceAssistant] handleVoiceCommand received:', { rawTranscript, isFinal });
+            if (isNavigating) return;
+            const text = rawTranscript.toLowerCase().trim();
+
+            if (!text) return;
+
+            // Display live transcript
+            setStatus(`${messages.heardPrefix} "${rawTranscript}"`, true);
+
+            // Check command matching
+            // Games matching
+            if (
+                text.includes('game') || text.includes('play') || text.includes('puzzle') ||
+                text.includes('exercise') || text.includes('start') || text.includes('খেল') ||
+                text.includes('গেম') || text.includes('খেলা')
+            ) {
+                isNavigating = true;
+                console.log('[VoiceAssistant] Matched Games command, navigating to:', urls.games);
+                setStatus(`${messages.heardPrefix} "${rawTranscript}" — ${messages.navGames}`, true);
+                setTimeout(() => { window.location.href = urls.games; }, 500);
+                return;
+            }
+
+            // Routine matching
+            if (
+                text.includes('routine') || text.includes('today') || text.includes('schedule') ||
+                text.includes('task') || text.includes('activity') || text.includes('ৰুটিন') ||
+                text.includes('দিনলিপি') || text.includes('কাম') || text.includes('কাৰ্য')
+            ) {
+                isNavigating = true;
+                console.log('[VoiceAssistant] Matched Routine command, navigating to:', urls.routine);
+                setStatus(`${messages.heardPrefix} "${rawTranscript}" — ${messages.navRoutine}`, true);
+                setTimeout(() => { window.location.href = urls.routine; }, 500);
+                return;
+            }
+
+            // Memories matching
+            if (
+                text.includes('memor') || text.includes('photo') || text.includes('picture') ||
+                text.includes('face') || text.includes('family') || text.includes('স্মৃতি') ||
+                text.includes('ছবি') || text.includes('ফটো') || text.includes('পৰিয়াল') ||
+                text.includes('পৰিয়াল')
+            ) {
+                isNavigating = true;
+                console.log('[VoiceAssistant] Matched Memories command, navigating to:', urls.memories);
+                setStatus(`${messages.heardPrefix} "${rawTranscript}" — ${messages.navMemories}`, true);
+                setTimeout(() => { window.location.href = urls.memories; }, 500);
+                return;
+            }
+
+            // If this is the final result and no command was matched, display guidance
+            if (isFinal) {
+                console.log('[VoiceAssistant] Final speech with no command match:', rawTranscript);
+                setStatus(`${messages.heardPrefix} "${rawTranscript}". ${messages.tryAgain}`, false);
+            }
+        }
+
+        if (micBtn) {
+            // Render initial button state if speech controller is available
+            if (window.CognicareSpeech && typeof window.CognicareSpeech._updateButtonUI === 'function') {
+                window.CognicareSpeech._updateButtonUI(micBtn, false);
+            }
+
+            micBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('[VoiceAssistant] #va-mic-btn clicked');
+                hasError = false;
+
+                if (!window.CognicareSpeech || !window.CognicareSpeech.isSupported()) {
+                    console.warn('[VoiceAssistant] CognicareSpeech not supported');
+                    setStatus(messages.unsupported, false);
+                    return;
+                }
+
+                if (window.CognicareSpeech.isListening()) {
+                    console.log('[VoiceAssistant] Already listening, requesting graceful stop');
+                    setStatus(messages.processing, true);
+                    window.CognicareSpeech.stop();
+                    return;
+                }
+
+                setStatus(messages.listening, true);
+
+                window.CognicareSpeech.start({
+                    target: (transcript, isFinal) => handleVoiceCommand(transcript, isFinal),
+                    button: micBtn,
+                    lang: "{{ LANGUAGE_CODE }}" === "as" ? "as-IN" : "en-US",
+                    onStart: () => {
+                        console.log('[VoiceAssistant] onStart callback received');
+                        setStatus(messages.listening, true);
+                    },
+                    onError: (err, msg) => {
+                        console.warn('[VoiceAssistant] onError callback received:', { err, msg });
+                        hasError = true;
+                        if (isNavigating) return;
+                        if (err === 'not-allowed' || err === 'service-not-allowed') {
+                            setStatus(messages.denied, false);
+                        } else if (err === 'no-speech') {
+                            setStatus(messages.noSpeech, false);
+                        } else {
+                            setStatus(msg || messages.tryAgain, false);
+                        }
+                    },
+                    onEnd: (lastTranscript) => {
+                        console.log('[VoiceAssistant] onEnd callback received:', { lastTranscript, hasError });
+                        if (isNavigating) return;
+                        if (!lastTranscript) {
+                            if (!hasError) {
+                                setStatus(messages.ready, false);
+                            }
+                        } else {
+                            // Ensure final evaluation if not already navigating
+                            handleVoiceCommand(lastTranscript, true);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initVoiceAssistant);
+    } else {
+        initVoiceAssistant();
+    }
+})();
+</script>
+{% endblock %}

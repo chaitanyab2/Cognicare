@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, translation
 
 from apps.accounts.models import Role, CaregiverMemberRelationship
 from apps.games.models import Game, GameSession, GameRound
@@ -766,6 +766,7 @@ class InternationalizationFoundationTests(TestCase):
         self.assertEqual(portal_res.status_code, 200)
         self.assertContains(portal_res, '<html lang="as">')
         self.assertContains(portal_res, 'Ananya')
+        translation.deactivate()
 
 
 class LanguageSwitcherUITests(TestCase):
@@ -791,6 +792,10 @@ class LanguageSwitcherUITests(TestCase):
             first_name='Mary',
             last_name='Watson'
         )
+
+    def tearDown(self):
+        translation.deactivate()
+        super().tearDown()
 
     def test_switcher_rendered_on_anonymous_login_page(self):
         res = self.client.get(reverse('accounts:login'))
@@ -925,6 +930,86 @@ class LanguageSwitcherUITests(TestCase):
         )
         self.assertEqual(res_proto_relative.status_code, 302)
         self.assertEqual(res_proto_relative.url, '/')
+
+
+class VoiceAssistantDedicatedPageTests(TestCase):
+    """Tests for the dedicated Voice Assistant page at /accounts/voice-assistant/."""
+
+    def setUp(self):
+        self.patient = CustomUser.objects.create_user(
+            username='va_patient',
+            email='va_patient@example.com',
+            password='Password123!',
+            role=Role.PATIENT,
+            first_name='Ananya',
+            last_name='Barua'
+        )
+        self.caregiver = CustomUser.objects.create_user(
+            username='va_caregiver',
+            email='va_caregiver@example.com',
+            password='Password123!',
+            role=Role.CAREGIVER,
+            first_name='Mary',
+            last_name='Watson'
+        )
+        self.url = reverse('accounts:voice_assistant')
+
+    def tearDown(self):
+        translation.deactivate()
+        super().tearDown()
+
+    def test_unauthenticated_access_redirects_to_login(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 302)
+        self.assertIn(reverse('accounts:login'), res.url)
+
+    def test_caregiver_access_is_forbidden(self):
+        self.client.login(username='va_caregiver', password='Password123!')
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 403)
+
+    def test_patient_access_success_200(self):
+        self.client.login(username='va_patient', password='Password123!')
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def test_voice_assistant_page_elements_english(self):
+        self.client.login(username='va_patient', password='Password123!')
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'Voice Assistant')
+        self.assertContains(res, 'id="va-mic-btn"')
+        self.assertContains(res, 'id="va-status-area"')
+        self.assertContains(res, 'id="va-status-text"')
+        self.assertContains(res, 'btn-speech')
+        self.assertContains(res, 'data-txt-speak="Tap to Speak"')
+        self.assertContains(res, 'data-txt-listening="Listening... Speak now"')
+        self.assertContains(res, reverse('games:list'))
+        self.assertContains(res, reverse('routines:patient_routine'))
+        self.assertContains(res, reverse('memories:patient_memories'))
+        self.assertContains(res, reverse('accounts:patient_portal'))
+
+    def test_voice_assistant_page_elements_assamese(self):
+        self.client.login(username='va_patient', password='Password123!')
+        self.client.post(
+            reverse('set_language'),
+            data={'language': 'as', 'next': self.url}
+        )
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, '<html lang="as">')
+        self.assertContains(res, 'কণ্ঠ সহায়ক')
+        self.assertContains(res, 'id="va-mic-btn"')
+        self.assertContains(res, 'জ্ঞানমূলক খেলসমূহ')
+        self.assertContains(res, 'আজিৰ দিনলিপি')
+        self.assertContains(res, 'মোৰ স্মৃতিসমূহ')
+
+    def test_patient_portal_links_to_voice_assistant_page(self):
+        self.client.login(username='va_patient', password='Password123!')
+        res = self.client.get(reverse('accounts:patient_portal'))
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, self.url)
+        self.assertContains(res, 'id="open-voice-assistant-btn"')
 
 
 

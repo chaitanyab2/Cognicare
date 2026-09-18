@@ -1,0 +1,73 @@
+{
+  "name": "Cognicare — Dementia Care & Memory Assistant",
+  "short_name": "Cognicare",
+  "description": "Gentle daily assistance, memory reinforcement, routines, and cognitive activities.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f766e",
+  "background_color": "#fbf9f5",
+  "categories": [
+    "health",
+    "lifestyle",
+    "medical",
+    "accessibility"
+  ],
+  "icons": [
+    {
+      "src": "/static/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/static/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/static/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daily Routines",
+      "short_name": "Routines",
+      "description": "View today's gentle schedule and reminders",
+      "url": "/routines/",
+      "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Family & Memories",
+      "short_name": "Memories",
+      "description": "View familiar faces and cherished memories",
+      "url": "/memories/",
+      "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Brain Games",
+      "short_name": "Games",
+      "description": "Play calming cognitive exercises",
+      "url": "/games/",
+      "icons": [{ "src": "/static/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

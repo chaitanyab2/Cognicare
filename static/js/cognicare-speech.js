@@ -33,10 +33,17 @@
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
             this._SpeechRecognitionClass = SpeechRecognition;
 
-            // Auto-cleanup on navigation
+            // Auto-cleanup on navigation and tab visibility
             if (typeof window !== 'undefined') {
-                window.addEventListener('beforeunload', () => this.stop());
-                window.addEventListener('pagehide', () => this.stop());
+                window.addEventListener('beforeunload', () => this.abort());
+                window.addEventListener('pagehide', () => this.abort());
+            }
+            if (typeof document !== 'undefined') {
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        this.abort();
+                    }
+                });
             }
         }
 
@@ -98,21 +105,41 @@
         }
 
         /**
-         * Starts listening and targets the specified input element.
+         * Starts listening and targets the specified input element or callback.
          * NEVER called automatically; only invoked through explicit user interaction.
+         * 
+         * Signatures:
+         * - start(targetInput, button, customLang)
+         * - start(callbackFn, button, customLang)
+         * - start({ target, button, lang, onResult, onStart, onEnd, onError })
          */
-        start(targetInput, button, customLang) {
+        start(targetInput, button = null, customLang = null) {
+            let options = {};
+            let target = targetInput;
+
+            if (targetInput && typeof targetInput === 'object' && typeof targetInput.nodeType !== 'number' && typeof targetInput.addEventListener !== 'function') {
+                options = targetInput;
+                target = options.target || options.onResult || null;
+                button = options.button || button;
+                customLang = options.lang || customLang;
+            }
+
             if (!this.isSupported()) {
                 const msgs = this.getMessages();
-                this._displayMessage(button, msgs.unsupported, 'warning');
+                if (typeof options.onError === 'function') {
+                    options.onError('unsupported', msgs.unsupported);
+                }
+                if (button) {
+                    this._displayMessage(button, msgs.unsupported, 'warning');
+                }
                 return;
             }
 
             // Stop any existing session
-            this.stop();
+            this.abort();
 
-            if (!targetInput) {
-                console.warn('CognicareSpeech: target input not found.');
+            if (!target && typeof options.onResult !== 'function') {
+                console.warn('CognicareSpeech: target input or onResult callback not found.');
                 return;
             }
 
@@ -122,62 +149,140 @@
             try {
                 const recognition = new this._SpeechRecognitionClass();
                 recognition.continuous = false;
-                recognition.interimResults = false;
+                recognition.interimResults = true;
                 recognition.maxAlternatives = 1;
                 recognition.lang = targetLang;
 
                 this._recognition = recognition;
-                this._activeInput = targetInput;
+                this._activeTarget = target;
                 this._activeButton = button;
+                this._activeOptions = options;
                 this._activeTargetLang = targetLang;
 
+                let lastTranscript = '';
+                let hasInserted = false;
+
+                recognition.onaudiostart = () => {
+                    console.log('[CognicareSpeech] onaudiostart: Audio hardware capture began');
+                };
+
+                recognition.onspeechstart = () => {
+                    console.log('[CognicareSpeech] onspeechstart: Speech sound detected by browser');
+                };
+
+                recognition.onspeechend = () => {
+                    console.log('[CognicareSpeech] onspeechend: Speech sound ended');
+                };
+
+                recognition.onaudioend = () => {
+                    console.log('[CognicareSpeech] onaudioend: Audio hardware capture stopped');
+                };
+
                 recognition.onstart = () => {
+                    console.log('[CognicareSpeech] onstart: Speech recognition active, lang =', recognition.lang);
                     this._isListening = true;
-                    this._updateButtonUI(button, true);
+                    if (button) {
+                        this._updateButtonUI(button, true);
+                    }
+                    if (typeof options.onStart === 'function') {
+                        options.onStart();
+                    }
                 };
 
                 recognition.onresult = (event) => {
-                    if (event.results && event.results.length > 0) {
-                        const transcript = event.results[0][0].transcript;
-                        if (transcript && transcript.trim()) {
-                            this._insertText(targetInput, transcript.trim());
+                    const resultsLen = event.results ? event.results.length : 0;
+                    console.log('[CognicareSpeech] onresult: event.results.length =', resultsLen);
+                    if (!event.results || resultsLen === 0) return;
+
+                    let fullTranscript = '';
+                    let isFinal = false;
+
+                    for (let i = 0; i < event.results.length; i++) {
+                        const res = event.results[i];
+                        if (res && res[0] && res[0].transcript) {
+                            const piece = res[0].transcript;
+                            console.log(`[CognicareSpeech] result[${i}]: "${piece}", isFinal = ${res.isFinal}`);
+                            fullTranscript += (fullTranscript && !fullTranscript.endsWith(' ') && !piece.startsWith(' ') ? ' ' : '') + piece;
+                            if (res.isFinal) {
+                                isFinal = true;
+                            }
+                        }
+                    }
+
+                    const cleanTranscript = fullTranscript.trim();
+                    console.log('[CognicareSpeech] final aggregated transcript:', cleanTranscript, 'isFinal:', isFinal);
+                    if (cleanTranscript) {
+                        lastTranscript = cleanTranscript;
+                        const isTargetFn = typeof target === 'function';
+                        console.log('[CognicareSpeech] invoking target callback, isFunction =', isTargetFn);
+                        if (isTargetFn) {
+                            target(cleanTranscript, isFinal);
+                        } else if (target && typeof target.nodeType === 'number') {
+                            if (isFinal) {
+                                this._insertText(target, cleanTranscript);
+                                hasInserted = true;
+                            }
+                        }
+                        if (typeof options.onResult === 'function' && !isTargetFn) {
+                            options.onResult(cleanTranscript, isFinal);
                         }
                     }
                 };
 
                 recognition.onerror = (event) => {
-                    console.info('CognicareSpeech error:', event.error);
+                    console.warn('[CognicareSpeech] onerror: event.error =', event.error);
                     let userMsg = msgs.errorOccurred;
                     if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                         userMsg = msgs.permissionDenied;
                     } else if (event.error === 'language-not-supported') {
                         userMsg = targetLang === 'as-IN' ? msgs.langUnsupported : msgs.errorOccurred;
                     } else if (event.error === 'no-speech') {
-                        // User remained silent; no need for error banner
-                        userMsg = null;
+                        userMsg = msgs.noSpeech || 'No speech was detected';
                     }
-                    if (userMsg) {
+
+                    if (userMsg && button) {
                         this._displayMessage(button, userMsg, 'info');
                     }
-                    this.stop();
+
+                    if (typeof options.onError === 'function') {
+                        options.onError(event.error, userMsg);
+                    }
+
+                    this.abort();
                 };
 
                 recognition.onend = () => {
-                    this.stop();
+                    console.log('[CognicareSpeech] onend: recognition finished, lastTranscript =', lastTranscript);
+                    // Fallback text insertion for DOM inputs if isFinal was never flagged before end
+                    if (target && typeof target.nodeType === 'number' && !hasInserted && lastTranscript) {
+                        this._insertText(target, lastTranscript);
+                        hasInserted = true;
+                    }
+
+                    if (typeof options.onEnd === 'function') {
+                        options.onEnd(lastTranscript);
+                    }
+                    this.abort();
                 };
 
                 recognition.start();
             } catch (err) {
                 console.warn('CognicareSpeech: failed to start recognition', err);
-                this.stop();
-                this._displayMessage(button, msgs.errorOccurred, 'info');
+                this.abort();
+                if (button) {
+                    this._displayMessage(button, msgs.errorOccurred, 'info');
+                }
+                if (typeof options.onError === 'function') {
+                    options.onError('exception', msgs.errorOccurred);
+                }
             }
         }
 
         /**
-         * Stops active listening session and restores UI.
+         * Cancels active recognition session immediately without waiting for results.
+         * Used for tab backgrounding, unload, and cleanup.
          */
-        stop() {
+        abort() {
             if (this._recognition) {
                 try {
                     this._recognition.abort();
@@ -188,20 +293,38 @@
             }
             if (this._activeButton) {
                 this._updateButtonUI(this._activeButton, false);
+                this._activeButton = null;
             }
             this._isListening = false;
-            this._activeButton = null;
-            this._activeInput = null;
+            this._activeTarget = null;
+            this._activeOptions = null;
+        }
+
+        /**
+         * Stops active listening session gracefully, allowing pending audio to finalize.
+         */
+        stop() {
+            if (this._recognition && this._isListening) {
+                try {
+                    this._recognition.stop();
+                } catch (e) {
+                    this.abort();
+                }
+            } else {
+                this.abort();
+            }
         }
 
         /**
          * Toggles speech recognition for a specific target and trigger button.
          */
-        toggle(targetInput, button, customLang) {
-            if (this._isListening && this._activeButton === button) {
+        toggle(targetInput, button = null, customLang = null) {
+            if (this._isListening && (this._activeButton === button || (!button && !this._activeButton))) {
                 this.stop();
+                return false;
             } else {
                 this.start(targetInput, button, customLang);
+                return true;
             }
         }
 
@@ -246,6 +369,8 @@
         _updateButtonUI(button, isListening) {
             if (!button) return;
             const msgs = this.getMessages();
+            const speakText = button.getAttribute('data-txt-speak') || msgs.speak;
+            const listeningText = button.getAttribute('data-txt-listening') || msgs.listening;
 
             if (isListening) {
                 button.setAttribute('aria-pressed', 'true');
@@ -253,14 +378,14 @@
                 button.style.borderColor = '#dc2626';
                 button.style.backgroundColor = '#fef2f2';
                 button.style.color = '#dc2626';
-                button.innerHTML = `${MIC_LISTENING_SVG} <span class="speech-label">${msgs.listening}</span>`;
+                button.innerHTML = `${MIC_LISTENING_SVG} <span class="speech-label">${listeningText}</span>`;
             } else {
                 button.setAttribute('aria-pressed', 'false');
                 button.classList.remove('is-listening');
                 button.style.borderColor = '';
                 button.style.backgroundColor = '';
                 button.style.color = '';
-                button.innerHTML = `${MIC_SVG} <span class="speech-label">${msgs.speak}</span>`;
+                button.innerHTML = `${MIC_SVG} <span class="speech-label">${speakText}</span>`;
             }
         }
 
@@ -269,12 +394,13 @@
          */
         _displayMessage(button, message, type) {
             if (!button || !message) return;
-            let msgBox = button.parentElement.querySelector('.speech-feedback-message');
+            const container = button.parentElement || button;
+            let msgBox = container.querySelector('.speech-feedback-message');
             if (!msgBox) {
                 msgBox = document.createElement('div');
                 msgBox.className = 'speech-feedback-message';
                 msgBox.style.cssText = 'font-size: 0.85rem; margin-top: 6px; padding: 6px 10px; border-radius: 6px; line-height: 1.4;';
-                button.parentElement.appendChild(msgBox);
+                container.appendChild(msgBox);
             }
 
             if (type === 'warning' || type === 'info') {
@@ -289,6 +415,7 @@
 
             msgBox.textContent = message;
             msgBox.setAttribute('role', 'status');
+            msgBox.setAttribute('aria-live', 'polite');
 
             // Fade out after 5 seconds
             setTimeout(() => {
@@ -308,15 +435,27 @@
 
             if (!button || !input) return;
 
+            const isSupp = this.isSupported();
+            const msgs = this.getMessages();
+
             button.setAttribute('type', 'button');
-            button.setAttribute('aria-label', this.getMessages().micAriaLabel);
+            button.setAttribute('aria-label', button.getAttribute('aria-label') || msgs.micAriaLabel);
             button.setAttribute('aria-pressed', 'false');
+
+            if (!isSupp) {
+                button.setAttribute('data-speech-supported', 'false');
+                button.classList.add('speech-unsupported');
+            }
 
             // Render initial button state
             this._updateButtonUI(button, false);
 
             button.addEventListener('click', (e) => {
                 e.preventDefault();
+                if (!this.isSupported()) {
+                    this._displayMessage(button, msgs.unsupported, 'warning');
+                    return;
+                }
                 this.toggle(input, button, lang);
             });
         }
@@ -326,18 +465,30 @@
          * Usage: <button type="button" class="btn-speech" data-speech-target="id_title">...</button>
          */
         autoBind() {
+            const isSupp = this.isSupported();
+            const msgs = this.getMessages();
             const buttons = document.querySelectorAll('[data-speech-target]');
             buttons.forEach((btn) => {
                 const targetId = btn.getAttribute('data-speech-target');
                 const targetInput = document.getElementById(targetId);
                 if (btn && targetInput) {
                     btn.setAttribute('type', 'button');
-                    btn.setAttribute('aria-label', this.getMessages().micAriaLabel);
+                    btn.setAttribute('aria-label', btn.getAttribute('aria-label') || msgs.micAriaLabel);
                     btn.setAttribute('aria-pressed', 'false');
+
+                    if (!isSupp) {
+                        btn.setAttribute('data-speech-supported', 'false');
+                        btn.classList.add('speech-unsupported');
+                    }
+
                     this._updateButtonUI(btn, false);
 
                     btn.addEventListener('click', (e) => {
                         e.preventDefault();
+                        if (!this.isSupported()) {
+                            this._displayMessage(btn, msgs.unsupported, 'warning');
+                            return;
+                        }
                         this.toggle(targetInput, btn);
                     });
                 }

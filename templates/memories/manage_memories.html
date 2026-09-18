@@ -82,7 +82,9 @@
                     {% for mem in memories %}
                         <article class="memory-card" aria-labelledby="mem-title-{{ mem.id }}">
                             {% if mem.image %}
-                                <img src="{{ mem.image.url }}" alt="{{ mem.title }}" class="memory-card-media" loading="lazy">
+                                <div class="memory-card-image-container">
+                                    <img src="{{ mem.image.url }}" alt="{{ mem.title }}" class="memory-card-media" loading="lazy">
+                                </div>
                             {% endif %}
                             <div class="memory-card-content">
                                 <div style="display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin-bottom: var(--space-2);">

@@ -478,6 +478,14 @@ class MemoryViewTests(TestCase):
         self.assertContains(res, 'data-speech-target="id_description"')
         self.assertContains(res, 'btn-speech')
 
+    def test_familiar_person_form_includes_speech_to_text_bindings(self):
+        self.client.login(username='caregiver_one', password='Password123!')
+        res = self.client.get(reverse('memories:add_familiar_person') + f'?member={self.patient_1.id}')
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, 'data-speech-target="id_name"')
+        self.assertContains(res, 'data-speech-target="id_relationship"')
+        self.assertContains(res, 'btn-speech')
+
     def test_user_created_content_preserved_in_assamese(self):
         self.client.post(reverse('set_language'), data={'language': 'as'}, follow=True)
         self.client.login(username='patient_one', password='Password123!')

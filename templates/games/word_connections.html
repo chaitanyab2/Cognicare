@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
-{% block title %}Word Connections - Round {{ current_round }} of {{ total_rounds }} - Cognicare{% endblock %}
+{% block title %}{% trans "Word Connections" %} - {% blocktrans with cur=current_round tot=total_rounds %}Round {{ cur }} of {{ tot }}{% endblocktrans %} - Cognicare{% endblock %}
 
 {% block content %}
 <div class="gameplay-container" style="max-width: 860px; margin: 0 auto;">
@@ -9,15 +10,15 @@
     <header class="gameplay-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-6); padding: var(--space-4) var(--space-6); background-color: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
         <div>
             <span style="font-size: var(--font-size-sm); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">
-                Activity
+                {% trans "Activity" %}
             </span>
             <h1 style="font-size: var(--font-size-lg); color: var(--text-primary); margin: 0;">
-                Word Connections
+                {% trans "Word Connections" %}
             </h1>
         </div>
         <div>
             <span id="round-indicator" class="badge badge-patient" style="font-size: var(--font-size-base); padding: 8px 16px;">
-                Round {{ current_round }} of {{ total_rounds }}
+                {% blocktrans with cur=current_round tot=total_rounds %}Round {{ cur }} of {{ tot }}{% endblocktrans %}
             </span>
         </div>
     </header>
@@ -32,32 +33,32 @@
             <!-- Prompt & Guidance -->
             <div style="text-align: center; margin-bottom: var(--space-6);">
                 <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); margin-bottom: var(--space-3); font-size: 1rem; padding: 4px 14px;">
-                    Semantic Memory & Association
+                    {% trans "Semantic Memory & Association" %}
                 </span>
                 <h2 id="question-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-top: var(--space-2);">
                     {{ round_data.prompt }}
                 </h2>
                 <p style="font-size: var(--font-size-base); color: var(--text-secondary); max-width: 620px; margin: var(--space-2) auto 0; line-height: 1.5;">
-                    Consider the central concept below, then select the word that connects most naturally.
+                    {% trans "Consider the central concept below, then select the word that connects most naturally." %}
                 </p>
             </div>
 
             <!-- Central Concept Card -->
-            <div class="concept-card" role="region" aria-label="Central concept card">
+            <div class="concept-card" role="region" aria-label="{% trans 'Central concept card' %}">
                 <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: var(--space-3);">
                     <span id="concept-theme" class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-size: 0.85rem; padding: 2px 10px;">
                         {{ round_data.theme }}
                     </span>
-                    <button type="button" id="btn-speak-prompt" class="btn-voice" aria-label="Listen to concept and clue">
+                    <button type="button" id="btn-speak-prompt" class="btn-voice" aria-label="{% trans 'Listen to concept and clue' %}">
                         <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                         <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                        <span class="voice-label">Listen</span>
+                        <span class="voice-label">{% trans "Listen" %}</span>
                     </button>
                 </div>
 
                 <div style="text-align: center; width: 100%;">
                     <span style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700; display: block; margin-bottom: var(--space-1);">
-                        Central Concept
+                        {% trans "Central Concept" %}
                     </span>
                     <div id="concept-title" style="font-size: 1.75rem; font-weight: 800; color: var(--text-primary); line-height: 1.25; margin-bottom: var(--space-2);">
                         {{ round_data.concept }}
@@ -72,14 +73,14 @@
             <div style="margin-bottom: var(--space-8);">
                 <div style="text-align: center; margin-bottom: var(--space-4);">
                     <h3 style="font-size: 1.15rem; color: var(--text-primary); margin: 0; font-weight: 700;">
-                        Select the Matching Word:
+                        {% trans "Select the Matching Word:" %}
                     </h3>
                 </div>
 
                 <div id="word-chip-grid"
                      class="word-chip-grid"
                      role="group"
-                     aria-label="Word choice options">
+                     aria-label="{% trans 'Word choice options' %}">
                     {% for choice in round_data.choices %}
                         <button type="button"
                                 class="word-card"
@@ -93,8 +94,8 @@
                                   tabindex="0"
                                   class="word-card-audio-btn choice-voice-btn"
                                   data-voice-speak="{{ choice.word }}"
-                                  aria-label="Listen to {{ choice.word }}"
-                                  title="Listen to {{ choice.word }}">
+                                  aria-label="{% blocktrans with word=choice.word %}Listen to {{ word }}{% endblocktrans %}"
+                                  title="{% blocktrans with word=choice.word %}Listen to {{ word }}{% endblocktrans %}">
                                 <svg class="voice-icon voice-icon-speaker" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                                 <svg class="voice-icon voice-icon-stop" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
                             </span>
@@ -110,8 +111,8 @@
                         class="btn btn-primary btn-lg"
                         style="min-width: 280px; min-height: 60px; font-size: var(--font-size-lg);"
                         disabled
-                        aria-label="Confirm selected word">
-                    Confirm My Selection &rarr;
+                        aria-label="{% trans 'Confirm selected word' %}">
+                    {% trans "Confirm My Selection" %} &rarr;
                 </button>
             </div>
         </section>
@@ -125,16 +126,16 @@
                     ✓
                 </div>
                 <h2 id="feedback-message-heading" style="font-size: var(--font-size-xl); color: var(--text-primary); margin-bottom: var(--space-2);">
-                    Wonderful!
+                    {% trans "Wonderful!" %}
                 </h2>
                 <p id="feedback-text" style="font-size: var(--font-size-lg); color: var(--text-secondary); max-width: 620px; margin: 0 auto var(--space-4); line-height: 1.6;">
-                    Thank you for exploring this memory connection.
+                    {% trans "Thank you for exploring this memory connection." %}
                 </p>
                 <div style="margin-bottom: var(--space-6);">
-                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="Listen to explanation and connection details">
+                    <button type="button" id="btn-speak-feedback" class="btn-voice" aria-label="{% trans 'Listen to explanation and connection details' %}">
                         <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                         <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                        <span class="voice-label">Listen</span>
+                        <span class="voice-label">{% trans "Listen" %}</span>
                     </button>
                 </div>
 
@@ -149,7 +150,7 @@
                         {{ round_data.concept }}
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px; margin-top: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--primary-border);">
-                        <span style="font-size: 0.95rem; color: var(--text-secondary);">Connection:</span>
+                        <span style="font-size: 0.95rem; color: var(--text-secondary);">{% trans "Connection:" %}</span>
                         <strong id="feedback-target-word" style="font-size: 1.15rem; color: var(--color-teal-900);">{{ round_data.target_word }}</strong>
                     </div>
                 </div>
@@ -160,7 +161,7 @@
                             id="btn-next-action"
                             class="btn btn-primary btn-lg"
                             style="min-width: 280px; min-height: 60px; font-size: var(--font-size-lg);">
-                        Continue &rarr;
+                        {% trans "Continue" %} &rarr;
                     </button>
                 </div>
             </div>
@@ -169,8 +170,8 @@
 
     <!-- Exit Navigation -->
     <footer style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-6);">
-        <a href="{% url 'games:list' %}" class="btn btn-secondary" onclick="return confirm('Would you like to return to the Games menu?');" style="min-height: 44px; padding: 8px 18px;">
-            &larr; Exit to Games
+        <a href="{% url 'games:list' %}" class="btn btn-secondary" onclick="return confirm('{% trans "Would you like to return to the Games menu?" %}');" style="min-height: 44px; padding: 8px 18px;">
+            &larr; {% trans "Exit to Games" %}
         </a>
     </footer>
 </div>
@@ -187,6 +188,18 @@
      data-submit-url="{% url 'games:submit_round' session_id=session.id %}"
      data-complete-url="{% url 'games:complete_session' session_id=session.id %}"
      data-results-url="{% url 'games:results' session_id=session.id %}"
+     data-txt-saving="{% trans 'Saving...' %}"
+     data-txt-confirm="{% trans 'Confirm My Selection →' %}"
+     data-txt-wonderful="{% trans 'Wonderful!' %}"
+     data-txt-good-effort="{% trans 'Good Effort!' %}"
+     data-txt-next-round="{% trans 'Next Round →' %}"
+     data-txt-view-summary="{% trans 'View Summary →' %}"
+     data-txt-round-prefix="{% trans 'Round' %}"
+     data-txt-of="{% trans 'of' %}"
+     data-txt-finalizing="{% trans 'Finalizing...' %}"
+     data-txt-listen-to="{% trans 'Listen to' %}"
+     data-txt-connection-label="{% trans 'Connection:' %}"
+     data-txt-error-saving="{% trans 'We had trouble saving your selection. Please check your connection and try again.' %}"
      style="display: none;">
 </div>
 {% endblock %}

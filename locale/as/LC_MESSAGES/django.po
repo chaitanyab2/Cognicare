@@ -885,3 +885,4755 @@ msgstr "এই ব্যক্তিক সক্ৰিয় পৰিচিত
 
 msgid "Leave blank to keep the current photograph, or upload a new image to replace it."
 msgstr "বৰ্তমানৰ ফটোখন ৰাখিবলৈ খালী এৰক, বা নতুন ফটো আপলোড কৰক।"
+
+# Phase 13C-3B: Patient Dashboard Personalization
+
+msgid "Today's Gentle Suggestion"
+msgstr "আজিৰ শান্ত পৰামৰ্শ"
+
+msgid "Play Activity"
+msgstr "কাৰ্যকলাপ আৰম্ভ কৰক"
+
+msgid "Play Activity: %(game)s"
+msgstr "কাৰ্যকলাপ আৰম্ভ কৰক: %(game)s"
+
+msgid "How to Play"
+msgstr "কেনেকৈ খেলিব"
+
+msgid "Read instructions for %(game)s"
+msgstr "%(game)s ৰ নিৰ্দেশনা পঢ়ক"
+
+msgid "Cognitive Wellness"
+msgstr "জ্ঞানমূলক কল্যাণ"
+
+msgid "Gentle"
+msgstr "শান্তিময়"
+
+msgid "Comfortable"
+msgstr "আৰামদায়ক"
+
+msgid "Engaging"
+msgstr "উৎসাহজনক"
+
+msgid "Challenging"
+msgstr "চ্যালেঞ্জিং"
+
+msgid "Mastery"
+msgstr "পাৰদৰ্শী"
+
+msgid "Welcome Activity"
+msgstr "স্বাগতম কাৰ্যকলাপ"
+
+msgid "This is a gentle activity for today's practice."
+msgstr "আজিৰ অনুশীলনৰ বাবে এইটো এটি শান্তিময় কাৰ্যকলাপ।"
+
+msgid "Gentle Practice"
+msgstr "শান্তিময় অনুশীলন"
+
+msgid "This activity gives you a chance to practice at a comfortable and unhurried pace."
+msgstr "এই কাৰ্যকলাপটোৱে আপোনাক শান্ত আৰু ধীৰ গতিৰে অনুশীলন কৰাৰ সুযোগ দিয়ে।"
+
+msgid "Engaging Challenge"
+msgstr "উৎসাহজনক প্ৰত্যাহ্বান"
+
+msgid "You have been doing well with this activity. This is an engaging opportunity for today's practice."
+msgstr "আপুনি এই কাৰ্যকলাপত সুন্দৰ প্ৰদৰ্শন কৰিছে। আজিৰ বাবে ই এক উৎসাহজনক সুযোগ।"
+
+msgid "Explore Something Fresh"
+msgstr "নতুন কিবা চেষ্টা কৰক"
+
+msgid "You haven't played this activity recently. It offers a fresh way to exercise focus."
+msgstr "আপুনি অলপতে এই কাৰ্যকলাপ খেলা নাই। মনোযোগ অনুশীলনৰ বাবে ই এক নতুন সুযোগ।"
+
+msgid "You haven't played this activity recently. Try this gentle activity for today's practice."
+msgstr "আপুনি অলপতে এই কাৰ্যকলাপ খেলা নাই। আজিৰ অনুশীলনৰ বাবে এই শান্ত কাৰ্যকলাপটো চেষ্টা কৰক।"
+
+# ==========================================================================
+# Phase 13C-3C: Six Cognitive Games Localization (English + Assamese)
+# ==========================================================================
+
+msgid "1 Amber Star"
+msgstr "১ টা এম্বাৰ তৰা"
+
+msgid "1 Golden Star"
+msgstr "১ টা সোণালী তৰা"
+
+msgid "1 Golden Sun"
+msgstr "১ টা সোণালী সূৰ্য"
+
+msgid "2 Amber Stars"
+msgstr "২ টা এম্বাৰ তৰা"
+
+msgid "2 Golden Stars"
+msgstr "২ টা সোণালী তৰা"
+
+msgid "2 Golden Suns"
+msgstr "২ টা সোণালী সূৰ্য"
+
+msgid "2 Teal Circles"
+msgstr "২ টা টিল নীলা বৃত্ত"
+
+msgid "3 Amber Stars"
+msgstr "৩ টা এম্বাৰ তৰা"
+
+msgid "3 Golden Stars"
+msgstr "৩ টা সোণালী তৰা"
+
+msgid "4 Golden Stars"
+msgstr "৪ টা সোণালী তৰা"
+
+msgid "5 Golden Stars"
+msgstr "৫ টা সোণালী তৰা"
+
+msgid "A Quiet Afternoon at the Library"
+msgstr "পুথিভঁৰালত শান্তিময় দুপৰীয়া"
+
+msgid "A bed pillow provides head and neck support for restful sleep throughout the night."
+msgstr "গাৰুৱে টোপনিৰ সময়ত মূৰ আৰু ডিঙিক সমৰ্থন আৰু আৰাম প্ৰদান কৰে।"
+
+msgid "A block tool with a sharp angled iron blade underneath."
+msgstr "তলফালে চোকা তীখাৰ ব্লেড থকা কাঠ বা লোহাৰ সঁজুলি।"
+
+msgid "A bookmark is placed between the pages of a book to preserve your reading position safely."
+msgstr "বুকমাৰ্কে কিতাপৰ পঢ়ি থকা স্থান মনত ৰাখিবলৈ সহায় কৰে।"
+
+msgid "A bushel basket is the traditional woven container used to hold picked apples and pears in an orchard."
+msgstr "ফলৰ পাচি হৈছে বাগানৰ পৰা চিঙা আপেল জমা কৰাৰ পৰম্পৰাগত পাত্ৰ।"
+
+msgid "A central dot is placed inside the shape in the second column. What happens to the terracotta square?"
+msgstr "দ্বিতীয় স্তম্ভৰ আকৃতিৰ ভিতৰত এটা কেন্দ্ৰীয় বিন্দু দিয়া হৈছে। টেৰাকোটা বৰ্গক্ষেত্ৰটোৰ কি হ’ব?"
+
+msgid "A classic lidded hamper carried outdoors for alfresco meals."
+msgstr "বাহিৰত খোৱাৰ বাবে হাতত কঢ়িয়াই নিয়া বেতৰ ঢাকনি থকা পাচি।"
+
+msgid "A classic table vessel designed specifically to hold fresh-cut floral bouquets."
+msgstr "ফুল সজাই ৰাখিবলৈ বিশেষভাৱে তৈয়াৰ কৰা সুন্দৰ পাত্ৰ।"
+
+msgid "A coffee grinder crushes whole roasted beans into fresh grounds for brewing."
+msgstr "কফি পিহা যন্ত্ৰই গোটা গুটি পিহি সতেজ কফি গুড়ি প্ৰস্তুত কৰে।"
+
+msgid "A comfortable resting cushion dressed in a clean cotton slip."
+msgstr "পৰিষ্কাৰ কভাৰ লগোৱা আৰামদায়ক তুলি।"
+
+msgid "A flower vase is the dedicated vessel used to hold water and display freshly cut floral arrangements."
+msgstr "ফুলদানিত পানী ৰাখি সতেজ ফুল সুন্দৰকৈ সজাই ৰখা হয়।"
+
+msgid "A gentle paper or ribbon keeper tucked inside a book."
+msgstr "কিতাপৰ পৃষ্ঠাৰ মাজত সুমুৱাই থোৱা কাগজ বা ৰিবনৰ চিন।"
+
+msgid "A hand plane is pushed across timber surfaces to shave off thin curls and create a true, smooth plane."
+msgstr "কাঠৰ পৃষ্ঠ মিহি আৰু সমান কৰিবলৈ কাঠমিস্ত্ৰীয়ে ৰেন্দা ব্যৱহাৰ কৰে।"
+
+msgid "A handheld container with a spout and perforated rose."
+msgstr "নলী আৰু ফুটা থকা জাঁঝৰীযুক্ত হাতত লোৱা পাত্ৰ।"
+
+msgid "A mill used to turn whole aromatic beans into grounds before brewing."
+msgstr "গোটা সুগন্ধি গুটি পিহি গুড়ি কৰা যন্ত্ৰ।"
+
+msgid "A pair of corrective lenses worn to bring book pages into sharp focus."
+msgstr "কিতাপৰ আখৰ স্পষ্ট কৰিবলৈ চকুৰ সন্মুখত লোৱা চশমা।"
+
+msgid "A picnic basket or wicker hamper is the traditional portable carrier for outdoor lunches and tablecloths."
+msgstr "বনভোজৰ পাচিত খাদ্য, কাপোৰ আৰু বাচন-বৰ্তন কঢ়িয়াই নিয়া হয়।"
+
+msgid "A portable fabric canopy on ribs carried when dark clouds gather."
+msgstr "ডাৱৰ ক’লা হ’লে হাতত লৈ ফুৰা কাপোৰৰ চালি।"
+
+msgid "A postage stamp is the official paper token affixed to an envelope confirming postal delivery fees."
+msgstr "ডাক টিকট হৈছে খামৰ ওপৰত লগোৱা চৰকাৰী কাগজৰ টিকট যিয়ে ডাক মাচুল নিশ্চিত কৰে।"
+
+msgid "A rolling pin is rolled across dough to flatten it to an even, uniform thickness for pies and tarts."
+msgstr "বেলনা মাৰিৰে হেঁচি ময়দা সমান আৰু মসৃণভাৱে মেলা হয়।"
+
+msgid "A shaving brush whips warm water and soap into a thick, protective lather applied to the face."
+msgstr "দাড়ি খুৰোৱা ব্ৰাছে ফেন তৈয়াৰ কৰি ছালৰ ওপৰত সুৰক্ষিতভাৱে প্ৰলেপ দিয়ে।"
+
+msgid "A shoe buffing brush made of horsehair creates friction to bring leather wax to a rich, warm shine."
+msgstr "জোতা পলিচ ব্ৰাছে চামৰাৰ ওপৰত ঘঁহি এক উজ্জ্বল চমক আনি দিয়ে।"
+
+msgid "A small gummed paper receipt showing postal payment."
+msgstr "ডাক মাচুল পৰিশোধ কৰা প্ৰমাণিত আঠাযুক্ত সৰু কাগজ।"
+
+msgid "A small mesh sphere or perforated basket placed in the cup or pot."
+msgstr "কাপ বা টি-পটত ৰখা সৰু জালিৰ গোলক বা ছিদ্ৰযুক্ত বাকচ।"
+
+msgid "A small metal shield used when hand-stitching thick fabric."
+msgstr "ডাঠ কাপোৰ চিলাওঁতে ব্যৱহাৰ কৰা ধাতুৰ সৰু কৱচ।"
+
+msgid "A smooth cylindrical roller with handles on both ends."
+msgstr "দুয়োফালে হাতল থকা কাঠ বা মাৰ্বলৰ বেলনা।"
+
+msgid "A sturdy slatted box or woven vessel used during seasonal harvests."
+msgstr "ফল সংগ্ৰহৰ সময়ত ব্যৱহাৰ কৰা কাঠৰ বা বেতৰ ডাঙৰ পাচি।"
+
+msgid "A tea infuser holds dried tea leaves securely while allowing boiling water to circulate and steep."
+msgstr "টি ইনফ্যুজাৰে চাহ পাত ধৰি ৰাখে আৰু গৰম পানী চলাচল কৰি সুগন্ধি উলিয়াবলৈ দিয়ে।"
+
+msgid "A thimble is worn over the fingertip to shield it while pushing a needle through tough cloth."
+msgstr "ডাঠ কাপোৰত বেজী সুমুৱাওঁতে আঙুলিক আঘাতৰ পৰা ৰক্ষা কৰিবলৈ থিম্বল পিন্ধা হয়।"
+
+msgid "A warm ground bark spice fragrant with comforting holiday aromas."
+msgstr "গছৰ ছালৰ পৰা তৈয়াৰী সুগন্ধি আৰু সোৱাদযুক্ত মছলা।"
+
+msgid "A watering can is designed specifically to carry and sprinkle water gently onto delicate plants."
+msgstr "কোমল গছ-লতাত পানী ছটিয়াবলৈ পানী ছটিওৱা পাত্ৰ বিশেষভাৱে তৈয়াৰ কৰা হয়।"
+
+msgid "A wooden or resin handle with dense badger or boar hair bristles."
+msgstr "কোমল নোমেৰে নিৰ্মিত ক্ষৌৰকৰ্মৰ ব্ৰাছ।"
+
+msgid "A wooden-backed bristle brush rubbed vigorously across the shoe."
+msgstr "ঘোঁৰাৰ নোম বা কোমল নোমেৰে নিৰ্মিত কাঠৰ পিঠি থকা ব্ৰাছ।"
+
+msgid "A woody Mediterranean bush with pine-like aroma used in roasting."
+msgstr "পাইন গছৰ দৰে সুগন্ধি থকা চিৰসেউজ পাতৰ গুল্ম।"
+
+msgid "Acid-Free Glue Stick"
+msgstr "এচিডবিহীন আঠা"
+
+msgid "Across all {{ count }} activity rounds today."
+msgstr "আজিৰ সকলো {{ count }} টা কাৰ্যকলাপ ৰাউণ্ডৰ ভিতৰত।"
+
+msgid "Across each row, a horizontal crossbar is layered across the base shape. Triangle plus crossbar produces Triangle with Crossbar."
+msgstr "প্ৰতিটো শাৰীতে মূল আকৃতিৰ ওপৰত এডাল পথালি আঁক যোগ কৰা হয়। ত্ৰিভুজ আৰু আঁক মিলি আঁকযুক্ত ত্ৰিভুজ হয়।"
+
+msgid "Across each row, a solid filled shape becomes a hollow outline. The solid circle transforms into an Outline Circle."
+msgstr "প্ৰতিটো শাৰীতে এটা গাঢ় আকৃতি খালী ৰূপৰেখালৈ ৰূপান্তৰিত হয়। গাঢ় বৃত্তটো ৰূপৰেখা বৃত্তলৈ পৰিৱৰ্তিত হয়।"
+
+msgid "Across each row, the outer color and inner dot color swap places. The Teal Diamond with Amber Dot swaps into an Amber Diamond with Teal Dot."
+msgstr "প্ৰতিটো শাৰীতে বাহিৰৰ ৰং আৰু ভিতৰৰ বিন্দুৰ ৰং সালসলনি হয়। এম্বাৰ বিন্দুযুক্ত টিল হীৰাটো টিল বিন্দুযুক্ত এম্বাৰ হীৰালৈ সলনি হয়।"
+
+msgid "Activities"
+msgstr "কাৰ্যকলাপসমূহ"
+
+msgid "Activity Completed"
+msgstr "কাৰ্যকলাপ সম্পূৰ্ণ হ’ল"
+
+msgid "Activity Overview"
+msgstr "কাৰ্যকলাপৰ চমু আভাস"
+
+msgid "Activity completed. {{ encouragement }}. Your score is {{ score }} out of {{ max }} across all {{ count_rounds }} activity rounds today."
+msgstr "কাৰ্যকলাপ সম্পূৰ্ণ হ’ল। {{ encouragement }}। আজিৰ সকলো {{ count_rounds }} টা ৰাউণ্ডৰ ভিতৰত আপোনাৰ নম্বৰ হ’ল {{ max }} ৰ ভিতৰত {{ score }}।"
+
+msgid "Add Tea Leaves"
+msgstr "চাহ পাত দিয়ক"
+
+msgid "Address Book"
+msgstr "ঠিকনাৰ বহী"
+
+msgid "Adhesive corner tabs that hold photographs without damaging delicate backing."
+msgstr "ফটো নষ্ট নকৰাকৈ চুকত ধৰি ৰখা আঠাযুক্ত সৰু কাগজৰ চুক।"
+
+msgid "Adjust Your Order Anytime"
+msgstr "যিকোনো সময়তে ক্ৰম সলনি কৰক"
+
+msgid "Afternoon Tea"
+msgstr "দুপৰীয়াৰ চাহ"
+
+msgid "Aftershave Splash"
+msgstr "ক্ষৌৰোত্তৰ লোচন"
+
+msgid "Airmail Label"
+msgstr "এয়াৰমেইল লেবেল"
+
+msgid "Alarm Clock"
+msgstr "এলাৰ্ম ঘড়ী"
+
+msgid "Album Slipcase"
+msgstr "এলবামৰ খাপ"
+
+msgid "All Cognitive Activities"
+msgstr "সকলো জ্ঞানমূলক কাৰ্যকলাপ"
+
+msgid "All Petals Highlighted"
+msgstr "সকলো পাহি চিহ্নিত"
+
+msgid "Allspice"
+msgstr "অলস্পাইচ"
+
+msgid "Almond Extract"
+msgstr "বাদামৰ এছেন্স"
+
+msgid "Alum Block"
+msgstr "ফিটকিৰিৰ টুকুৰা"
+
+msgid "Amber Circle"
+msgstr "এম্বাৰ বৃত্ত"
+
+msgid "Amber Cross"
+msgstr "এম্বাৰ ক্ৰছ"
+
+msgid "Amber Diamond with Amber Dot"
+msgstr "এম্বাৰ বিন্দুযুক্ত এম্বাৰ হীৰা"
+
+msgid "Amber Diamond with Teal Dot"
+msgstr "টিল বিন্দুযুক্ত এম্বাৰ হীৰা"
+
+msgid "Amber Dot"
+msgstr "এম্বাৰ বিন্দু"
+
+msgid "Amber Gold"
+msgstr "সোণালী এম্বাৰ"
+
+msgid "Amber Leaf"
+msgstr "এম্বাৰ পাত"
+
+msgid "Amber Ring with Teal Dot"
+msgstr "টিল বিন্দুযুক্ত এম্বাৰ আঙুঠি"
+
+msgid "Amber Square"
+msgstr "এম্বাৰ বৰ্গক্ষেত্ৰ"
+
+msgid "Amber Star"
+msgstr "এম্বাৰ তৰা"
+
+msgid "Amber Sun"
+msgstr "এম্বাৰ সূৰ্য"
+
+msgid "Amber Triangle"
+msgstr "এম্বাৰ ত্ৰিভুজ"
+
+msgid "An Afternoon Picnic"
+msgstr "দুপৰীয়াৰ বনভোজ"
+
+msgid "An accordion-like wooden tool with leather sides and a brass nozzle."
+msgstr "হাতত ধৰি বতাহ মৰা চামৰাৰ ভাঁজযুক্ত নলী থকা সঁজুলি।"
+
+msgid "An umbrella is designed specifically to open overhead and shield a person from falling rain."
+msgstr "ছাতিয়ে বৰষুণ আৰু বতাহৰ পৰা ৰক্ষা কৰিবলৈ মূৰৰ ওপৰত চালি ধৰে।"
+
+msgid "Anise Star"
+msgstr "মৌৰি তৰা"
+
+msgid "Answer choices"
+msgstr "উত্তৰৰ বিকল্পসমূহ"
+
+msgid "Antique Brass"
+msgstr "পুৰণি পিতল"
+
+msgid "Antique Brass Key"
+msgstr "পুৰণি পিতলৰ চাবি"
+
+msgid "Antique Gold"
+msgstr "পুৰণি সোণালী"
+
+msgid "Antique Silver"
+msgstr "পুৰণি ৰূপালী"
+
+msgid "Apple Corer"
+msgstr "আপেলৰ গুটি উলিওৱা সঁজুলি"
+
+msgid "Apple Peeler"
+msgstr "আপেলৰ বাকলি গুচোৱা সঁজুলি"
+
+msgid "Apple Pie Baking"
+msgstr "আপেল পাই তৈয়াৰ কৰা"
+
+msgid "Apples"
+msgstr "আপেল"
+
+msgid "Apply Gentle Soap"
+msgstr "নৰম চাবোন ঘঁহক"
+
+msgid "Aquatic Blue"
+msgstr "জল নীলা"
+
+msgid "Armchair"
+msgstr "আৰামী চকী"
+
+msgid "Aromatic Assam tea"
+msgstr "সুগন্ধি অসম চাহ"
+
+msgid "Arrange the everyday steps for washing your hands properly."
+msgstr "সঠিকভাৱে হাত ধোৱাৰ দৈনন্দিন পদক্ষেপসমূহ সজাওক।"
+
+msgid "Arrange the steps in natural order before heading out for your walk."
+msgstr "খোজ কাঢ়িবলৈ ওলাই যোৱাৰ আগৰ পদক্ষেপসমূহ স্বাভাৱিক ক্ৰমত সজাওক।"
+
+msgid "Arrange the steps to prepare a warm cup of morning tea."
+msgstr "পুৱাৰ এগিলাচ গৰম চাহ তৈয়াৰ কৰাৰ পদক্ষেপসমূহ সজাওক।"
+
+msgid "Arranging Fresh Flowers"
+msgstr "সতেজ ফুল সজোৱা"
+
+msgid "Artifacts"
+msgstr "শিল্পকলাৰ সামগ্ৰী"
+
+msgid "Artisan Clay"
+msgstr "শিল্পকলাৰ মাটি"
+
+msgid "Ash Broom"
+msgstr "ছাইৰ বাঢ়নী"
+
+msgid "Ash Bucket"
+msgstr "ছাইৰ বাল্টি"
+
+msgid "Ash Shovel"
+msgstr "ছাইৰ বেলচা"
+
+msgid "Autumn Apple Orchard"
+msgstr "শৰতৰ আপেল বাগান"
+
+msgid "Autumn Leaves"
+msgstr "শৰতৰ শুকান পাত"
+
+msgid "Available Cognitive Games"
+msgstr "উপলব্ধ জ্ঞানমূলক খেলসমূহ"
+
+msgid "Available Steps"
+msgstr "উপলব্ধ পদক্ষেপসমূহ"
+
+msgid "Available steps to pick"
+msgstr "বাছনিৰ বাবে উপলব্ধ পদক্ষেপ"
+
+msgid "Back to Activities"
+msgstr "কাৰ্যকলাপলৈ উভতি যাওক"
+
+msgid "Back to My Space"
+msgstr "মোৰ পৃষ্ঠালৈ উভতি যাওক"
+
+msgid "Bag of long-grain rice"
+msgstr "দীঘল চাউলৰ বেগ"
+
+msgid "Bakery"
+msgstr "বেকাৰী"
+
+msgid "Baking Bread"
+msgstr "পাউৰুটি তৈয়াৰ কৰা"
+
+msgid "Baking Dish"
+msgstr "বেকিং পাত্ৰ"
+
+msgid "Baking Sheet"
+msgstr "বেকিং শ্বীট"
+
+msgid "Baking Soda"
+msgstr "বেকিং চোডা"
+
+msgid "Baking Tin"
+msgstr "বেকিং টিন"
+
+msgid "Ball Winder"
+msgstr "সূতাৰ লাড়ু বনোৱা যন্ত্ৰ"
+
+msgid "Ballpoint Pen"
+msgstr "বলপেন"
+
+msgid "Bamboo Basket"
+msgstr "বাঁহৰ পাচি"
+
+msgid "Bananas"
+msgstr "কল"
+
+msgid "Bandage"
+msgstr "বেণ্ডেজ"
+
+msgid "Banding Wheel"
+msgstr "মৃৎশিল্পৰ চকা"
+
+msgid "Bar Soap"
+msgstr "গা-ধোৱা চাবোন"
+
+msgid "Baseball Cap"
+msgstr "বেছবল টুপী"
+
+msgid "Basement Key"
+msgstr "তলকোঠাৰ চাবি"
+
+msgid "Basmati Rice"
+msgstr "বাসমতী চাউল"
+
+msgid "Bathroom Scale"
+msgstr "ওজন জোখা যন্ত্ৰ"
+
+msgid "Bay Laurel Leaves"
+msgstr "তেজপাত"
+
+msgid "Beach Towel"
+msgstr "বিচ টাৱেল"
+
+msgid "Beans Canister"
+msgstr "কফি গুটিৰ বৈয়াম"
+
+msgid "Bed Pillow"
+msgstr "গাৰু"
+
+msgid "Bed Sheet"
+msgstr "বিচনাৰ চাদৰ"
+
+msgid "Bed Skirt"
+msgstr "বিচনাৰ তলৰ ঢাকনি"
+
+msgid "Bedside Lamp"
+msgstr "বিচনাৰ কাষৰ লেম্প"
+
+msgid "Bedside Table"
+msgstr "বিচনাৰ কাষৰ মেজ"
+
+msgid "Beeswax"
+msgstr "মৌ-মোম"
+
+msgid "Bell Pepper"
+msgstr "কেপচিকাম"
+
+msgid "Bench Chisel"
+msgstr "কাঠমিস্ত্ৰীৰ বটালী"
+
+msgid "Bench Hook"
+msgstr "বেঞ্চ হুক"
+
+msgid "Bench Plane"
+msgstr "বেঞ্চ ৰেন্দা"
+
+msgid "Bench Scraper"
+msgstr "আটা কটা ফলি"
+
+msgid "Bench Vise"
+msgstr "বেঞ্চ ভাইচ"
+
+msgid "Bicycle"
+msgstr "চাইকেল"
+
+msgid "Bicycle Bell"
+msgstr "চাইকেলৰ ঘণ্টা"
+
+msgid "Bicycle Helmet"
+msgstr "চাইকেলৰ হেলমেট"
+
+msgid "Bicycle Pump"
+msgstr "চাইকেলৰ পাম্পাৰ"
+
+msgid "Bifocal Lenses"
+msgstr "বাইফ’কেল লেন্স"
+
+msgid "Binoculars"
+msgstr "দূৰবীণ"
+
+msgid "Birdcage"
+msgstr "চৰাইৰ সঁজা"
+
+msgid "Biscuit Tin"
+msgstr "বিস্কুটৰ বাকচ"
+
+msgid "Black Album Page"
+msgstr "ক’লা এলবামৰ পৃষ্ঠা"
+
+msgid "Black Pepper"
+msgstr "জালুক"
+
+msgid "Blank Notebook"
+msgstr "খালী বহী"
+
+msgid "Blanket"
+msgstr "কম্বল"
+
+msgid "Blender"
+msgstr "মিক্সাৰ"
+
+msgid "Block Plane"
+msgstr "ব্লক ৰেন্দা"
+
+msgid "Blocking Board"
+msgstr "ছুৱেটাৰ জোখা বৰ্ড"
+
+msgid "Blotting Paper"
+msgstr "ব্লটিং পেপাৰ"
+
+msgid "Blue Circle"
+msgstr "নীলা বৃত্ত"
+
+msgid "Blue Lotus"
+msgstr "নীলপদ্ম"
+
+msgid "Bobbin"
+msgstr "ববিন"
+
+msgid "Bodkin"
+msgstr "বডকিন"
+
+msgid "Boil Fresh Water"
+msgstr "পানী উতলাওক"
+
+msgid "Boiled Egg"
+msgstr "উতলা কণী"
+
+msgid "Bolster Cushion"
+msgstr "দীঘল গাৰু"
+
+msgid "Book Display Stand"
+msgstr "কিতাপ ৰখা ষ্টেণ্ড"
+
+msgid "Book Dust Jacket"
+msgstr "কিতাপৰ ধূলিৰোধী মলাট"
+
+msgid "Book Light"
+msgstr "কিতাপ পঢ়া লাইট"
+
+msgid "Book Weight"
+msgstr "কিতাপৰ ওজন কাঠি"
+
+msgid "Bookbinder Glue"
+msgstr "কিতাপ বন্ধা আঠা"
+
+msgid "Bookmark"
+msgstr "বুকমাৰ্ক"
+
+msgid "Bookmark Ribbon"
+msgstr "বুকমাৰ্ক ফিটা"
+
+msgid "Bookshelf"
+msgstr "কিতাপৰ আলমাৰি"
+
+msgid "Bottle of fresh milk"
+msgstr "সতেজ গাখীৰৰ বটল"
+
+msgid "Bottom Petal Highlighted"
+msgstr "তলৰ পাহি চিহ্নিত"
+
+msgid "Bound Ribbon Page Marker"
+msgstr "ফিটাৰ বুকমাৰ্ক"
+
+msgid "Brass Andiron"
+msgstr "পিতলৰ জুইৰ কাঠ ৰখা ষ্টেণ্ড"
+
+msgid "Brass Bookends"
+msgstr "পিতলৰ বুকএণ্ড"
+
+msgid "Brass Candlestick"
+msgstr "পিতলৰ মমবাতিৰ ষ্টেণ্ড"
+
+msgid "Brass Fire Screen"
+msgstr "পিতলৰ অগ্নি আৱৰণ"
+
+msgid "Brass Hand Bell"
+msgstr "পিতলৰ হাত-টিলিঙা"
+
+msgid "Brass Handbell"
+msgstr "পিতলৰ টিলিঙা"
+
+msgid "Brass Hearth Fender"
+msgstr "জুহালৰ পিতলৰ বেৰা"
+
+msgid "Brass Oil Lamp"
+msgstr "পিতলৰ চাকি"
+
+msgid "Brass Shoe Horn"
+msgstr "পিতলৰ জোতা পিন্ধা সঁজুলি"
+
+msgid "Brass Teapot"
+msgstr "পিতলৰ চাহদানি"
+
+msgid "Bread"
+msgstr "পাউৰুটি"
+
+msgid "Bread Knife"
+msgstr "পাউৰুটি কটা কটাৰী"
+
+msgid "Bread Toaster"
+msgstr "পাউৰুটি সেকা টোষ্টাৰ"
+
+msgid "Breadbox"
+msgstr "পাউৰুটিৰ বাকচ"
+
+msgid "Breadcrumb"
+msgstr "ব্ৰেডক্ৰাম্ব"
+
+msgid "Briefcase"
+msgstr "ব্ৰিফকেচ"
+
+msgid "Bright Red"
+msgstr "উজ্জ্বল ৰঙা"
+
+msgid "Bright Sunflower"
+msgstr "উজ্জ্বল বেলিফুল"
+
+msgid "Bright fragrant blossoms"
+msgstr "উজ্জ্বল সুগন্ধি ফুল"
+
+msgid "Bronze Amber"
+msgstr "ব্ৰঞ্জ এম্বাৰ"
+
+msgid "Brown Pinecone"
+msgstr "মটিয়া পাইনকন"
+
+msgid "Brown Sugar"
+msgstr "ৰঙচুৱা চেনি"
+
+msgid "Building a Winter Fire"
+msgstr "শীতৰ জুহাল তৈয়াৰ কৰা"
+
+msgid "Bunch of sweet bananas"
+msgstr "মিঠা পকা কলৰ থোক"
+
+msgid "Bushel Basket"
+msgstr "ফলৰ পাচি"
+
+msgid "Butter Knife"
+msgstr "মাখন লগোৱা ছুৰী"
+
+msgid "Cabinet Rasp"
+msgstr "কাঠৰ ৰেটি"
+
+msgid "Cake Stand"
+msgstr "কেকৰ ষ্টেণ্ড"
+
+msgid "Calipers"
+msgstr "কেলিপাৰ্ছ"
+
+msgid "Calm Teal"
+msgstr "প্ৰশান্ত টিল নীলা"
+
+msgid "Camera"
+msgstr "কেমেৰা"
+
+msgid "Can Opener"
+msgstr "টিন খোলা সঁজুলি"
+
+msgid "Candle Snuffer"
+msgstr "মমবাতি নুমোৱা সঁজুলি"
+
+msgid "Cane Chair"
+msgstr "বেতৰ চকী"
+
+msgid "Cane Sugar"
+msgstr "কুঁহিয়াৰৰ চেনি"
+
+msgid "Cannot complete session before all required rounds are finished."
+msgstr "সকলো প্ৰয়োজনীয় ৰাউণ্ড শেষ হোৱাৰ আগতে অধিবেশন সম্পূৰ্ণ কৰিব নোৱাৰি।"
+
+msgid "Cannot submit rounds to a completed or abandoned session."
+msgstr "সম্পূৰ্ণ বা বাতিল কৰা অধিবেশনত ৰাউণ্ড দাখিল কৰিব নোৱাৰি।"
+
+msgid "Canvas Sun Hat"
+msgstr "কেনভাছৰ ৰ’দ টুপী"
+
+msgid "Carafe Warmer"
+msgstr "কেৰাফ ৱাৰ্মাৰ"
+
+msgid "Card Catalog Drawer"
+msgstr "কাৰ্ড কেটালগ ড্ৰয়াৰ"
+
+msgid "Cardamom"
+msgstr "ইলাচী"
+
+msgid "Caring for Leather Shoes"
+msgstr "চামৰাৰ জোতাৰ যত্ন"
+
+msgid "Carpenter Square"
+msgstr "কাঠমিস্ত্ৰীৰ এল-স্কেল"
+
+msgid "Carpet Sweeper"
+msgstr "দলিচা ঝাৰু"
+
+msgid "Carrot"
+msgstr "গাজৰ"
+
+msgid "Carrots"
+msgstr "গাজৰ"
+
+msgid "Carved Wooden Box"
+msgstr "খোদিত কাঠৰ বাকচ"
+
+msgid "Cast Iron Grate"
+msgstr "কেঁচা লোহাৰ জালি"
+
+msgid "Cedar Brown"
+msgstr "দেৱদাৰু মটিয়া"
+
+msgid "Cedar Kindling"
+msgstr "দেৱদাৰু কাঠৰ খুৰি"
+
+msgid "Ceiling Fan"
+msgstr "ছাদৰ বিচনী"
+
+msgid "Celestial Trio Cycle"
+msgstr "আকাশী ত্ৰয়ী চক্ৰ"
+
+msgid "Cellophane Tape"
+msgstr "চেলোটেপ"
+
+msgid "Central Concept"
+msgstr "মূল ধাৰণা"
+
+msgid "Central Core Relationship"
+msgstr "কেন্দ্ৰীয় মূলৰ সম্পৰ্ক"
+
+msgid "Central concept card"
+msgstr "মূল ধাৰণাৰ কাৰ্ড"
+
+msgid "Ceramic Glaze"
+msgstr "চীনামাটিৰ প্ৰলেপ"
+
+msgid "Ceramic Mug"
+msgstr "চীনামাটিৰ মগ"
+
+msgid "Ceramic Pie Dish"
+msgstr "চীনামাটিৰ পাইৰ বাতি"
+
+msgid "Ceramic Pie Weights"
+msgstr "চীনামাটিৰ পাই ওজন গুটি"
+
+msgid "Ceramic Shave Mug"
+msgstr "চীনামাটিৰ ক্ষৌৰকৰ্মৰ মগ"
+
+msgid "Ceramic Teapot"
+msgstr "চীনামাটিৰ চাহদানি"
+
+msgid "Ceramic Yarn Bowl"
+msgstr "চীনামাটিৰ সূতাৰ বাতি"
+
+msgid "Cereal Bowl"
+msgstr "গাখীৰ-মুড়িৰ বাটি"
+
+msgid "Chamois Leather"
+msgstr "চেমোইছ কোমল চামৰা"
+
+msgid "Chamomile Tea"
+msgstr "কেমোমাইল চাহ"
+
+msgid "Check My Items"
+msgstr "মোৰ সামগ্ৰীসমূহ পৰীক্ষা কৰক"
+
+msgid "Check My Items →"
+msgstr "মোৰ সামগ্ৰীসমূহ পৰীক্ষা কৰক →"
+
+msgid "Check My Sequence"
+msgstr "মোৰ ক্ৰম পৰীক্ষা কৰক"
+
+msgid "Check My Sequence →"
+msgstr "মোৰ ক্ৰম পৰীক্ষা কৰক →"
+
+msgid "Check Your Sequence"
+msgstr "আপোনাৰ ক্ৰম পৰীক্ষা কৰক"
+
+msgid "Check the Weather"
+msgstr "বতৰ পৰীক্ষা কৰক"
+
+msgid "Check the ordered sequence"
+msgstr "সজোৱা ক্ৰমটো পৰীক্ষা কৰক"
+
+msgid "Check the selected items"
+msgstr "বাছনি কৰা সামগ্ৰীসমূহ পৰীক্ষা কৰক"
+
+msgid "Checkered Blanket"
+msgstr "চকচকীয়া দবা কম্বল"
+
+msgid "Checking Sequence..."
+msgstr "ক্ৰম পৰীক্ষা কৰি থকা হৈছে..."
+
+msgid "Checking..."
+msgstr "পৰীক্ষা কৰি থকা হৈছে..."
+
+msgid "Checkout Pocket"
+msgstr "পুথিভঁৰালৰ কাৰ্ড জেপ"
+
+msgid "Chestnut"
+msgstr "চেষ্টনাট বাদাম"
+
+msgid "Chimney Flue"
+msgstr "ধোঁৱা ওলোৱা নলী"
+
+msgid "Choose the Next Step"
+msgstr "পৰৱৰ্তী পদক্ষেপটো বাছক"
+
+msgid "Choose the Tile That Belongs in the Missing Space:"
+msgstr "খালী ঠাইত বহিবলগীয়া টাইলটো বাছক:"
+
+msgid "Choose the matching name and relationship from the options below the picture."
+msgstr "ছবিৰ তলৰ বিকল্পসমূহৰ পৰা মিলা নাম আৰু সম্পৰ্ক বাছক।"
+
+msgid "Chrome Razor Stand"
+msgstr "ক্ৰোম ৰেজৰ ষ্টেণ্ড"
+
+msgid "Cider Press"
+msgstr "আপেল ৰস উলিওৱা মেচিন"
+
+msgid "Cinnamon"
+msgstr "ডালচেনি"
+
+msgid "Cinnamon Stick"
+msgstr "ডালচেনিৰ কাঠ"
+
+msgid "Cinnamon is the classic warm spice paired with apples in traditional homemade pies."
+msgstr "ডালচেনিয়ে আপেলৰ সৈতে মিলি এক উষ্ম আৰু সুস্বাদু সোৱাদ প্ৰদান কৰে।"
+
+msgid "Circle & Square Rhythm"
+msgstr "বৃত্ত আৰু বৰ্গক্ষেত্ৰৰ ছন্দ"
+
+msgid "Circle with Crossbar"
+msgstr "আঁকযুক্ত বৃত্ত"
+
+msgid "Circle with Inner Dot"
+msgstr "ভিতৰত বিন্দু থকা বৃত্ত"
+
+msgid "Circle with Inner Star"
+msgstr "ভিতৰত তৰা থকা বৃত্ত"
+
+msgid "Citrus Juicer"
+msgstr "নেমু চেপা সঁজুলি"
+
+msgid "Classic Navy"
+msgstr "প্ৰাচীন নেভী নীলা"
+
+msgid "Claw Hammer"
+msgstr "হাতুৰী"
+
+msgid "Clay Cutter Wire"
+msgstr "মাটি কটা তাঁৰ"
+
+msgid "Clay Modeling Tool"
+msgstr "মাটি সজা সঁজুলি"
+
+msgid "Clay Slip Cup"
+msgstr "মাটিৰ জুলীয়া কাপ"
+
+msgid "Clay Tea Cup"
+msgstr "মাটিৰ চাহৰ কাপ"
+
+msgid "Clay is the natural, malleable earthen material centered and shaped by hand on the potter’s wheel."
+msgstr "কুমাৰৰ মাটিৰে চকীত ঘূৰাই বিভিন্ন সুন্দৰ পাত্ৰ গঢ়া হয়।"
+
+msgid "Clear All"
+msgstr "সকলো মচক"
+
+msgid "Clear entire sequence"
+msgstr "সমগ্ৰ ক্ৰম মচক"
+
+msgid "Click \"Check My Items\" to review your picks. You will complete {{ count }} short rounds."
+msgstr "আপোনাৰ বাচনি পৰীক্ষা কৰিবলৈ \"মোৰ সামগ্ৰীসমূহ পৰীক্ষা কৰক\" টিপক। আপুনি {{ count }} টা চুটি ৰাউণ্ড সম্পূৰ্ণ কৰিব।"
+
+msgid "Click \"I Am Ready"
+msgstr "\"মই সাজু\" টিপক"
+
+msgid "Click \"I Am Ready\""
+msgstr "\"মই সাজু\" টিপক"
+
+msgid "Click \\\"Check My Items\\\" to review your picks. You will complete 3 short rounds."
+msgstr "আপোনাৰ বাচনি পৰীক্ষা কৰিবলৈ \"মোৰ সামগ্ৰীসমূহ পৰীক্ষা কৰক\" টিপক। আপুনি ৩ টা চুটি ৰাউণ্ড সম্পূৰ্ণ কৰিব।"
+
+msgid "Click or tap each item you remember. Tap again to uncheck if needed."
+msgstr "আপোনাৰ মনত থকা প্ৰতিটো সামগ্ৰীত টিপক। প্ৰয়োজন হ’লে আঁতৰাবলৈ পুনৰ টিপক।"
+
+msgid "Clip-on Book Light"
+msgstr "কিতাপৰ ক্লিপ লাইট"
+
+msgid "Clockwise Compass Turning"
+msgstr "ঘড়ীৰ কাঁটাৰ দিশত কম্পাছৰ ঘূৰণ"
+
+msgid "Cloth Napkins"
+msgstr "কাপোৰৰ নেপকিন"
+
+msgid "Clothespin"
+msgstr "কাপোৰ মৰা ক্লিপ"
+
+msgid "Clover Leaf"
+msgstr "তিনিপতীয়া পাত"
+
+msgid "Cloves"
+msgstr "লৱংগ"
+
+msgid "Coal Scuttle"
+msgstr "কয়লাৰ বাল্টি"
+
+msgid "Coat Hanger"
+msgstr "কোট ওলমোৱা হেঙাৰ"
+
+msgid "Coat Rack"
+msgstr "কোটৰ ষ্টেণ্ড"
+
+msgid "Cobalt Blue"
+msgstr "কোবাল্ট নীলা"
+
+msgid "Cocoa Powder"
+msgstr "কোকো পাউদাৰ"
+
+msgid "Coffee Beans"
+msgstr "কফিৰ গুটি"
+
+msgid "Coffee Cup"
+msgstr "কফিৰ কাপ"
+
+msgid "Coffee Dripper"
+msgstr "কফি ড্ৰিপাৰ"
+
+msgid "Coffee Filter"
+msgstr "কফি ফিল্টাৰ"
+
+msgid "Coffee Grinder"
+msgstr "কফি পিহা যন্ত্ৰ"
+
+msgid "Coffee Mug"
+msgstr "কফিৰ মগ"
+
+msgid "Coffee Scoop"
+msgstr "কফি চামুচ"
+
+msgid "Cognitive Activities"
+msgstr "জ্ঞানমূলক কাৰ্যকলাপসমূহ"
+
+msgid "Colander"
+msgstr "পানী জৰা চালনী"
+
+msgid "Color Inversion Analogy"
+msgstr "ৰং ওলোটা কৰাৰ সাদৃশ্য"
+
+msgid "Column 1 shows a base shape; Column 2 adds a horizontal crossbar. Which tile completes the triangle row?"
+msgstr "স্তম্ভ ১ ত মূল আকৃতি আৰু স্তম্ভ ২ ত এটা পথালি আঁক যোগ কৰা হৈছে। ত্ৰিভুজৰ শাৰীটো কোনে সম্পূৰ্ণ কৰিব?"
+
+msgid "Coming Soon"
+msgstr "শীঘ্ৰেই আহি আছে"
+
+msgid "Community & Culture"
+msgstr "পৰিয়াল আৰু আনন্দ"
+
+msgid "Compost Bin"
+msgstr "পচন সাৰৰ বাকচ"
+
+msgid "Confirm & Enjoy Feedback"
+msgstr "নিশ্চিত কৰক আৰু প্ৰতিক্ৰিয়া উপভোগ কৰক"
+
+msgid "Confirm & Receive Gentle Feedback"
+msgstr "নিশ্চিত কৰক আৰু শান্তিময় প্ৰতিক্ৰিয়া লাভ কৰক"
+
+msgid "Confirm My Answer"
+msgstr "মোৰ উত্তৰ নিশ্চিত কৰক"
+
+msgid "Confirm My Answer →"
+msgstr "মোৰ উত্তৰ নিশ্চিত কৰক →"
+
+msgid "Confirm My Selection"
+msgstr "মোৰ নিৰ্বাচন নিশ্চিত কৰক"
+
+msgid "Confirm My Selection →"
+msgstr "মোৰ নিৰ্বাচন নিশ্চিত কৰক →"
+
+msgid "Confirm my selected tile"
+msgstr "মোৰ নিৰ্বাচিত টাইল নিশ্চিত কৰক"
+
+msgid "Confirm selected item"
+msgstr "নিৰ্বাচিত সামগ্ৰী নিশ্চিত কৰক"
+
+msgid "Confirm selected person"
+msgstr "নিৰ্বাচিত ব্যক্তি নিশ্চিত কৰক"
+
+msgid "Confirm selected word"
+msgstr "নিৰ্বাচিত শব্দ নিশ্চিত কৰক"
+
+msgid "Connection:"
+msgstr "সংযোগ:"
+
+msgid "Connections Made"
+msgstr "সংযোগ সম্পন্ন হ’ল"
+
+msgid "Consider the central concept below, then select the word that connects most naturally."
+msgstr "তলৰ মূল ধাৰণাটো বিবেচনা কৰক, তাৰ পিছত আটাইতকৈ স্বাভাৱিক সংযোগ থকা শব্দটো বাছক।"
+
+msgid "Continue"
+msgstr "আগবাঢ়ক"
+
+msgid "Continue to Next Round"
+msgstr "পৰৱৰ্তী ৰাউণ্ডলৈ যাওক"
+
+msgid "Continue to Next Round →"
+msgstr "পৰৱৰ্তী ৰাউণ্ডলৈ যাওক →"
+
+msgid "Continue to next round"
+msgstr "পৰৱৰ্তী ৰাউণ্ডলৈ যাওক"
+
+msgid "Cookbook"
+msgstr "ৰন্ধন প্ৰণালীৰ কিতাপ"
+
+msgid "Cooler Flask"
+msgstr "ঠাণ্ডা পানীৰ ফ্লাস্ক"
+
+msgid "Cooling Rack"
+msgstr "কুলিং ৰেক"
+
+msgid "Coping Saw"
+msgstr "নকশা কটা সৰু কৰত"
+
+msgid "Copper Wire"
+msgstr "তামৰ তাঁৰ"
+
+msgid "Corner Punch"
+msgstr "চুক কটা সঁজুলি"
+
+msgid "Cornstarch"
+msgstr "কৰ্ণফ্লাৱাৰ"
+
+msgid "Cotton Apron"
+msgstr "কপাহী এপ্ৰন"
+
+msgid "Cotton Buffing Rag"
+msgstr "কপাহী মচা কাপোৰ"
+
+msgid "Cotton Yarn"
+msgstr "কপাহী সূতা"
+
+msgid "Cotton Yarn Ball"
+msgstr "কপাহী সূতাৰ লাড়ু"
+
+msgid "Counting Golden Stars"
+msgstr "সোণালী তৰা গণনা"
+
+msgid "Crafts & Trades"
+msgstr "হস্তশিল্প আৰু কাৰুকাৰ্য"
+
+msgid "Cream Pitcher"
+msgstr "ক্ৰীমৰ জগ"
+
+msgid "Crescent Opening Down"
+msgstr "তললৈ মেল খোৱা অৰ্ধচন্দ্ৰ"
+
+msgid "Crescent Opening Left"
+msgstr "বাওঁফালে মেল খোৱা অৰ্ধচন্দ্ৰ"
+
+msgid "Crescent Opening Right"
+msgstr "সোঁফালে মেল খোৱা অৰ্ধচন্দ্ৰ"
+
+msgid "Crescent Opening Up"
+msgstr "ওপৰলৈ মেল খোৱা অৰ্ধচন্দ্ৰ"
+
+msgid "Crimson Red"
+msgstr "গাঢ় ৰঙা"
+
+msgid "Crisp Red Apple"
+msgstr "মচমচীয়া ৰঙা আপেল"
+
+msgid "Crisp and sweet"
+msgstr "মচমচীয়া আৰু মিঠা"
+
+msgid "Crochet Hook"
+msgstr "ক্ৰুচ শলা"
+
+msgid "Crunchy orange carrots"
+msgstr "মচমচীয়া কমলা গাজৰ"
+
+msgid "Curtain"
+msgstr "পৰ্দা"
+
+msgid "Cushion"
+msgstr "গাৰু-তুলি"
+
+msgid "Cutlery Roll"
+msgstr "বাচন ৰখা কাপোৰৰ থোপা"
+
+msgid "Cutting Board"
+msgstr "শাক-পাচলি কটা ফলি"
+
+msgid "Daily Life Journey"
+msgstr "দৈনন্দিন জীৱনৰ যাত্ৰা"
+
+msgid "Daily Newspaper"
+msgstr "দৈনিক বাতৰিকাকত"
+
+msgid "Dairy"
+msgstr "দুগ্ধজাত সামগ্ৰী"
+
+msgid "Darning Egg"
+msgstr "মোজা চিলাবৰ কাঠৰ কণী"
+
+msgid "Deep Indigo"
+msgstr "গাঢ় ইণ্ডিগো নীলা"
+
+msgid "Deep Violet"
+msgstr "গাঢ় বেঙুনীয়া"
+
+msgid "Desk Blotter"
+msgstr "মেজৰ ব্লটাৰ"
+
+msgid "Desk Lamp"
+msgstr "পঢ়া মেজৰ লেম্প"
+
+msgid "Diamond & Cross Border"
+msgstr "হীৰা আৰু ক্ৰছৰ সীমা"
+
+msgid "Diamond with Inner Star"
+msgstr "ভিতৰত তৰা থকা হীৰা"
+
+msgid "Digital Coffee Scale"
+msgstr "ডিজিটেল কফিৰ ওজন যন্ত্ৰ"
+
+msgid "Dinner Fork"
+msgstr "কাঁটা চামুচ"
+
+msgid "Dinner Plate"
+msgstr "ভাত খোৱা কাঁহী"
+
+msgid "Dispense soap and rub hands together to make a warm lather for 20 seconds."
+msgstr "চাবোন লৈ হাত দুখন একেলগে ২০ ছেকেণ্ড ঘঁহি ফেন তোলক।"
+
+msgid "Door Mat"
+msgstr "দুৱাৰৰ দলিচা"
+
+msgid "Doorbell"
+msgstr "কলিং বেল"
+
+msgid "Dough Docker"
+msgstr "আটা ফুটা কৰা সঁজুলি"
+
+msgid "Drafting Compass"
+msgstr "কম্পাছ"
+
+msgid "Drawer Knob"
+msgstr "ড্ৰয়াৰৰ হেণ্ডেল"
+
+msgid "Drawknife"
+msgstr "দুমূৰীয়া ছুৰী"
+
+msgid "Dried Birch Bark Strips"
+msgstr "শুকান গছৰ ছালৰ ফলি"
+
+msgid "Dry Kindling"
+msgstr "শুকান খুৰি-খৰি"
+
+msgid "Dry Twigs"
+msgstr "শুকান ডাল-পাত"
+
+msgid "Dry with a Clean Towel"
+msgstr "পৰিষ্কাৰ গামোচাৰে মচক"
+
+msgid "Drying Towel"
+msgstr "গা-মচা গামোচা"
+
+msgid "Dubbin Wax"
+msgstr "চামৰাৰ মম"
+
+msgid "Due Date Stamp"
+msgstr "তাৰিখ মোহৰ"
+
+msgid "Duster"
+msgstr "ধূলি ঝাৰু"
+
+msgid "Dustpan"
+msgstr "জাবৰ তোলা কুলা"
+
+msgid "Each ring grows progressively wider in diameter. The next size in the expansion is the Extra Large Teal Ring."
+msgstr "প্ৰতিটো আঙুঠিৰ ব্যাস ক্ৰমান্বয়ে বাঢ়ি গৈছে। পৰৱৰ্তী আকাৰটো হ’ল অতি ডাঙৰ টিল আঙুঠি।"
+
+msgid "Each row consists of a left-facing motif mirrored into a right-facing motif of the same color. The answer is Right Terracotta Feather."
+msgstr "প্ৰতিটো শাৰীতে একে ৰঙৰ এটা বাওঁমুৱা নকশা সোঁমুৱা নকশালৈ প্ৰতিফলিত হয়। উত্তৰটো হ’ল সোঁমুৱা টেৰাকোটা পাখি।"
+
+msgid "Each tile gains one golden star. Which tile continues the counting series?"
+msgstr "প্ৰতিটো টাইলত এটাকৈ সোণালী তৰা বাঢ়িছে। কোনটো টাইলে এই গণনা শৃংখলা অব্যাহত ৰাখে?"
+
+msgid "Earmuffs"
+msgstr "কাণ-ঢকা"
+
+msgid "Egg Timer"
+msgstr "কণী সিজোৱা টাইমাৰ"
+
+msgid "Egg Whisk"
+msgstr "কণী ফেটা সঁজুলি"
+
+msgid "Elastic Band"
+msgstr "ৰবৰ বেণ্ড"
+
+msgid "Ember Rake"
+msgstr "অঙঠা ভঙা সঁজুলি"
+
+msgid "Embossed Labeling Tape"
+msgstr "খোদিত লেবেল টেপ"
+
+msgid "Embossing Seal"
+msgstr "ছিল মোহৰ"
+
+msgid "Embroidery Hoop"
+msgstr "ফুল তোলা ফ্ৰেম"
+
+msgid "Embroidery Scissors"
+msgstr "ফুল তোলা কেঁচী"
+
+msgid "Emerald Green"
+msgstr "পান্না সেউজীয়া"
+
+msgid "Enamel Camp Plates"
+msgstr "এনামেলৰ কাঁহী"
+
+msgid "Enjoy the Connection"
+msgstr "সংযোগ উপভোগ কৰক"
+
+msgid "Envelope"
+msgstr "খাম"
+
+msgid "Eraser"
+msgstr "ৰবৰ (মচক)"
+
+msgid "Espresso Tamper"
+msgstr "এছপ্ৰেছো টেম্পাৰ"
+
+msgid "Evening Bedtime"
+msgstr "ৰাতিৰ শয়ন"
+
+msgid "Ex Libris Bookplate"
+msgstr "কিতাপৰ নাম ফলক"
+
+msgid "Examine the color exchange across the top row. What happens when the diamond colors exchange?"
+msgstr "ওপৰৰ শাৰীৰ ৰঙৰ সালসলনি পৰীক্ষা কৰক। হীৰাৰ ৰং সলনি হ’লে কি হ’ব?"
+
+msgid "Examine the rows and columns. Which shape and color combination completes the grid?"
+msgstr "শাৰী আৰু স্তম্ভসমূহ নিৰীক্ষণ কৰক। কোনটো আকৃতি আৰু ৰঙৰ সংমিশ্ৰণে তালিকাখন সম্পূৰ্ণ কৰে?"
+
+msgid "Exit to Activities"
+msgstr "কাৰ্যকলাপলৈ প্ৰস্থান কৰক"
+
+msgid "Exit to Games"
+msgstr "খেললৈ প্ৰস্থান কৰক"
+
+msgid "Expanding Teal Rings"
+msgstr "প্ৰসাৰিত টিল আঙুঠি"
+
+msgid "Extra Large Teal Ring"
+msgstr "অতি ডাঙৰ টিল আঙুঠি"
+
+msgid "Eye Drops"
+msgstr "চকুৰ ড্ৰপ"
+
+msgid "Eyeglass Case"
+msgstr "চশমাৰ বাকচ"
+
+msgid "Eyeglass Neck Cord"
+msgstr "চশমাৰ ডিঙিৰ ৰছী"
+
+msgid "Fabric Glue"
+msgstr "কাপোৰৰ আঠা"
+
+msgid "Fabric Scissors"
+msgstr "কাপোৰ কটা কেঁচী"
+
+msgid "Face Recognition & Relational Memory"
+msgstr "মুখ চিনাক্তকৰণ আৰু সম্পৰ্কীয় স্মৃতি"
+
+msgid "Familiar Faces"
+msgstr "চিনাকি মুখ"
+
+msgid "Familiar Faces Recognized"
+msgstr "চিনাকি মুখ চিনাক্ত কৰা হ’ল"
+
+msgid "Familiar Faces requires at least 4 active people with photos. Currently %(count)s are ready. Please ask your caregiver to add photos."
+msgstr "চিনাকি মুখ খেলৰ বাবে ফটোসহ কমেও ৪ জন সক্ৰিয় ব্যক্তিৰ প্ৰয়োজন। বৰ্তমান %(count)s জন সাজু আছে। অনুগ্ৰহ কৰি সেৱাকাৰীক ফটো যোগ কৰিবলৈ কওক।"
+
+msgid "Familiar Faces requires at least 4 photos of family members or friends. \" \"Currently %(count)s are ready. Please ask your caregiver to add photos in the Caregiver Portal."
+msgstr "চিনাকি মুখ খেলৰ বাবে পৰিয়ালৰ সদস্য বা বন্ধুৰ কমেও ৪ খন ফটোৰ প্ৰয়োজন। বৰ্তমান %(count)s খন সাজু আছে। অনুগ্ৰহ কৰি সেৱাকাৰী প’ৰ্টেলত ফটো যোগ কৰিবলৈ কওক।"
+
+msgid "Familiar Faces requires at least 4 photos of family members or friends. Currently %(count)s are ready. Please ask your caregiver to add photos in the Caregiver Portal."
+msgstr "চিনাকি মুখ খেলৰ বাবে পৰিয়ালৰ সদস্য বা বন্ধুৰ কমেও ৪ খন ফটোৰ প্ৰয়োজন। বৰ্তমান %(count)s খন সাজু আছে। অনুগ্ৰহ কৰি সেৱাকাৰী প’ৰ্টেলত ফটো যোগ কৰিবলৈ কওক।"
+
+msgid "Family Photo Album"
+msgstr "পৰিয়ালৰ ফটো এলবাম"
+
+msgid "Farm Potatoes"
+msgstr "পথাৰৰ আলু"
+
+msgid "Feather Duster"
+msgstr "পাখিৰ ঝাৰু"
+
+msgid "Feather Duvet"
+msgstr "পাখিৰ উষ্ম লেপ"
+
+msgid "Feather Pillow"
+msgstr "পাখিৰ কোমল গাৰু"
+
+msgid "Felt Hatbox"
+msgstr "টুপীৰ বাকচ"
+
+msgid "Felt Pad"
+msgstr "ফেল্ট পেড"
+
+msgid "Fill the kettle and bring clean water to a gentle boil."
+msgstr "কেটলীত পৰিষ্কাৰ পানী ভৰাই উতলাবলৈ দিয়ক।"
+
+msgid "Film Negative Sleeve"
+msgstr "ফিল্ম নেগেটিভ খাপ"
+
+msgid "Filter Holder"
+msgstr "ফিল্টাৰ ধাৰক"
+
+msgid "Finalizing Results..."
+msgstr "ফলাফল চূড়ান্ত কৰা হৈছে..."
+
+msgid "Finalizing..."
+msgstr "চূড়ান্ত কৰা হৈছে..."
+
+msgid "Find the matching item in the grid below."
+msgstr "তলৰ তালিকাখনত মিল থকা সামগ্ৰীটো বিচাৰি উলিওৱক।"
+
+msgid "Find the target item:"
+msgstr "লক্ষ্য সামগ্ৰীটো বিচাৰি উলিওৱক:"
+
+msgid "Fire Poker"
+msgstr "জুই খুচৰা লোহা"
+
+msgid "Fireplace Bellows"
+msgstr "হাঁতুৰি-ধমনী"
+
+msgid "Fireplace Poker"
+msgstr "জুহালৰ লোহাৰ শিকলি"
+
+msgid "Fireplace Screen"
+msgstr "জুহালৰ জালি"
+
+msgid "Fireplace bellows pump a concentrated blast of fresh air into the coals to kindle and feed the flames."
+msgstr "ধমনীয়ে অক্সিজেনযুক্ত বতাহ দি জুহালৰ জুই উজ্জ্বলভাৱে জ্বলাই তোলে।"
+
+msgid "Firescreen"
+msgstr "জুহালৰ জালি"
+
+msgid "Firewood Basket"
+msgstr "খৰিৰ পাচি"
+
+msgid "Firewood Log"
+msgstr "জ্বলা খৰি"
+
+msgid "Firing Kiln"
+msgstr "মাটি পোৰা ভাটি"
+
+msgid "Fishing Line"
+msgstr "মাছ মৰা বৰশীৰ সূতা"
+
+msgid "Flashlight"
+msgstr "টৰ্চলাইট"
+
+msgid "Flat Chisel"
+msgstr "সমান বটালী"
+
+msgid "Fleece Blanket"
+msgstr "উষ্ম ফ্লীচ কম্বল"
+
+msgid "Flint Striker"
+msgstr "চকচকীয়া শিলৰ জুইধৰা সঁজুলি"
+
+msgid "Floral Foam"
+msgstr "ফুল সজোৱা ফ’ম"
+
+msgid "Floral Foam Block"
+msgstr "ফুল সজোৱা ফ’মৰ টুকুৰা"
+
+msgid "Floral Shears"
+msgstr "ফুল কটা কেঁচী"
+
+msgid "Floral Stem Wire"
+msgstr "ফুলৰ ঠাৰিৰ তাঁৰ"
+
+msgid "Floral Tape"
+msgstr "ফুলৰ টেপ"
+
+msgid "Flour Dough"
+msgstr "ময়দাৰ লেই"
+
+msgid "Flour Sifter"
+msgstr "ময়দা চালনী"
+
+msgid "Flower Basket"
+msgstr "ফুলৰ পাচি"
+
+msgid "Flower Pot"
+msgstr "ফুলৰ টব"
+
+msgid "Flower Shears"
+msgstr "ফুল কটা কেঁচী"
+
+msgid "Flower Vase"
+msgstr "ফুলদানি"
+
+msgid "Flowerbed"
+msgstr "ফুলৰ দলি"
+
+msgid "Flowers"
+msgstr "ফুল"
+
+msgid "Focus Finder"
+msgstr "মনোযোগ সন্ধান"
+
+msgid "Focus Finder - Visual Selective Attention"
+msgstr "মনোযোগ সন্ধান - দৃশ্যমান বাছনিমূলক মনোযোগ"
+
+msgid "Folding Ruler"
+msgstr "ভাঁজ কৰা স্কেল"
+
+msgid "Foliage & Botanicals"
+msgstr "গছৰ পাত আৰু উদ্ভিদ"
+
+msgid "Food & Kitchen"
+msgstr "খাদ্য আৰু পাকঘৰ"
+
+msgid "Footstool"
+msgstr "ভৰি থোৱা টুল"
+
+msgid "Forest Acorn"
+msgstr "অৰণ্যৰ ওক গুটি"
+
+msgid "Forest Green"
+msgstr "গাঢ় সেউজীয়া"
+
+msgid "Found Items"
+msgstr "পোৱা সামগ্ৰীসমূহ"
+
+msgid "Fountain Pen"
+msgstr "ফাউণ্টেন পেন"
+
+msgid "Four-Leaf Clover"
+msgstr "চাৰিপতীয়া পাত"
+
+msgid "Four-Petal Clockwise Shift"
+msgstr "চাৰি-পাহীৰ ঘড়ীৰ কাঁটাৰ দিশত স্থানান্তৰ"
+
+msgid "Frame & Core Synthesis"
+msgstr "ফ্ৰেম আৰু কেন্দ্ৰৰ সংশ্লেষণ"
+
+msgid "Framed Photo"
+msgstr "ফ্ৰেমযুক্ত ফটো"
+
+msgid "French Press"
+msgstr "ফ্ৰেন্স প্ৰেছ"
+
+msgid "French Tarragon"
+msgstr "ফ্ৰেন্স টেৰাগন"
+
+msgid "Fresh Apples"
+msgstr "সতেজ আপেল"
+
+msgid "Fresh Marigolds"
+msgstr "সতেজ গেন্দা ফুল"
+
+msgid "Fresh Milk"
+msgstr "সতেজ গাখীৰ"
+
+msgid "Fresh Morning Coffee"
+msgstr "পুৱাৰ সতেজ কফি"
+
+msgid "Fresh Parsley"
+msgstr "সতেজ পাৰ্চলি শাক"
+
+msgid "Fresh Rosemary"
+msgstr "ৰোজমেৰী"
+
+msgid "Fresh russet potatoes"
+msgstr "সতেজ ৰঙচুৱা আলু"
+
+msgid "Fresh tender greens"
+msgstr "সতেজ কোমল শাক"
+
+msgid "Freshly baked loaf"
+msgstr "সতেজভাৱে বনোৱা পাউৰুটি"
+
+msgid "Fruit"
+msgstr "ফল"
+
+msgid "Fruit Picker Pole"
+msgstr "ফল চিঙা আঁকুহী"
+
+msgid "Frying Pan"
+msgstr "কেৰাহী"
+
+msgid "Full Moon Circle"
+msgstr "পূৰ্ণিমাৰ জোন বৃত্ত"
+
+msgid "Garden"
+msgstr "বাগান"
+
+msgid "Garden & Nature"
+msgstr "বাগান আৰু প্ৰকৃতি"
+
+msgid "Garden Butterfly"
+msgstr "বাগানৰ পখিলা"
+
+msgid "Garden Carrots"
+msgstr "বাৰীৰ গাজৰ"
+
+msgid "Garden Gloves"
+msgstr "বাগানৰ হাতমোজা"
+
+msgid "Garden Hose"
+msgstr "বাগানৰ পানীৰ পাইপ"
+
+msgid "Garden Kneeler"
+msgstr "বাগানত আঁঠু লোৱা কুশ্বন"
+
+msgid "Garden Lantern"
+msgstr "বাগানৰ লণ্ঠন"
+
+msgid "Garden Rake"
+msgstr "বাগানৰ জাঁত"
+
+msgid "Garden Sage"
+msgstr "বাগানৰ চেজ পাত"
+
+msgid "Garden Soil"
+msgstr "বাগানৰ মাটি"
+
+msgid "Garden Spade"
+msgstr "বাগানৰ কোৰ"
+
+msgid "Garden Thyme"
+msgstr "বাগানৰ থাইম বনৌষধি"
+
+msgid "Garden Trowel"
+msgstr "বাগানৰ খন্তি"
+
+msgid "Garden Twine"
+msgstr "বাগানৰ সূতলী"
+
+msgid "Garden Wheelbarrow"
+msgstr "বাগানৰ ঠেলা গাড়ী"
+
+msgid "Gardening Gloves"
+msgstr "বাগানৰ হাতমোজা"
+
+msgid "Garlic Salt"
+msgstr "নহৰু নিমখ"
+
+msgid "Gather your keys and a small bottle of water in your pocket."
+msgstr "জেপত ঘৰৰ চাবি আৰু পানীৰ সৰু বটল এটা লওক।"
+
+msgid "Gelatin"
+msgstr "জিলেটিন"
+
+msgid "Gentle Bluebell"
+msgstr "কোমল ব্লুবেল ফুল"
+
+msgid "Gentle Ladybug"
+msgstr "মৰমিয়াল মোৱাপোক"
+
+msgid "Gently close and lock the front door as you head out."
+msgstr "ওলাই যাওঁতে সন্মুখৰ দুৱাৰখন সন্তপৰ্ণে বন্ধ কৰি তলা মাৰক।"
+
+msgid "Geometric Trio Cycle"
+msgstr "জ্যামিতিক ত্ৰয়ী চক্ৰ"
+
+msgid "Ginger Root"
+msgstr "আদা"
+
+msgid "Glass Cider Jug"
+msgstr "কাঁচৰ ফলৰ ৰসৰ জগ"
+
+msgid "Glass Coffee Pot"
+msgstr "কাঁচৰ কফি পট"
+
+msgid "Glass Jar"
+msgstr "কাঁচৰ বৈয়াম"
+
+msgid "Glass Mister"
+msgstr "কাঁচৰ স্প্ৰেয়াৰ"
+
+msgid "Glass Paperweight"
+msgstr "কাঁচৰ পেপাৰৱেট"
+
+msgid "Glass Tumbler"
+msgstr "কাঁচৰ গিলাচ"
+
+msgid "Glassine Tissue Sheet"
+msgstr "গ্লাচিন টিচু কাগজ"
+
+msgid "Glaze Brush"
+msgstr "মাটিৰ চকচকীয়া প্ৰলেপ ব্ৰাছ"
+
+msgid "Golden Circle"
+msgstr "সোণালী বৃত্ত"
+
+msgid "Golden Diya"
+msgstr "সোণালী চাকি"
+
+msgid "Golden Honey Jar"
+msgstr "সোণালী মৌৰ বৈয়াম"
+
+msgid "Golden Marigold"
+msgstr "সোণালী গেন্দা ফুল"
+
+msgid "Golden Sun"
+msgstr "সোণালী সূৰ্য"
+
+msgid "Golden Yellow"
+msgstr "সোণালী হালধীয়া"
+
+msgid "Good Effort!"
+msgstr "ভাল প্ৰচেষ্টা!"
+
+msgid "Good effort! Taking time to exercise your mind is what matters most."
+msgstr "ভাল প্ৰচেষ্টা! মনক সক্ৰিয় ৰাখিবলৈ সময় দিয়াতোহে আটাইতকৈ ডাঙৰ কথা।"
+
+msgid "Good effort! The %(name)s was resting in the grid. Taking your time to search is what matters most."
+msgstr "ভাল প্ৰচেষ্টা! %(name)s তালিকাখনত আছিল। সময় লৈ বিচাৰি উলিওৱাটোহে আটাইতকৈ গুৰুত্বপূৰ্ণ।"
+
+msgid "Good effort! The closest connection is %(word)s. %(explanation)s"
+msgstr "ভাল প্ৰচেষ্টা! আটাইতকৈ ওচৰৰ সংযোগ হ’ল %(word)s। %(explanation)s"
+
+msgid "Good effort! The harmonious choice is %(name)s. %(explanation)s"
+msgstr "ভাল প্ৰচেষ্টা! সমন্বয়শীল পছন্দটো হ’ল %(name)s। %(explanation)s"
+
+msgid "Good effort! You placed %(score)s out of %(max)s steps in order."
+msgstr "ভাল প্ৰচেষ্টা! আপুনি %(max)s টা পদক্ষেপৰ ভিতৰত %(score)s টা সঠিক ক্ৰমত সজাইছে।"
+
+msgid "Good effort! You remembered %(score)s out of %(max)s items."
+msgstr "ভাল প্ৰচেষ্টা! আপুনি %(max)s টা সামগ্ৰীৰ ভিতৰত %(score)s টা মনত ৰাখিছে।"
+
+msgid "Grading Sieve"
+msgstr "চালনী"
+
+msgid "Gramophone"
+msgstr "গ্ৰামোফোন"
+
+msgid "Granola Bar"
+msgstr "গ্ৰেনোলা বাৰ"
+
+msgid "Grater"
+msgstr "ৰুকনী"
+
+msgid "Gravy Boat"
+msgstr "গ্ৰেভীৰ পাত্ৰ"
+
+msgid "Greaseproof Paper"
+msgstr "তেল প্ৰতিৰোধী কাগজ"
+
+msgid "Great work! You completed most steps in natural order today."
+msgstr "বৰ ভাল কাম! আপুনি আজি সৰহসংখ্যক পদক্ষেপে স্বাভাৱিক ক্ৰমত সম্পূৰ্ণ কৰিলে।"
+
+msgid "Green Oak Leaf"
+msgstr "সেউজীয়া ওক পাত"
+
+msgid "Green Pear"
+msgstr "সেউজীয়া নাচপতি"
+
+msgid "Green Spinach"
+msgstr "সেউজীয়া পালেং শাক"
+
+msgid "Green Stem Tape"
+msgstr "সেউজীয়া ঠাৰিৰ টেপ"
+
+msgid "Ground Allspice"
+msgstr "অলস্পাইচ গুড়ি"
+
+msgid "Ground Cinnamon"
+msgstr "ডালচেনি গুড়ি"
+
+msgid "Ground Cloves"
+msgstr "লৱংগ গুড়ি"
+
+msgid "Ground Nutmeg"
+msgstr "জয়ফল গুড়ি"
+
+msgid "Guidance note"
+msgstr "মাৰ্গদৰ্শন টোকা"
+
+msgid "Hairbrush"
+msgstr "চুলি ব্ৰাছ"
+
+msgid "Hall Umbrella Stand"
+msgstr "বাৰাণ্ডাৰ ছাতিৰ ষ্টেণ্ড"
+
+msgid "Hammer"
+msgstr "হাতুৰী"
+
+msgid "Hand Fan"
+msgstr "হাত বিচনী"
+
+msgid "Hand Plane"
+msgstr "ৰেন্দা"
+
+msgid "Hand Saw"
+msgstr "হাত কৰত"
+
+msgid "Hand Towel"
+msgstr "হাত মচা গামোচা"
+
+msgid "Handbag"
+msgstr "হাতবেগ"
+
+msgid "Handheld Magnifier"
+msgstr "হাতত লোৱা বিবৰ্ধক কাঁচ"
+
+msgid "Handsaw"
+msgstr "হাত কৰত"
+
+msgid "Hanging Produce Scale"
+msgstr "ওলমোৱা ওজন পাল্লা"
+
+msgid "Hard Eyeglass Case"
+msgstr "ডাঠ চশমাৰ বাকচ"
+
+msgid "Hardcover Book"
+msgstr "ডাঠ মলাটৰ কিতাপ"
+
+msgid "Harmonica"
+msgstr "হাৰ্মোনিকা"
+
+msgid "Harmonious Match!"
+msgstr "সমন্বয়শীল মিল!"
+
+msgid "Harmonious Pattern!"
+msgstr "সমন্বয়শীল আৰ্হি!"
+
+msgid "Harmonious Tile"
+msgstr "সমন্বয়শীল টাইল"
+
+msgid "Harvest Apron"
+msgstr "শস্য চপোৱা এপ্ৰন"
+
+msgid "Harvest Tarp"
+msgstr "শস্য শুকোৱা তিৰ্পাল"
+
+msgid "Hearth Bellows"
+msgstr "জুহালৰ হাঁতুৰি-ধমনী"
+
+msgid "Hearth Fender"
+msgstr "জুহালৰ সুৰক্ষা বেৰা"
+
+msgid "Hearth Grate"
+msgstr "জুহালৰ লোৰ জালি"
+
+msgid "Heavy Oak Logs"
+msgstr "ডাঙৰ ওক কাঠৰ টুকুৰা"
+
+msgid "Hedge Shears"
+msgstr "বাগানৰ ডাঙৰ কেঁচী"
+
+msgid "Heel Pad"
+msgstr "গোৰোহাৰ পেড"
+
+msgid "Herb Shears"
+msgstr "শাক-বনৌষধি কটা কেঁচী"
+
+msgid "Highlighter"
+msgstr "হাইলাইটাৰ পেন"
+
+msgid "Hold hands under running water until all soap washes cleanly away."
+msgstr "চাবোনৰ সকলো ফেন আঁতৰি নোযোৱালৈকে বৈ থকা পানীৰ তলত হাত ৰাখক।"
+
+msgid "Hollow Teal Circle"
+msgstr "খোলা টিল বৃত্ত"
+
+msgid "Hollow Terracotta Square"
+msgstr "খোলা টেৰাকোটা বৰ্গক্ষেত্ৰ"
+
+msgid "Home & Hearth"
+msgstr "ঘৰুৱা পৰিৱেশ"
+
+msgid "Honey"
+msgstr "মৌ"
+
+msgid "Honey Amber"
+msgstr "মৌ এম্বাৰ"
+
+msgid "Honey Dipper"
+msgstr "মৌ উলিওৱা কাঠি"
+
+msgid "Hose Nozzle"
+msgstr "পাইপৰ নজেল"
+
+msgid "Hot Cocoa Mug"
+msgstr "হট চকলেটৰ মগ"
+
+msgid "Hot Water Bottle"
+msgstr "গৰম পানীৰ বেগ"
+
+msgid "Hot Water Scuttle"
+msgstr "গৰম পানীৰ পাত্ৰ"
+
+msgid "Hourglass"
+msgstr "বালুঘড়ী"
+
+msgid "House Slippers"
+msgstr "ঘৰুৱা চটি জোতা"
+
+msgid "Hovering Dragonfly"
+msgstr "উৰি থকা পানীপিপৰুৱা"
+
+msgid "I Am Ready"
+msgstr "মই সাজু"
+
+msgid "I am ready to pick the items"
+msgstr "মই সামগ্ৰীসমূহ বাছিবলৈ সাজু"
+
+msgid "Identify the Missing Position"
+msgstr "অনুপস্থিত স্থান চিনাক্ত কৰক"
+
+msgid "Indigo Circle"
+msgstr "ইণ্ডিগো বৃত্ত"
+
+msgid "Indigo Diamond with Rose Dot"
+msgstr "গুলপীয়া বিন্দুযুক্ত ইণ্ডিগো হীৰা"
+
+msgid "Indigo Dot"
+msgstr "ইণ্ডিগো বিন্দু"
+
+msgid "Indigo Ring"
+msgstr "ইণ্ডিগো আঙুঠি"
+
+msgid "Indigo Square"
+msgstr "ইণ্ডিগো বৰ্গক্ষেত্ৰ"
+
+msgid "Ink Bottle"
+msgstr "মৈৰ চিয়াঁহীৰ দোৱাত"
+
+msgid "Insulated Canvas Bag"
+msgstr "উষ্ম কেনভাছ বেগ"
+
+msgid "Insulated Thermos"
+msgstr "থাৰ্মোছ ফ্লাস্ক"
+
+msgid "Invalid JSON payload."
+msgstr "অবৈধ JSON তথ্য।"
+
+msgid "Ironing Board"
+msgstr "ইস্ত্ৰি কৰা মেজ"
+
+msgid "Items Remembered"
+msgstr "মনত থকা সামগ্ৰীসমূহ"
+
+msgid "Jar of golden honey"
+msgstr "সোণালী মৌৰ বৈয়াম"
+
+msgid "Jeweler Loupe"
+msgstr "মণি-মুকুতা পৰীক্ষা কৰা কাঁচ"
+
+msgid "Juicy citrus oranges"
+msgstr "ৰসাল টেঙা-মিঠা কমলা"
+
+msgid "Keepsake Envelope"
+msgstr "স্মৃতিচিহ্নৰ খাম"
+
+msgid "Keepsakes"
+msgstr "স্মৃতিচিহ্নসমূহ"
+
+msgid "Kindling Bucket"
+msgstr "খুৰি-খৰিৰ বাল্টি"
+
+msgid "Kindling consists of dry, thin sticks that catch fire easily and produce enough sustained heat to ignite heavy logs."
+msgstr "শুকান খুৰি-খৰিয়ে সহজে জুই ধৰি ডাঙৰ কাঠবোৰ জ্বলোৱাত সহায় কৰে।"
+
+msgid "Kitchen & Table"
+msgstr "পাকঘৰ আৰু মেজ"
+
+msgid "Kitchen Apron"
+msgstr "পাকঘৰৰ এপ্ৰন"
+
+msgid "Kitchen Clock"
+msgstr "পাকঘৰৰ ঘড়ী"
+
+msgid "Kitchen Herb Garden"
+msgstr "পাকঘৰৰ শাকনিবাৰী"
+
+msgid "Kitchen Knife"
+msgstr "পাকঘৰৰ কটাৰী"
+
+msgid "Kitchen Scale"
+msgstr "পাকঘৰৰ ওজন যন্ত্ৰ"
+
+msgid "Kitchen Scissors"
+msgstr "পাকঘৰৰ কেঁচী"
+
+msgid "Kitchen Sponge"
+msgstr "পাকঘৰৰ স্পঞ্জ"
+
+msgid "Kitchen Timer"
+msgstr "পাকঘৰৰ টাইমাৰ"
+
+msgid "Kitchen Towel"
+msgstr "পাকঘৰৰ গামোচা"
+
+msgid "Kite"
+msgstr "চিলাই"
+
+msgid "Knee Rug"
+msgstr "আঁঠুৰ কম্বল"
+
+msgid "Knitting Bag"
+msgstr "ছুৱেটাৰ গুঠা বেগ"
+
+msgid "Knitting Needle"
+msgstr "ছুৱেটাৰ গুঠা শলা"
+
+msgid "Knitting Needles"
+msgstr "ছুৱেটাৰ গুঠা শলাবোৰ"
+
+msgid "Knitting a Warm Sweater"
+msgstr "উষ্ম ছুৱেটাৰ গুঠা"
+
+msgid "Kolam Diamond Tilt Rhythm"
+msgstr "কোলাম হীৰাৰ হেলনীয়া ছন্দ"
+
+msgid "Lacquered Coaster"
+msgstr "লাৰ কোষ্টাৰ"
+
+msgid "Ladle"
+msgstr "ডাঙৰ হেতা"
+
+msgid "Lamp"
+msgstr "লেম্প"
+
+msgid "Lantern"
+msgstr "লণ্ঠন"
+
+msgid "Large Amber Circle"
+msgstr "ডাঙৰ এম্বাৰ বৃত্ত"
+
+msgid "Large Amber Square"
+msgstr "ডাঙৰ এম্বাৰ বৰ্গক্ষেত্ৰ"
+
+msgid "Large Teal Circle"
+msgstr "ডাঙৰ টিল নীলা বৃত্ত"
+
+msgid "Large Teal Ring"
+msgstr "ডাঙৰ টিল আঙুঠি"
+
+msgid "Large Teal Square"
+msgstr "ডাঙৰ টিল বৰ্গক্ষেত্ৰ"
+
+msgid "Laundry Basket"
+msgstr "কাপোৰ ধোৱা পাচি"
+
+msgid "Lawn Mower"
+msgstr "ঘাঁহ কটা মেচিন"
+
+msgid "Lawn Sprinkler"
+msgstr "ঘাঁহৰ পানী ছটিওৱা যন্ত্ৰ"
+
+msgid "Lawnmower"
+msgstr "ঘাঁহ কটা মেচিন"
+
+msgid "Leather Balm"
+msgstr "চামৰাৰ বাম"
+
+msgid "Leather Belt"
+msgstr "চামৰাৰ পেটী"
+
+msgid "Leather Binder"
+msgstr "চামৰাৰ বাইণ্ডাৰ"
+
+msgid "Leather Blanket Carrier"
+msgstr "চামৰাৰ কম্বল ধাৰক"
+
+msgid "Leather Cream"
+msgstr "চামৰাৰ ক্ৰীম"
+
+msgid "Leather Gloves"
+msgstr "চামৰাৰ হাতমোজা"
+
+msgid "Leather Strop"
+msgstr "ক্ষুৰ ধৰোৱা চামৰাৰ ফিটা"
+
+msgid "Leather Wallet"
+msgstr "চামৰাৰ মানিবেগ"
+
+msgid "Left Feather"
+msgstr "বাওঁ পাখি"
+
+msgid "Left Petal Highlighted"
+msgstr "বাওঁফালৰ পাহি চিহ্নিত"
+
+msgid "Left Teal Feather"
+msgstr "বাওঁমুৱা টিল পাখি"
+
+msgid "Left Terracotta Feather"
+msgstr "বাওঁমুৱা টেৰাকোটা পাখি"
+
+msgid "Lemon Fork"
+msgstr "নেমুৰ কাঁটা চামুচ"
+
+msgid "Lemon Juice"
+msgstr "নেমুৰ ৰস"
+
+msgid "Letter Opener"
+msgstr "চিঠি মেলা ছুৰী"
+
+msgid "Letter Scale"
+msgstr "চিঠি ওজন কৰা যন্ত্ৰ"
+
+msgid "Library Card"
+msgstr "পুথিভঁৰালৰ কাৰ্ড"
+
+msgid "Light Bulb"
+msgstr "বৈদ্যুতিক বাল্ব"
+
+msgid "Linen Bedspread"
+msgstr "মৰাপাটৰ বিচনা চাদৰ"
+
+msgid "Linen Napkin"
+msgstr "কাপোৰৰ নেপকিন"
+
+msgid "Linen Table Runner"
+msgstr "মেজৰ লিনেন কাপোৰ"
+
+msgid "Linen Towel"
+msgstr "মৰাপাটৰ গামোচা"
+
+msgid "Lint Roller"
+msgstr "নোম তোলা ৰোলাৰ"
+
+msgid "Liquid Glue"
+msgstr "জুলীয়া আঠা"
+
+msgid "Listen to"
+msgstr "শুনক"
+
+msgid "Listen to activity description"
+msgstr "কাৰ্যকলাপৰ বিৱৰণ শুনক"
+
+msgid "Listen to activity prompt and instructions"
+msgstr "কাৰ্যকলাপৰ প্ৰশ্ন আৰু নিৰ্দেশনা শুনক"
+
+msgid "Listen to activity results summary"
+msgstr "কাৰ্যকলাপৰ ফলাফলৰ সাৰাংশ শুনক"
+
+msgid "Listen to central concept"
+msgstr "মূল ধাৰণা শুনক"
+
+msgid "Listen to concept and clue"
+msgstr "ধাৰণা আৰু সংকেত শুনক"
+
+msgid "Listen to explanation and connection details"
+msgstr "ব্যাখ্যা আৰু সংযোগৰ বিৱৰণ শুনক"
+
+msgid "Listen to feedback"
+msgstr "প্ৰতিক্ৰিয়া শুনক"
+
+msgid "Listen to feedback and connection"
+msgstr "প্ৰতিক্ৰিয়া আৰু সংযোগ শুনক"
+
+msgid "Listen to feedback and harmony"
+msgstr "প্ৰতিক্ৰিয়া আৰু সমন্বয় শুনক"
+
+msgid "Listen to feedback and person information"
+msgstr "প্ৰতিক্ৰিয়া আৰু ব্যক্তিৰ তথ্য শুনক"
+
+msgid "Listen to feedback explanation"
+msgstr "প্ৰতিক্ৰিয়াৰ ব্যাখ্যা শুনক"
+
+msgid "Listen to how to play instructions"
+msgstr "কেনেকৈ খেলিব তাৰ নিৰ্দেশনা শুনক"
+
+msgid "Listen to instruction"
+msgstr "নিৰ্দেশনা শুনক"
+
+msgid "Listen to instructions"
+msgstr "নিৰ্দেশনা শুনক"
+
+msgid "Listen to item name"
+msgstr "সামগ্ৰীৰ নাম শুনক"
+
+msgid "Listen to order"
+msgstr "ক্ৰম শুনক"
+
+msgid "Listen to pattern description"
+msgstr "আৰ্হিৰ বিৱৰণ শুনক"
+
+msgid "Listen to prompt"
+msgstr "প্ৰশ্ন শুনক"
+
+msgid "Listen to prompt and central concept"
+msgstr "প্ৰশ্ন আৰু মূল ধাৰণা শুনক"
+
+msgid "Listen to question"
+msgstr "প্ৰশ্ন শুনক"
+
+msgid "Listen to question prompt and options"
+msgstr "প্ৰশ্ন আৰু বিকল্পসমূহ শুনক"
+
+msgid "Listen to scenario"
+msgstr "পৰিস্থিতি শুনক"
+
+msgid "Listen to selection instructions"
+msgstr "নিৰ্বাচনৰ নিৰ্দেশনা শুনক"
+
+msgid "Listen to shopping list items"
+msgstr "বজাৰৰ তালিকাৰ সামগ্ৰী শুনক"
+
+msgid "Listen to step"
+msgstr "পদক্ষেপ শুনক"
+
+msgid "Listen to step description"
+msgstr "পদক্ষেপৰ বিৱৰণ শুনক"
+
+msgid "Listen to summary"
+msgstr "সাৰাংশ শুনক"
+
+msgid "Listen to target item"
+msgstr "লক্ষ্য সামগ্ৰী শুনক"
+
+msgid "Listen to target item name"
+msgstr "লক্ষ্য সামগ্ৰীৰ নাম শুনক"
+
+msgid "Listen to {{ name }}"
+msgstr "{{ name }} শুনক"
+
+msgid "Listen to {{ word }}"
+msgstr "{{ word }} শুনক"
+
+msgid "Living Room Fireplace"
+msgstr "বহা কোঠাৰ অগ্নিকুণ্ড"
+
+msgid "Loading Summary..."
+msgstr "সাৰাংশ লোড কৰি থকা হৈছে..."
+
+msgid "Loaf Pan"
+msgstr "পাউৰুটিৰ পেন"
+
+msgid "Log Tongs"
+msgstr "কাঠ ধৰা চিমটা"
+
+msgid "Look & Remember"
+msgstr "চাওক আৰু মনত ৰাখক"
+
+msgid "Look across the calm grid at your own pace. There is no timer or hurry."
+msgstr "শান্ত তালিকাখন আপোনাৰ সুবিধাজনক গতিত চাওক। কোনো সময়ৰ তাগিদা নাই।"
+
+msgid "Look at how the sun and leaf take turns. Which tile comes next?"
+msgstr "সূৰ্য আৰু পাতে কেনেকৈ পৰ্যায়ক্ৰমে স্থান লৈছে চাওক। পৰৱৰ্তী টাইলটো কি হ’ব?"
+
+msgid "Look at the Photo"
+msgstr "ছবিখন চাওক"
+
+msgid "Look at the Target Item"
+msgstr "লক্ষ্য সামগ্ৰীটো চাওক"
+
+msgid "Look at the harmonious sequence of symbols or grid on the main display card."
+msgstr "মূল প্ৰদৰ্শন কাৰ্ডত প্ৰতীক বা তালিকাৰ সমন্বয়শীল ক্ৰমটো চাওক।"
+
+msgid "Look at the harmonious visual arrangement below, then choose the tile that belongs in the missing space."
+msgstr "তলৰ সমন্বয়শীল দৃশ্যমান সজ্জাটো চাওক, তাৰ পিছত খালী ঠাইত বহিবলগীয়া টাইলটো বাছক।"
+
+msgid "Look at the motifs in each row and the colors in each column. Which tile fits the empty corner?"
+msgstr "প্ৰতিটো শাৰীৰ নকশা আৰু প্ৰতিটো স্তম্ভৰ ৰং চাওক। খালী চুকটোত কোনটো টাইল খাপ খাব?"
+
+msgid "Look at the picture"
+msgstr "ছবিখন চাওক"
+
+msgid "Look at the picture below and choose the person's name and relationship."
+msgstr "তলৰ ছবিখন চাওক আৰু ব্যক্তিজনৰ নাম আৰু সম্পৰ্ক বাছক।"
+
+msgid "Look at the sequence below and arrange the steps in the order they happen naturally."
+msgstr "তলৰ ক্ৰমটো চাওক আৰু পদক্ষেপসমূহ স্বাভাৱিক ক্ৰমত সজাওক।"
+
+msgid "Look at the target item below, then tap the matching item in the picture grid."
+msgstr "তলৰ লক্ষ্য সামগ্ৰীটো চাওক, তাৰ পিছত ছবিৰ তালিকাত মিল থকা সামগ্ৰীটোত টিপক।"
+
+msgid "Look outside the window to see the sunshine and temperature."
+msgstr "খিৰিকীৰে বাহিৰলৈ চাই ৰ’দ আৰু উষ্ণতা লক্ষ্য কৰক।"
+
+msgid "Loom Shuttle"
+msgstr "তাঁতশালৰ মাকো"
+
+msgid "Loop Carving Tool"
+msgstr "লুপ খোদাই সঁজুলি"
+
+msgid "Lotus & Diya Lamp"
+msgstr "পদ্ম আৰু চাকি"
+
+msgid "Luggage Tag"
+msgstr "বেগৰ টেগ"
+
+msgid "Lunch Box"
+msgstr "টিফিন বাকচ"
+
+msgid "Magnifying Glass"
+msgstr "বিবৰ্ধক কাঁচ"
+
+msgid "Magnifying Shave Mirror"
+msgstr "বিবৰ্ধক ক্ষৌৰকৰ্মৰ দাপোণ"
+
+msgid "Mailbox"
+msgstr "ডাক বাকচ"
+
+msgid "Making Homemade Pies"
+msgstr "ঘৰুৱা পাই তৈয়াৰ কৰা"
+
+msgid "Making a Morning Cup of Tea"
+msgstr "পুৱাৰ এগিলাচ চাহ বনোৱা"
+
+msgid "Maple Syrup"
+msgstr "মেপল চিৰাপ"
+
+msgid "Marble Pastry Slab"
+msgstr "মাৰ্বলৰ পেষ্ট্ৰী শ্লেব"
+
+msgid "Marble Rolling Pin"
+msgstr "মাৰ্বলৰ বেলনা"
+
+msgid "Marking Gauge"
+msgstr "দাগ দিয়া গজ"
+
+msgid "Matchbox"
+msgstr "দিয়াশলাই বাকচ"
+
+msgid "Matches"
+msgstr "দিয়াশলাই"
+
+msgid "Mattress Pad"
+msgstr "তোচকৰ পেড"
+
+msgid "Measuring Cup"
+msgstr "জোখ লোৱা কাপ"
+
+msgid "Measuring Cups"
+msgstr "জোখ লোৱা কাপবোৰ"
+
+msgid "Measuring Gauge"
+msgstr "জোখ লোৱা স্কেল"
+
+msgid "Measuring Spoon"
+msgstr "জোখ লোৱা চামুচ"
+
+msgid "Measuring Spoons"
+msgstr "জোখ লোৱা চামুচবোৰ"
+
+msgid "Measuring Tape"
+msgstr "জোখ লোৱা ফিটা"
+
+msgid "Medium Teal Ring"
+msgstr "মাজু টিল আঙুঠি"
+
+msgid "Memory Market"
+msgstr "স্মৃতিৰ বজাৰ"
+
+msgid "Memory Market - Cognitive Activity"
+msgstr "স্মৃতিৰ বজাৰ - জ্ঞানমূলক কাৰ্যকলাপ"
+
+msgid "Mesh Fireplace Screen"
+msgstr "জালিযুক্ত জুহালৰ আৱৰণ"
+
+msgid "Metal Chisel"
+msgstr "ধাতুৰ বটালী"
+
+msgid "Metal Flower Frog"
+msgstr "ফুল থিয় কৰোৱা ধাতুৰ সঁজুলি"
+
+msgid "Metal Ruler"
+msgstr "লোহাৰ স্কেল"
+
+msgid "Microfiber Lens Cloth"
+msgstr "মাইক্ৰোফাইবার্ব লেন্স কাপোৰ"
+
+msgid "Milk"
+msgstr "গাখীৰ"
+
+msgid "Milk Frother"
+msgstr "গাখীৰৰ ফেন তোলোৱা সঁজুলি"
+
+msgid "Milk Pitcher"
+msgstr "গাখীৰৰ জগ"
+
+msgid "Miniature Clamps"
+msgstr "সৰু ক্ল্যাম্প"
+
+msgid "Mirror"
+msgstr "দাপোণ"
+
+msgid "Mirror Reflection Symmetry"
+msgstr "দাপোণ প্ৰতিফলনৰ সমমিতি"
+
+msgid "Misplaced"
+msgstr "ভুল স্থানত ৰখা"
+
+msgid "Missed"
+msgstr "বাদ পৰা"
+
+msgid "Missing"
+msgstr "অনুপস্থিত"
+
+msgid "Missing Tile"
+msgstr "অনুপস্থিত টাইল"
+
+msgid "Missing tile marked with question mark"
+msgstr "প্ৰশ্নচিহ্নিত অনুপস্থিত টাইল"
+
+msgid "Miter Box"
+msgstr "কোণ কটা বাকচ"
+
+msgid "Mixing Bowl"
+msgstr "মিহলোৱা বাতি"
+
+msgid "Moist mineral soil molded into bowls and baked in a kiln."
+msgstr "পানীত তিওৱা কোমল আৰু মসৃণ পলসুৱা মাটি।"
+
+msgid "Morning Songbird"
+msgstr "পুৱাৰ গীত গোৱা চৰাই"
+
+msgid "Morning Sun"
+msgstr "পুৱাৰ সূৰ্য"
+
+msgid "Mortar and Pestle"
+msgstr "খল আৰু উৰাল"
+
+msgid "Mothball"
+msgstr "নেফথালিন গুটি"
+
+msgid "Motif & Color Correspondence"
+msgstr "নকশা আৰু ৰঙৰ সংগতি"
+
+msgid "Motif & Count Matrix"
+msgstr "নকশা আৰু গণনা তালিকা"
+
+msgid "Motif Overlay Combination"
+msgstr "নকশা ওপৰা-ওপৰিকৈ সংমিশ্ৰণ"
+
+msgid "Mounting Squares"
+msgstr "ফটো লগোৱা বৰ্গ সঁজুলি"
+
+msgid "Moving horizontally adds diagonal stripes across the shape. The plain indigo triangle becomes the Striped Indigo Triangle."
+msgstr "পথালিকৈ আগবাঢ়িলে আকৃতিটোত হেলনীয়া আঁচ যোগ হয়। সাধাৰণ ইণ্ডিগো ত্ৰিভুজটো ৰেখাঙ্কিত ইণ্ডিগো ত্ৰিভুজ হয়।"
+
+msgid "Mud Mat"
+msgstr "বোকা মচা মেট"
+
+msgid "Muffin Pan"
+msgstr "মাফিনৰ পেন"
+
+msgid "Music Box"
+msgstr "গানৰ বাকচ"
+
+msgid "Mustard Seed"
+msgstr "সৰিয়হ গুটি"
+
+msgid "Nail Clipper"
+msgstr "নখ কটা সঁজুলি"
+
+msgid "Nail File"
+msgstr "নখ ঘঁহা সঁজুলি"
+
+msgid "Napkin Ring"
+msgstr "নেপকিন ৰিং"
+
+msgid "Natural Cane"
+msgstr "প্ৰাকৃতিক বেত"
+
+msgid "Nature"
+msgstr "প্ৰকৃতি"
+
+msgid "Nature & Outdoors"
+msgstr "প্ৰকৃতি আৰু মুক্তাঙ্গন"
+
+msgid "Nature & Seasons"
+msgstr "বতৰ আৰু ঋতু"
+
+msgid "Neck Pillow"
+msgstr "ডিঙিৰ গাৰু"
+
+msgid "Needle Case"
+msgstr "বেজীৰ খাপ"
+
+msgid "Needle Gauge"
+msgstr "বেজীৰ মাপক"
+
+msgid "Needle Threader"
+msgstr "বেজীত সূতা ভৰোৱা সঁজুলি"
+
+msgid "Needle Tool"
+msgstr "বেজী সঁজুলি"
+
+msgid "Newspaper"
+msgstr "বাতৰিকাকত"
+
+msgid "Next"
+msgstr "পৰৱৰ্তী"
+
+msgid "Next Journey →"
+msgstr "পৰৱৰ্তী যাত্ৰা →"
+
+msgid "Next Round"
+msgstr "পৰৱৰ্তী ৰাউণ্ড"
+
+msgid "Next Round →"
+msgstr "পৰৱৰ্তী ৰাউণ্ড →"
+
+msgid "Nightcap"
+msgstr "ৰাতিৰ শয়ন টুপী"
+
+msgid "Nightstand"
+msgstr "বিচনাৰ কাষৰ মেজ"
+
+msgid "No Timers"
+msgstr "সময়সীমা নাই"
+
+msgid "No image available"
+msgstr "কোনো ছবি উপলব্ধ নহয়"
+
+msgid "Note down your memories"
+msgstr "আপোনাৰ স্মৃতিসমূহ টুকি ৰাখক"
+
+msgid "Notice how the first shape gains diagonal stripes in the second column. What belongs in the lower right?"
+msgstr "মন কৰক কেনেকৈ দ্বিতীয় স্তম্ভত প্ৰথম আকৃতিটোত হেলনীয়া আঁক বহে। তলৰ সোঁফালে কি বহিব?"
+
+msgid "Notice how the hollow ring and solid dot alternate. What belongs in the empty space?"
+msgstr "খালী আঙুঠি আৰু গাঢ় বিন্দু কেনেকৈ পৰ্যায়ক্ৰমে আহে মন কৰক। খালী ঠাইত কি বহিব?"
+
+msgid "Notice the empty space marked with a question card. Consider which symbol naturally belongs there."
+msgstr "প্ৰশ্ন কাৰ্ড থকা খালী ঠাইখিনিলৈ মন কৰক। তাত কোনটো প্ৰতীক স্বাভাৱিকভাৱে খাপ খাই ভাবি চাওক।"
+
+msgid "Notice the synchronized changes: Size (Large, Small), Color (Teal, Amber), and Shape (Circle, Square). What follows the Large Teal Circle?"
+msgstr "সমকালীন পৰিৱৰ্তনবোৰ লক্ষ্য কৰক: আকাৰ (ডাঙৰ, সৰু), ৰং (টিল, এম্বাৰ), আৰু আকৃতি (বৃত্ত, বৰ্গক্ষেত্ৰ)। ডাঙৰ টিল বৃত্তৰ পিছত কি আহে?"
+
+msgid "Nutcracker"
+msgstr "আখৰোট ভঙা সঁজুলি"
+
+msgid "Oak Leaf"
+msgstr "ওক গছৰ পাত"
+
+msgid "Object to Find"
+msgstr "বিচাৰিবলগীয়া বস্তু"
+
+msgid "Observe the Visual Pattern"
+msgstr "দৃশ্যমান আৰ্হি পৰ্যবেক্ষণ কৰক"
+
+msgid "Oil Can"
+msgstr "তেলৰ পাত্ৰ"
+
+msgid "Old Newspaper"
+msgstr "পুৰণি বাতৰিকাকত"
+
+msgid "Olive Green"
+msgstr "জলফাই সেউজীয়া"
+
+msgid "Olive Oil"
+msgstr "জলফাই তেল"
+
+msgid "Olive Twig"
+msgstr "জলফাই ডাল"
+
+msgid "Open the tap and thoroughly wet your hands with clean water."
+msgstr "টেপ খুলি পৰিষ্কাৰ পানীৰে হাত দুখন ভালদৰে তিয়াওক।"
+
+msgid "Open {{ name }}"
+msgstr "{{ name }} খোলক"
+
+msgid "Opera Glasses"
+msgstr "অপেৰা চশমা"
+
+msgid "Options to Select"
+msgstr "বাছনি কৰিবলগীয়া বিকল্পসমূহ"
+
+msgid "Orange Maple Leaf"
+msgstr "কমলা মেপল পাত"
+
+msgid "Oranges"
+msgstr "কমলা"
+
+msgid "Orchid Water Tube"
+msgstr "অৰ্কিডৰ পানীৰ নলী"
+
+msgid "Order of steps"
+msgstr "পদক্ষেপসমূহৰ ক্ৰম"
+
+msgid "Ordered steps tray"
+msgstr "ক্ৰমত সজোৱা পদক্ষেপৰ ট্ৰে"
+
+msgid "Outdoor Rain Gauge"
+msgstr "বাহিৰৰ বৰষুণ মাপক"
+
+msgid "Outer Frame"
+msgstr "বাহিৰৰ ফ্ৰেম"
+
+msgid "Outline Circle"
+msgstr "ৰূপৰেখা বৃত্ত"
+
+msgid "Outline Diamond"
+msgstr "ৰূপৰেখা হীৰা"
+
+msgid "Outline Square"
+msgstr "ৰূপৰেখা বৰ্গক্ষেত্ৰ"
+
+msgid "Oven Gloves"
+msgstr "ওভেনৰ হাতমোজা"
+
+msgid "Oven Mitt"
+msgstr "ওভেন মিট"
+
+msgid "Paint Brush"
+msgstr "ৰং কৰা ব্ৰাছ"
+
+msgid "Paintbrush"
+msgstr "ৰং কৰা ব্ৰাছ"
+
+msgid "Pancake Griddle"
+msgstr "তাৱা"
+
+msgid "Pantry"
+msgstr "ভঁৰালৰ সামগ্ৰী"
+
+msgid "Paper Clip"
+msgstr "কাগজৰ ক্লিপ"
+
+msgid "Paper Filter"
+msgstr "কাগজৰ ফিল্টাৰ"
+
+msgid "Paper Napkin"
+msgstr "কাগজৰ নেপকিন"
+
+msgid "Paper Parasol"
+msgstr "কাগজৰ ছাতি"
+
+msgid "Paper Weight"
+msgstr "কাগজ চেপা গধুৰ বস্তু"
+
+msgid "Paring Knife"
+msgstr "বাকলি গুচোৱা কটাৰী"
+
+msgid "Pastry Blender"
+msgstr "ময়দা মিহলোৱা সঁজুলি"
+
+msgid "Pastry Board"
+msgstr "পেষ্ট্ৰী বনোৱা ফলি"
+
+msgid "Pastry Brush"
+msgstr "পেষ্ট্ৰী ব্ৰাছ"
+
+msgid "Pastry Cutter"
+msgstr "পেষ্ট্ৰী কটাৰী"
+
+msgid "Pastry Flour"
+msgstr "পেষ্ট্ৰী ময়দা"
+
+msgid "Pastry Lattice Roller"
+msgstr "পেষ্ট্ৰী জালি ৰোলাৰ"
+
+msgid "Pastry Wheel"
+msgstr "পেষ্ট্ৰী কটা চকা"
+
+msgid "Pastrycutter"
+msgstr "পেষ্ট্ৰী কটাৰী"
+
+msgid "Pat your hands gently with a soft, clean towel."
+msgstr "কোমল, পৰিষ্কাৰ গামোচাৰে হাত দুখন লাহে লাহে মচক।"
+
+msgid "Pattern Detective"
+msgstr "আৰ্হি সন্ধান"
+
+msgid "Pattern Detective - Abstract Reasoning"
+msgstr "আৰ্হি সন্ধান - বিমূৰ্ত যুক্তি"
+
+msgid "Pattern Paper"
+msgstr "আৰ্হি কাগজ"
+
+msgid "Pattern Sequence"
+msgstr "আৰ্হিৰ ক্ৰম"
+
+msgid "Pattern matrix 2 by 2"
+msgstr "২ বাই ২ আৰ্হি তালিকা"
+
+msgid "Pattern sequence strip"
+msgstr "আৰ্হি ক্ৰমৰ পটি"
+
+msgid "Patterns Completed"
+msgstr "সম্পূৰ্ণ কৰা আৰ্হি"
+
+msgid "Patterns Solved"
+msgstr "সমাধান কৰা আৰ্হি"
+
+msgid "Peanut Butter"
+msgstr "বাদাম মাখন"
+
+msgid "Peeler"
+msgstr "বাকলি গুচোৱা ছুৰী"
+
+msgid "Pen Holder"
+msgstr "কলমৰ ষ্টেণ্ড"
+
+msgid "Pencil"
+msgstr "পেঞ্চিল"
+
+msgid "Pencil Sharpener"
+msgstr "পেঞ্চিল কটাকটা"
+
+msgid "Pepper Mill"
+msgstr "জালুক পিহা যন্ত্ৰ"
+
+msgid "Person name and relationship options"
+msgstr "ব্যক্তিৰ নাম আৰু সম্পৰ্কৰ বিকল্প"
+
+msgid "Pewter Slate"
+msgstr "শ্লেট ৰং"
+
+msgid "Photo Corners"
+msgstr "ফটোৰ চুক বন্ধনী"
+
+msgid "Photo corners are adhesive pockets that gently hold the corners of photographs onto album pages without damaging them."
+msgstr "ফটোৰ চুক বন্ধনীয়ে পুৰণি ছবিক ক্ষতি নকৰাকৈ এলবামত ধৰি ৰাখে।"
+
+msgid "Photo of %(name)s"
+msgstr "%(name)s ৰ ফটো"
+
+msgid "Photo of member"
+msgstr "সদস্যৰ ফটো"
+
+msgid "Photograph of a familiar person to recognize"
+msgstr "চিনাক্ত কৰিবলগীয়া চিনাকি ব্যক্তিৰ ফটো"
+
+msgid "Photos Needed:"
+msgstr "প্ৰয়োজনীয় ফটো:"
+
+msgid "Pick Your Items"
+msgstr "আপোনাৰ সামগ্ৰী বাছক"
+
+msgid "Pick from the shelf below"
+msgstr "তলৰ আলমাৰিৰ পৰা বাছক"
+
+msgid "Picked Items"
+msgstr "বাছনি কৰা সামগ্ৰীসমূহ"
+
+msgid "Picked Steps"
+msgstr "বাছনি কৰা পদক্ষেপসমূহ"
+
+msgid "Picked items shelf"
+msgstr "বাছনি কৰা সামগ্ৰীৰ আলমাৰি"
+
+msgid "Picked steps sequence"
+msgstr "বাছনি কৰা পদক্ষেপৰ ক্ৰম"
+
+msgid "Picnic Basket"
+msgstr "বনভোজৰ পাচি"
+
+msgid "Picture Frame"
+msgstr "ফটো ফ্ৰেম"
+
+msgid "Picture Grid"
+msgstr "ছবিৰ তালিকা"
+
+msgid "Picture Grid:"
+msgstr "ছবিৰ তালিকা:"
+
+msgid "Picture Postcard"
+msgstr "ছবি থকা পোষ্টকাৰ্ড"
+
+msgid "Picture search grid"
+msgstr "ছবি সন্ধানৰ তালিকা"
+
+msgid "Pie Crust"
+msgstr "পাইৰ বাকলি"
+
+msgid "Pie Crust Fluter"
+msgstr "পাইৰ খাঁজ কটা সঁজুলি"
+
+msgid "Pie Crust Shield"
+msgstr "পাই আৱৰণী"
+
+msgid "Pie Dish"
+msgstr "পাইৰ বাতি"
+
+msgid "Pie Server"
+msgstr "পাই কটা হেতা"
+
+msgid "Pie Weights"
+msgstr "পাইৰ ওজন গুটি"
+
+msgid "Pillowcase"
+msgstr "গাৰুৰ কভাৰ"
+
+msgid "Pin Cushion"
+msgstr "বেজীৰ গাৰু"
+
+msgid "Pince-Nez Spectacles"
+msgstr "নাকত পিন্ধা চশমা"
+
+msgid "Pine Needle"
+msgstr "পাইন গছৰ বেজী-পাত"
+
+msgid "Pink Lotus"
+msgstr "গুলপীয়া পদ্ম"
+
+msgid "Pink Tulip"
+msgstr "গুলপীয়া টিউলিপ"
+
+msgid "Pinking Shears"
+msgstr "কাটিং কেঁচী"
+
+msgid "Place aromatic tea leaves or a tea bag into your cup or teapot."
+msgstr "কাপ বা টি-পটত সুগন্ধি চাহ পাত বা টি-বেগ দিয়ক।"
+
+msgid "Placed as Step"
+msgstr "পদক্ষেপ হিচাপে ৰখা হ’ল"
+
+msgid "Plain Circle"
+msgstr "সাধাৰণ বৃত্ত"
+
+msgid "Plain Indigo Circle"
+msgstr "সাধাৰণ ইণ্ডিগো বৃত্ত"
+
+msgid "Plain Indigo Triangle"
+msgstr "সাধাৰণ ইণ্ডিগো ত্ৰিভুজ"
+
+msgid "Plain Triangle"
+msgstr "সাধাৰণ ত্ৰিভুজ"
+
+msgid "Plant Food Packet"
+msgstr "উদ্ভিদৰ খাদ্য পেকেট"
+
+msgid "Plant Mister"
+msgstr "গছত পানী স্প্ৰে কৰা সঁজুলি"
+
+msgid "Plant Pot"
+msgstr "ফুলৰ পাত্ৰ"
+
+msgid "Plant Stake"
+msgstr "গছ ধৰি ৰখা কাঠি"
+
+msgid "Plant Trellis"
+msgstr "গছ বগোৱা চালি"
+
+msgid "Plate"
+msgstr "কাঁহী"
+
+msgid "Play Again"
+msgstr "পুনৰ খেলক"
+
+msgid "Play Memory Market"
+msgstr "স্মৃতিৰ বজাৰ খেলক"
+
+msgid "Play again"
+msgstr "পুনৰ খেলক"
+
+msgid "Play {{ name }} again"
+msgstr "{{ name }} পুনৰ খেলক"
+
+msgid "Please select an option"
+msgstr "অনুগ্রহ কৰি এটা বিকল্প বাছক"
+
+msgid "Please take your time to remember these items"
+msgstr "অনুগ্ৰহ কৰি এই সামগ্ৰীসমূহ মনত ৰাখিবলৈ সময় লওক"
+
+msgid "Please take your time to remember these items:"
+msgstr "অনুগ্ৰহ কৰি এই সামগ্ৰীসমূহ মনত ৰাখিবলৈ সময় লওক:"
+
+msgid "Pliers"
+msgstr "প্লায়াৰ্ছ"
+
+msgid "Plum Purple"
+msgstr "প্লাম বেঙুনীয়া"
+
+msgid "Pocket Compass"
+msgstr "জেপৰ কম্পাছ"
+
+msgid "Pocket Corkscrew"
+msgstr "জেপৰ কৰ্ক খোলা সঁজুলি"
+
+msgid "Pocket Knife"
+msgstr "জেপৰ কটাৰী"
+
+msgid "Pocket Watch"
+msgstr "জেপৰ ঘড়ী"
+
+msgid "Pointer Diagonal"
+msgstr "হেলনীয়া কাঁড়"
+
+msgid "Pointer Down"
+msgstr "তলমুৱা কাঁড়"
+
+msgid "Pointer Left"
+msgstr "বাওঁমুৱা কাঁড়"
+
+msgid "Pointer Right"
+msgstr "সোঁমুৱা কাঁড়"
+
+msgid "Pointer Up"
+msgstr "ওপৰমুৱা কাঁড়"
+
+msgid "Points"
+msgstr "পইণ্ট"
+
+msgid "Polish Applicator Dauber"
+msgstr "পলিচ লগোৱা ব্ৰাছ"
+
+msgid "Polished Silver"
+msgstr "চকচকে ৰূপালী"
+
+msgid "Polishing Cloth"
+msgstr "পলিচ কৰা কাপোৰ"
+
+msgid "Pomegranate"
+msgstr "ডালিম"
+
+msgid "Porcelain Cup"
+msgstr "চীনামাটিৰ কাপ"
+
+msgid "Porcelain Teapot"
+msgstr "চীনামাটিৰ চাহদানি"
+
+msgid "Postage Stamp"
+msgstr "ডাক টিকট"
+
+msgid "Postal Envelope"
+msgstr "ডাক খাম"
+
+msgid "Postal Scale"
+msgstr "ডাক ওজন মেচিন"
+
+msgid "Postcard"
+msgstr "পোষ্টকাৰ্ড"
+
+msgid "Potatoes"
+msgstr "আলু"
+
+msgid "Potter's Needle"
+msgstr "কুমাৰৰ বেজী"
+
+msgid "Potter's Rib"
+msgstr "মাটি মিহি কৰা কাঠি"
+
+msgid "Potter's Sponge"
+msgstr "কুমাৰৰ স্পঞ্জ"
+
+msgid "Potter's Wheel"
+msgstr "কুমাৰৰ চকী"
+
+msgid "Pottery Calipers"
+msgstr "মৃৎশিল্পৰ কেলিপাৰ্ছ"
+
+msgid "Pottery Clay"
+msgstr "কুমাৰৰ মাটি"
+
+msgid "Pottery Sponge"
+msgstr "কুমাৰৰ স্পঞ্জ"
+
+msgid "Pottery Wheel"
+msgstr "কুমাৰৰ চকী"
+
+msgid "Pour & Steep"
+msgstr "ঢালি সিজিবলৈ দিয়ক"
+
+msgid "Pour the boiling water over the tea and allow it to steep for a few minutes."
+msgstr "চাহৰ ওপৰত উতলা পানী ঢালি কেইমিনিটমান সিজিবলৈ দিয়ক।"
+
+msgid "Pour-Over Kettle"
+msgstr "ঢালি বনোৱা কেটলী"
+
+msgid "Practice and enjoy"
+msgstr "অনুশীলন কৰক আৰু উপভোগ কৰক"
+
+msgid "Pre-Shave Oil"
+msgstr "দাড়ি খুৰোৱাৰ আগৰ তেল"
+
+msgid "Preparing for a Morning Walk"
+msgstr "পুৱাৰ খোজ কঢ়াৰ প্ৰস্তুতি"
+
+msgid "Press \"Confirm My Selection\" to review the connection and complete 3 pleasant rounds."
+msgstr "সংযোগ পৰীক্ষা কৰিবলৈ আৰু ৩ টা আনন্দদায়ক ৰাউণ্ড সম্পূৰ্ণ কৰিবলৈ \"মোৰ নিৰ্বাচন নিশ্চিত কৰক\" টিপক।"
+
+msgid "Press \"Confirm My Selection\" to review your choice and complete 3 pleasant rounds."
+msgstr "আপোনাৰ নিৰ্বাচন পৰীক্ষা কৰিবলৈ আৰু ৩ টা আনন্দদায়ক ৰাউণ্ড সম্পূৰ্ণ কৰিবলৈ \"মোৰ নিৰ্বাচন নিশ্চিত কৰক\" টিপক।"
+
+msgid "Press \\\"Confirm My Selection\\\" to review the connection and complete 3 pleasant rounds."
+msgstr "সংযোগ পৰীক্ষা কৰিবলৈ আৰু ৩ টা আনন্দদায়ক ৰাউণ্ড সম্পূৰ্ণ কৰিবলৈ \"মোৰ নিৰ্বাচন নিশ্চিত কৰক\" টিপক।"
+
+msgid "Press \\\"Confirm My Selection\\\" to review your choice and complete 3 pleasant rounds."
+msgstr "আপোনাৰ নিৰ্বাচন পৰীক্ষা কৰিবলৈ আৰু ৩ টা আনন্দদায়ক ৰাউণ্ড সম্পূৰ্ণ কৰিবলৈ \"মোৰ নিৰ্বাচন নিশ্চিত কৰক\" টিপক।"
+
+msgid "Previous"
+msgstr "পূৰ্বৱৰ্তী"
+
+msgid "Prompt"
+msgstr "প্ৰশ্ন"
+
+msgid "Pruning Clippers"
+msgstr "গছৰ ডাল কটা কেঁচী"
+
+msgid "Pruning Shears"
+msgstr "গছ কটা কেঁচী"
+
+msgid "Pure Honey"
+msgstr "বিশুদ্ধ মৌ"
+
+msgid "Pure Ivory"
+msgstr "দাঁত-বগা নিৰ্মল"
+
+msgid "Purple Plum"
+msgstr "বেঙুনীয়া প্লাম"
+
+msgid "Put On Walking Shoes"
+msgstr "খোজ কঢ়া জোতা পিন্ধক"
+
+msgid "Quiet Evening Reading"
+msgstr "গধূলিৰ শান্ত পঢ়া-শুনা"
+
+msgid "Rain Boots"
+msgstr "বৰষুণৰ বুট জোতা"
+
+msgid "Rain Gauge"
+msgstr "বৃষ্টি মাপক"
+
+msgid "Raincoat"
+msgstr "বৰষুণৰ কোট (ৰেইনকোট)"
+
+msgid "Rainy Afternoon"
+msgstr "বৰষুণৰ দুপৰীয়া"
+
+msgid "Raked Leaves"
+msgstr "বাঢ়নীৰে চপোৱা শুকান পাত"
+
+msgid "Razor Blade"
+msgstr "ব্লেড"
+
+msgid "Razor Blade Pack"
+msgstr "ব্লেডৰ পেকেট"
+
+msgid "Read instructions"
+msgstr "নিৰ্দেশনা পঢ়ক"
+
+msgid "Read the Central Concept"
+msgstr "মূল ধাৰণাটো পঢ়ক"
+
+msgid "Read the Daily Story"
+msgstr "দৈনিক কাহিনীটো পঢ়ক"
+
+msgid "Read the central concept and clue, then choose the word with the closest natural connection."
+msgstr "মূল ধাৰণা আৰু সংকেতটো পঢ়ক, তাৰ পিছত আটাইতকৈ ওচৰৰ স্বাভাৱিক সংযোগ থকা শব্দটো বাছক।"
+
+msgid "Read through the word choices below at your own pace. There are no timers or rushing."
+msgstr "তলৰ শব্দৰ বিকল্পসমূহ আপোনাৰ সুবিধাজনক গতিত পঢ়ক। কোনো সময়ৰ তাগিদা বা খৰখেদা নাই।"
+
+msgid "Read through your shopping list at your own pace. There is no time limit."
+msgstr "বজাৰৰ তালিকাখন আপোনাৰ গতিত পঢ়ক। কোনো সময়সীমা নাই।"
+
+msgid "Reading Armchair"
+msgstr "কিতাপ পঢ়া আৰামী চকী"
+
+msgid "Reading Glass"
+msgstr "পঢ়া চশমা"
+
+msgid "Reading Glasses"
+msgstr "পঢ়া চশমা"
+
+msgid "Reading Lamp"
+msgstr "পঢ়া লেম্প"
+
+msgid "Reading Stand"
+msgstr "কিতাপ থোৱা ষ্টেণ্ড"
+
+msgid "Reading glasses magnify close-up printed text, making books and newspapers clear and easy to read."
+msgstr "পঢ়া চশমাই ওচৰৰ সৰু আখৰবোৰ ডাঙৰ আৰু স্পষ্ট কৰি দেখুৱায়।"
+
+msgid "Ready"
+msgstr "সাজু"
+
+msgid "Ready to play"
+msgstr "খেলিবলৈ সাজু"
+
+msgid "Reasoning & Visual Logic"
+msgstr "যুক্তি আৰু দৃশ্যমান যুক্তিবিজ্ঞান"
+
+msgid "Recall and Identify"
+msgstr "স্মৰণ কৰক আৰু চিনাক্ত কৰক"
+
+msgid "Receive Gentle Feedback"
+msgstr "শান্তিময় প্ৰতিক্ৰিয়া লাভ কৰক"
+
+msgid "Receive warm, encouraging feedback as you complete 3 pleasant rounds."
+msgstr "৩ টা আনন্দদায়ক ৰাউণ্ড সম্পূৰ্ণ কৰাৰ লগে লগে উষ্ম, উৎসাহজনক প্ৰতিক্ৰিয়া লাভ কৰক।"
+
+msgid "Recipe Book"
+msgstr "ৰন্ধন প্ৰণালীৰ কিতাপ"
+
+msgid "Recognized person"
+msgstr "চিনাক্ত কৰা ব্যক্তি"
+
+msgid "Red Rose"
+msgstr "ৰঙা গোলাপ"
+
+msgid "Refrigerator"
+msgstr "ফ্ৰিজ"
+
+msgid "Relationship"
+msgstr "সম্পৰ্ক"
+
+msgid "Remarkable effort! You had wonderful clarity and focus today."
+msgstr "অসাধাৰণ প্ৰচেষ্টা! আজি আপোনাৰ মনোযোগ আৰু স্পষ্টতা অতি সুন্দৰ আছিল।"
+
+msgid "Remember the list"
+msgstr "তালিকাখন মনত ৰাখক"
+
+msgid "Remember:"
+msgstr "মনত ৰাখক:"
+
+msgid "Remove"
+msgstr "আঁতৰাওক"
+
+msgid "Reset Sequence"
+msgstr "ক্ৰম পুনৰ সজাওক"
+
+msgid "Resinous Pine Sticks"
+msgstr "ৰেজিনযুক্ত পাইন কাঠি"
+
+msgid "Restart Activity"
+msgstr "কাৰ্যকলাপ পুনৰ আৰম্ভ কৰক"
+
+msgid "Return to Activities"
+msgstr "কাৰ্যকলাপলৈ উভতি যাওক"
+
+msgid "Return to Cognitive Activities"
+msgstr "জ্ঞানমূলক কাৰ্যকলাপলৈ উভতি যাওক"
+
+msgid "Return to Dashboard"
+msgstr "ডেশ্বব’ৰ্ডলৈ উভতি যাওক"
+
+msgid "Review the Word Options"
+msgstr "শব্দৰ বিকল্পসমূহ চাওক"
+
+msgid "Ribbon"
+msgstr "ফিটা"
+
+msgid "Ribbon Marker"
+msgstr "ফিটা মাৰ্কাৰ"
+
+msgid "Rice"
+msgstr "চাউল"
+
+msgid "Right Feather"
+msgstr "সোঁ পাখি"
+
+msgid "Right Petal Highlighted"
+msgstr "সোঁফালৰ পাহি চিহ্নিত"
+
+msgid "Right Teal Feather"
+msgstr "সোঁমুৱা টিল পাখি"
+
+msgid "Right Terracotta Feather"
+msgstr "সোঁমুৱা টেৰাকোটা পাখি"
+
+msgid "Ring & Dot Harmony"
+msgstr "আঙুঠি আৰু বিন্দুৰ সমন্বয়"
+
+msgid "Rinse Thoroughly"
+msgstr "ভালদৰে ধুওক"
+
+msgid "Ripe Bananas"
+msgstr "পকা কল"
+
+msgid "Ripe Mango"
+msgstr "পকা আম"
+
+msgid "Rocking Chair"
+msgstr "দোলনা চকী"
+
+msgid "Roller Skate"
+msgstr "ৰোলাৰ স্কেট"
+
+msgid "Rolling Pin"
+msgstr "বেলনা মাৰি"
+
+msgid "Rose Circle"
+msgstr "গুলপীয়া বৃত্ত"
+
+msgid "Rose Sun"
+msgstr "গুলপীয়া সূৰ্য"
+
+msgid "Rosemary"
+msgstr "ৰোজমেৰী"
+
+msgid "Rosemary is the aromatic, needle-leaved garden herb traditionally roasted with potatoes and meats."
+msgstr "ৰোজমেৰী হৈছে এক সুগন্ধি বনৌষধি যিয়ে ৰন্ধনশিল্পত উৎকৃষ্ট সোৱাদ যোগায়।"
+
+msgid "Round"
+msgstr "ৰাউণ্ড"
+
+msgid "Round %(count)s"
+msgstr "ৰাউণ্ড %(count)s"
+
+msgid "Round %(cur)s of %(tot)s"
+msgstr "%(tot)s ৰ ভিতৰত ৰাউণ্ড %(cur)s"
+
+msgid "Round %(current)s of %(total)s"
+msgstr "%(total)s ৰ ভিতৰত ৰাউণ্ড %(current)s"
+
+msgid "Round %s of %s"
+msgstr "%s ৰ ভিতৰত ৰাউণ্ড %s"
+
+msgid "Round 1"
+msgstr "ৰাউণ্ড ১"
+
+msgid "Round 2"
+msgstr "ৰাউণ্ড ২"
+
+msgid "Round 3"
+msgstr "ৰাউণ্ড ৩"
+
+msgid "Round 4"
+msgstr "ৰাউণ্ড ৪"
+
+msgid "Round 5"
+msgstr "ৰাউণ্ড ৫"
+
+msgid "Round Overview"
+msgstr "ৰাউণ্ডৰ সাৰাংশ"
+
+msgid "Round Score"
+msgstr "ৰাউণ্ডৰ নম্বৰ"
+
+msgid "Round Summary"
+msgstr "ৰাউণ্ডৰ সাৰাংশ"
+
+msgid "Round completed"
+msgstr "ৰাউণ্ড সম্পূৰ্ণ হ’ল"
+
+msgid "Round results"
+msgstr "ৰাউণ্ডৰ ফলাফল"
+
+msgid "Round {{ cur }} of {{ tot }}"
+msgstr "{{ tot }} ৰ ভিতৰত ৰাউণ্ড {{ cur }}"
+
+msgid "Round {{ num }}"
+msgstr "ৰাউণ্ড {{ num }}"
+
+msgid "Rounds Completed"
+msgstr "সম্পূৰ্ণ হোৱা ৰাউণ্ডসমূহ"
+
+msgid "Row 1 displays leaves and Row 2 displays suns. Column 1 is teal and Column 2 is amber. The missing tile is the Amber Sun."
+msgstr "শাৰী ১ ত পাত আৰু শাৰী ২ ত সূৰ্য আছে। স্তম্ভ ১ টিল আৰু স্তম্ভ ২ এম্বাৰ। অনুপস্থিত টাইলটো হ’ল এম্বাৰ সূৰ্য।"
+
+msgid "Row 1 has Circles and Row 2 has Squares. Column 1 is Teal and Column 2 is Amber. The matching tile is the Amber Square."
+msgstr "শাৰী ১ ত বৃত্ত আৰু শাৰী ২ ত বৰ্গক্ষেত্ৰ আছে। স্তম্ভ ১ টিল আৰু স্তম্ভ ২ এম্বাৰ। মিল থকা টাইলটো হ’ল এম্বাৰ বৰ্গক্ষেত্ৰ।"
+
+msgid "Row 2 requires stars, and Column 2 requires a pair of items (count of 2). The matching combination is 2 Amber Stars."
+msgstr "শাৰী ২ ৰ বাবে তৰা আৰু স্তম্ভ ২ ৰ বাবে এটা জোৰা (২ টা) প্ৰয়োজন। সঠিক সংমিশ্ৰণটো হ’ল ২ টা এম্বাৰ তৰা।"
+
+msgid "Row 2 uses square frames, and Column 2 uses inner stars. The synthesis is the Square with Inner Star."
+msgstr "শাৰী ২ য়ে বৰ্গ ফ্ৰেম আৰু স্তম্ভ ২ য়ে ভিতৰৰ তৰা ব্যৱহাৰ কৰে। সঠিক ৰূপটো হ’ল ভিতৰত তৰা থকা বৰ্গক্ষেত্ৰ।"
+
+msgid "Row Counter"
+msgstr "শাৰী গণনা যন্ত্ৰ"
+
+msgid "Rows set the motif (Sun vs. Star); columns set the count (1 item vs. 2 items). What completes the corner?"
+msgstr "শাৰীবোৰে নকশা ঠিক কৰে (সূৰ্য বনাম তৰা); স্তম্ভবোৰে সংখ্যা ঠিক কৰে (১ টা বনাম ২ টা)। চুকটো কোনে সম্পূৰ্ণ কৰিব?"
+
+msgid "Rubber Band"
+msgstr "ৰবৰ বেণ্ড"
+
+msgid "Rubber Boots"
+msgstr "ৰবৰৰ বুট জোতা"
+
+msgid "Rubber Date Stamp"
+msgstr "তাৰিখ মৰা ৰবৰৰ মোহৰ"
+
+msgid "Rubber Duck"
+msgstr "ৰবৰৰ হাঁহ"
+
+msgid "Rubber Galoshes"
+msgstr "ৰবৰৰ জোতা"
+
+msgid "Rubber Stamp"
+msgstr "ৰবৰৰ মোহৰ"
+
+msgid "Ruby Red"
+msgstr "ৰুবী ৰঙা"
+
+msgid "Saddle Soap"
+msgstr "চামৰা পৰিষ্কাৰ কৰা চাবোন"
+
+msgid "Safety Matches"
+msgstr "সুৰক্ষিত দিয়াশলাই"
+
+msgid "Safety Pin"
+msgstr "ছেফটি পিন"
+
+msgid "Safety Razor"
+msgstr "ক্ষৌৰকৰ্মৰ ৰেজৰ"
+
+msgid "Sage Green"
+msgstr "কোমল সেউজীয়া"
+
+msgid "Sailboat"
+msgstr "পালতৰা নাও"
+
+msgid "Salt Shaker"
+msgstr "নিমখৰ বৈয়াম"
+
+msgid "Sandpaper"
+msgstr "বালি কাগজ (চেণ্ডপেপাৰ)"
+
+msgid "Sandpaper Sheet"
+msgstr "বালি কাগজ"
+
+msgid "Sandwich Tin"
+msgstr "চেণ্ডউইচৰ বাকচ"
+
+msgid "Satin Ribbon"
+msgstr "ৰেচমী ফিটা"
+
+msgid "Saucer"
+msgstr "প্লেট-বাটি"
+
+msgid "Saving..."
+msgstr "সংৰক্ষণ কৰি থকা হৈছে..."
+
+msgid "Sawdust"
+msgstr "কাঠৰ গুড়ি"
+
+msgid "Scan the Picture Grid"
+msgstr "ছবিৰ তালিকাখন চাওক"
+
+msgid "Scarlet"
+msgstr "টকটকীয়া ৰঙা"
+
+msgid "Scented Candle"
+msgstr "সুগন্ধি মমবাতি"
+
+msgid "Scissors"
+msgstr "কেঁচী"
+
+msgid "Scrapbook"
+msgstr "স্ক্ৰেপবুক"
+
+msgid "Screwdriver"
+msgstr "স্ক্ৰু-ড্ৰাইভাৰ"
+
+msgid "Sealing Wax"
+msgstr "গালা (ছীল কৰা মোম)"
+
+msgid "Seam Ripper"
+msgstr "চিলাই খোলা সঁজুলি"
+
+msgid "Seed Packet"
+msgstr "বীজৰ পেকেট"
+
+msgid "Select Who It Is"
+msgstr "তেওঁ কোন বাছক"
+
+msgid "Select Your Choice"
+msgstr "আপোনাৰ পছন্দ বাছক"
+
+msgid "Select a word card"
+msgstr "এটা শব্দৰ কাৰ্ড বাছক"
+
+msgid "Select all items on your list"
+msgstr "আপোনাৰ তালিকাত থকা সকলো সামগ্ৰী বাছক"
+
+msgid "Select the Matching Person:"
+msgstr "মিল থকা ব্যক্তিজনক বাছক:"
+
+msgid "Select the Matching Word"
+msgstr "মিল থকা শব্দটো বাছক"
+
+msgid "Select the Matching Word:"
+msgstr "মিল থকা শব্দটো বাছক:"
+
+msgid "Select the items"
+msgstr "সামগ্ৰীসমূহ বাছক"
+
+msgid "Select the matching connected word"
+msgstr "সংলগ্ন মিল থকা শব্দটো বাছক"
+
+msgid "Select the matching tile"
+msgstr "মিল থকা টাইলটো বাছক"
+
+msgid "Selected Items"
+msgstr "বাছনি কৰা সামগ্ৰীসমূহ"
+
+msgid "Selected Steps"
+msgstr "বাছনি কৰা পদক্ষেপসমূহ"
+
+msgid "Selected step"
+msgstr "বাছনি কৰা পদক্ষেপ"
+
+msgid "Self-Paced"
+msgstr "নিজৰ সুবিধাজনক গতিত"
+
+msgid "Semantic Memory & Association"
+msgstr "অৰ্থমূলক স্মৃতি আৰু সংগতি"
+
+msgid "Sending a Letter"
+msgstr "চিঠি পঠোৱা"
+
+msgid "Sequence Tray"
+msgstr "ক্ৰমৰ ট্ৰে"
+
+msgid "Sequence review"
+msgstr "ক্ৰম পৰ্যালোচনা"
+
+msgid "Sequence tray"
+msgstr "ক্ৰমৰ ট্ৰে"
+
+msgid "Serving Tray"
+msgstr "খাদ্য দিয়া ট্ৰে"
+
+msgid "Sewing Basket"
+msgstr "চিলাইৰ বাকচ"
+
+msgid "Sewing Gauge"
+msgstr "চিলাই গজ"
+
+msgid "Sewing Machine"
+msgstr "চিলাই মেচিন"
+
+msgid "Sewing Needle"
+msgstr "চিলাইৰ বেজী"
+
+msgid "Sewing Needles"
+msgstr "চিলাইৰ বেজী"
+
+msgid "Shape & Color Harmony Grid"
+msgstr "আকৃতি আৰু ৰঙৰ সমন্বয় তালিকা"
+
+msgid "Shapes mirror each other across the columns. What mirrors the left-pointing curved feather?"
+msgstr "স্তম্ভসমূহত আকৃতিবোৰে এটা আনটোৰ প্ৰতিফলন ঘটায়। বাওঁমুৱা বেঁকা পাখিটোৰ প্ৰতিফলন কি হ’ব?"
+
+msgid "Shaping Rib"
+msgstr "মাটিৰ পাত্ৰ গঢ়া ফলি"
+
+msgid "Shaving Bowl"
+msgstr "দাড়ি খুৰোৱা বাটি"
+
+msgid "Shaving Brush"
+msgstr "দাড়ি খুৰোৱা ব্ৰাছ"
+
+msgid "Shaving Cream"
+msgstr "দাড়ি খুৰোৱা ক্ৰীম"
+
+msgid "Shaving Soap"
+msgstr "দাড়ি খুৰোৱা চাবোন"
+
+msgid "Shaving Soap Puck"
+msgstr "দাড়ি খুৰোৱা চাবোনৰ ঘিলা"
+
+msgid "Shoe Brush"
+msgstr "জোতাৰ ব্ৰাছ"
+
+msgid "Shoe Buffing Brush"
+msgstr "জোতা পলিচ ব্ৰাছ"
+
+msgid "Shoe Horn"
+msgstr "জোতা পিন্ধা সঁজুলি"
+
+msgid "Shoe Polish"
+msgstr "জোতাৰ পলিচ"
+
+msgid "Shoe Rack"
+msgstr "জোতাৰ ৰেক"
+
+msgid "Shoe Trees"
+msgstr "জোতাৰ আকৃতি ৰখা কাঠ"
+
+msgid "Shoelaces"
+msgstr "জোতাৰ ফিতা"
+
+msgid "Silk Bookmark"
+msgstr "ৰেচমী বুকমাৰ্ক"
+
+msgid "Silk Eye Mask"
+msgstr "ৰেচমী চকুৰ ঢাকনি"
+
+msgid "Silver Cutlery"
+msgstr "ৰূপালী বাচন"
+
+msgid "Silver Spoon"
+msgstr "ৰূপালী চামুচ"
+
+msgid "Silverware"
+msgstr "ৰূপালী বাচন"
+
+msgid "Sketchbook"
+msgstr "ছবি অঁকা বহী"
+
+msgid "Sky Blue"
+msgstr "আকাশী নীলা"
+
+msgid "Slate Plant Marker"
+msgstr "শ্লেটৰ গছৰ নামফলক"
+
+msgid "Sleeve Board"
+msgstr "হাতা ইস্ত্ৰি কৰা ফলি"
+
+msgid "Slender dry wood used between crumpled paper and heavy firewood."
+msgstr "সহজে জুই লগা সৰু সৰু শুকান ডাল আৰু কাঠৰ টুকুৰা।"
+
+msgid "Slippers"
+msgstr "চটি জোতা"
+
+msgid "Small Amber Circle"
+msgstr "সৰু এম্বাৰ বৃত্ত"
+
+msgid "Small Amber Square"
+msgstr "সৰু এম্বাৰ বৰ্গক্ষেত্ৰ"
+
+msgid "Small Clamps"
+msgstr "সৰু ক্ল্যাম্প"
+
+msgid "Small Hammer"
+msgstr "সৰু হাতুৰী"
+
+msgid "Small Teal Ring"
+msgstr "সৰু টিল আঙুঠি"
+
+msgid "Small Teal Square"
+msgstr "সৰু টিল বৰ্গক্ষেত্ৰ"
+
+msgid "Small Welt Brush"
+msgstr "সৰু জোতাৰ ব্ৰাছ"
+
+msgid "Soap Dish"
+msgstr "চাবোন দানি"
+
+msgid "Soft Coral"
+msgstr "কোমল প্ৰবাল"
+
+msgid "Soft Pink"
+msgstr "কোমল গুলপীয়া"
+
+msgid "Soil Scoop"
+msgstr "মাটি তোলা বেলচা"
+
+msgid "Sole Edge Dressing"
+msgstr "জোতাৰ তলৰ পলিচ"
+
+msgid "Solid Circle"
+msgstr "গাঢ় বৃত্ত"
+
+msgid "Solid Diamond"
+msgstr "গাঢ় হীৰা"
+
+msgid "Solid Teal Circle"
+msgstr "গাঢ় টিল বৃত্ত"
+
+msgid "Solid Terracotta Square"
+msgstr "গাঢ় টেৰাকোটা বৰ্গক্ষেত্ৰ"
+
+msgid "Solid Triangle"
+msgstr "গাঢ় ত্ৰিভুজ"
+
+msgid "Solid to Outline Analogy"
+msgstr "গাঢ় আৰু ৰূপৰেখাৰ সাদৃশ্য"
+
+msgid "Soup Bowl"
+msgstr "চুপৰ বাটি"
+
+msgid "Soup Ladle"
+msgstr "চুপৰ হেতা"
+
+msgid "Soup Spoon"
+msgstr "চুপৰ চামুচ"
+
+msgid "Souwester Hat"
+msgstr "বৰষুণৰ টুপী"
+
+msgid "Spare Button"
+msgstr "অতিৰিক্ত বুটাম"
+
+msgid "Spatula"
+msgstr "হেতা"
+
+msgid "Spearmint"
+msgstr "স্পিয়াৰমিণ্ট বনৌষধি"
+
+msgid "Spectacle Cord"
+msgstr "চশমাৰ ৰছী"
+
+msgid "Spice Grinder"
+msgstr "মছলা পিহা যন্ত্ৰ"
+
+msgid "Spinach"
+msgstr "পালেং শাক"
+
+msgid "Splendid! %(explanation)s"
+msgstr "চমৎকার! %(explanation)s"
+
+msgid "Spokeshave"
+msgstr "গোলাকাৰ কাঠৰ ৰেন্দা"
+
+msgid "Spun Yarn"
+msgstr "পশমী সূতা"
+
+msgid "Spun strands of wool or cotton pulled loop by loop onto needles."
+msgstr "পশমৰ পৰা তৈয়াৰী কোমল সূতাৰ লাড়ু।"
+
+msgid "Spun yarn is the primary fibrous material knitted with needles to form blankets and sweaters."
+msgstr "পশমী সূতা শলাৰে গুঠি উষ্ম কাপোৰ তৈয়াৰ কৰা হয়।"
+
+msgid "Square with Crossbar"
+msgstr "আঁকযুক্ত বৰ্গক্ষেত্ৰ"
+
+msgid "Square with Inner Cross"
+msgstr "ভিতৰত ক্ৰছ থকা বৰ্গক্ষেত্ৰ"
+
+msgid "Square with Inner Dot"
+msgstr "ভিতৰত বিন্দু থকা বৰ্গক্ষেত্ৰ"
+
+msgid "Square with Inner Star"
+msgstr "ভিতৰত তৰা থকা বৰ্গক্ষেত্ৰ"
+
+msgid "Stacking Food Tins"
+msgstr "খাদ্যৰ টিফিন বাকচ"
+
+msgid "Start Activity"
+msgstr "কাৰ্যকলাপ আৰম্ভ কৰক"
+
+msgid "Start playing {{ name }}"
+msgstr "{{ name }} খেলিবলৈ আৰম্ভ কৰক"
+
+msgid "Stationery Box"
+msgstr "চিঠিৰ কাগজৰ বাকচ"
+
+msgid "Steam Iron"
+msgstr "ভাপ ইস্ত্ৰি"
+
+msgid "Steel Square"
+msgstr "তীখাৰ বৰ্গ স্কেল"
+
+msgid "Step"
+msgstr "পদক্ষেপ"
+
+msgid "Step %(num)s"
+msgstr "পদক্ষেপ %(num)s"
+
+msgid "Step %(number)s"
+msgstr "পদক্ষেপ %(number)s"
+
+msgid "Step 1"
+msgstr "পদক্ষেপ ১"
+
+msgid "Step 1 of 2: Remember Your List"
+msgstr "পদক্ষেপ ১ / ২: তালিকাখন মনত ৰাখক"
+
+msgid "Step 2"
+msgstr "পদক্ষেপ ২"
+
+msgid "Step 2 of 2: Pick Your Items"
+msgstr "পদক্ষেপ ২ / ২: সামগ্ৰীসমূহ বাছক"
+
+msgid "Step 3"
+msgstr "পদক্ষেপ ৩"
+
+msgid "Step 4"
+msgstr "পদক্ষেপ ৪"
+
+msgid "Step Ladder"
+msgstr "খটখটী জখলা"
+
+msgid "Step Ordering Activity"
+msgstr "পদক্ষেপ সজোৱা কাৰ্যকলাপ"
+
+msgid "Step Outside & Lock Door"
+msgstr "বাহিৰলৈ ওলাই দুৱাৰ বন্ধ কৰক"
+
+msgid "Step Tray"
+msgstr "পদক্ষেপৰ ট্ৰে"
+
+msgid "Step tray"
+msgstr "পদক্ষেপৰ ট্ৰে"
+
+msgid "Steps in Natural Order"
+msgstr "স্বাভাৱিক ক্ৰমত পদক্ষেপসমূহ"
+
+msgid "Steps placed in order"
+msgstr "ক্ৰমত সজোৱা পদক্ষেপসমূহ"
+
+msgid "Stirring Spoon"
+msgstr "লৰোৱা চামুচ"
+
+msgid "Stitch Holder"
+msgstr "চিলাই ধাৰক শলা"
+
+msgid "Stitch Markers"
+msgstr "চিলাই চিহ্নক"
+
+msgid "Stone Hearth"
+msgstr "শিলৰ জুহাল"
+
+msgid "Storage Crate"
+msgstr "বস্তু ৰখা কাঠৰ ক্ৰেট"
+
+msgid "Storm Lantern"
+msgstr "তুফানৰ লণ্ঠন"
+
+msgid "Straight Razor"
+msgstr "ক্ষুৰ"
+
+msgid "Straw Sunhat"
+msgstr "খেৰৰ ৰ’দ টুপী"
+
+msgid "Striped Indigo Circle"
+msgstr "ৰেখাঙ্কিত ইণ্ডিগো বৃত্ত"
+
+msgid "Striped Indigo Square"
+msgstr "ৰেখাঙ্কিত ইণ্ডিগো বৰ্গক্ষেত্ৰ"
+
+msgid "Striped Indigo Triangle"
+msgstr "ৰেখাঙ্কিত ইণ্ডিগো ত্ৰিভুজ"
+
+msgid "Strop Leather"
+msgstr "ক্ষুৰ চোকা কৰা চামৰা"
+
+msgid "Study Lamp"
+msgstr "পঢ়া লেম্প"
+
+msgid "Styptic Pencil"
+msgstr "তেজ বন্ধ কৰা কাঠি"
+
+msgid "Sugar Bowl"
+msgstr "চেনিৰ বাটি"
+
+msgid "Sugar Tongs"
+msgstr "চেনি তোলা চিমটা"
+
+msgid "Summary"
+msgstr "সাৰাংশ"
+
+msgid "Sun & Leaf Alternation"
+msgstr "সূৰ্য আৰু পাতৰ পৰ্যায়ক্ৰম"
+
+msgid "Sun & Moon"
+msgstr "সূৰ্য আৰু জোন"
+
+msgid "Sunglasses"
+msgstr "ৰ’দ চশমা"
+
+msgid "Sweet Basil"
+msgstr "তুলসী বনৌষধি"
+
+msgid "Sweet Green Pear"
+msgstr "মিঠা সেউজীয়া নাচপতি"
+
+msgid "Sweet Marjoram"
+msgstr "মিঠা মাৰ্জোৰাম বনৌষধি"
+
+msgid "Sweet Oranges"
+msgstr "মিঠা কমলা"
+
+msgid "Table Lamp"
+msgstr "টেবুল লেম্প"
+
+msgid "Table Napkin"
+msgstr "টেবুল নেপকিন"
+
+msgid "Tablecloth"
+msgstr "মেজৰ চাদৰ"
+
+msgid "Tableware"
+msgstr "টেবুলৰ বাচন-বৰ্তন"
+
+msgid "Tailor's Chalk"
+msgstr "দৰ্জীৰ চক"
+
+msgid "Take All the Time You Need"
+msgstr "আপোনাৰ প্ৰয়োজনীয় সকলো সময় লওক"
+
+msgid "Take House Keys & Water"
+msgstr "ঘৰৰ চাবি আৰু পানী লওক"
+
+msgid "Tap Your Choice"
+msgstr "আপোনাৰ পছন্দত টিপক"
+
+msgid "Tap a step to place it into your sequence."
+msgstr "আপোনাৰ ক্ৰমত ৰাখিবলৈ এটা পদক্ষেপত টিপক।"
+
+msgid "Tap an available step below"
+msgstr "তলৰ উপলব্ধ পদক্ষেপ এটাত টিপক"
+
+msgid "Tap any step in your tray to remove it, or use Undo to adjust your sequence."
+msgstr "ট্ৰেৰ পৰা আঁতৰাবলৈ যিকোনো পদক্ষেপত টিপক, বা ক্ৰম সলাবলৈ পূৰ্বৰ অৱস্থালৈ আনক ব্যৱহাৰ কৰক।"
+
+msgid "Tap each step in the order it happens naturally from start to finish."
+msgstr "আৰম্ভণিৰ পৰা শেষলৈ স্বাভাৱিক ক্ৰমত প্ৰতিটো পদক্ষেপত টিপক।"
+
+msgid "Tap or click the items you remember from the market shelf. You can tap again to uncheck any item."
+msgstr "বজাৰৰ আলমাৰিৰ পৰা মনত থকা সামগ্ৰীসমূহত টিপক। আঁতৰাবলৈ পুনৰ টিপিব পাৰে।"
+
+msgid "Tap the card that has the closest natural connection. You can change your choice anytime without penalty."
+msgstr "আটাইতকৈ ওচৰৰ সংযোগ থকা কাৰ্ডত টিপক। কোনো অসুবিধা নোহোৱাকৈ যিকোনো সময়তে পছন্দ সলাব পাৰিব।"
+
+msgid "Tap the symbol card that fits best. You can change your choice anytime without penalty."
+msgstr "আটাইতকৈ খাপ খোৱা প্ৰতীক কাৰ্ডত টিপক। কোনো অসুবিধা নোহোৱাকৈ যিকোনো সময়তে পছন্দ সলাব পাৰিব।"
+
+msgid "Tap the tile that matches the target. You can change your selection at any time without penalty."
+msgstr "লক্ষ্যৰ সৈতে মিলা টাইলত টিপক। কোনো অসুবিধা নোহোৱাকৈ যিকোনো সময়তে পছন্দ সলাব পাৰিব।"
+
+msgid "Tap to Add +"
+msgstr "যোগ কৰিবলৈ টিপক +"
+
+msgid "Tape Measure"
+msgstr "জোখ লোৱা টেপ"
+
+msgid "Tapestry Needle"
+msgstr "টেপেষ্ট্ৰীৰ ডাঙৰ বেজী"
+
+msgid "Target"
+msgstr "লক্ষ্য"
+
+msgid "Target Item"
+msgstr "লক্ষ্য সামগ্ৰী"
+
+msgid "Target Person"
+msgstr "লক্ষ্য ব্যক্তি"
+
+msgid "Target item reference"
+msgstr "লক্ষ্য সামগ্ৰীৰ উল্লেখ"
+
+msgid "Target item reference card"
+msgstr "লক্ষ্য সামগ্ৰীৰ উল্লেখনীয় কাৰ্ড"
+
+msgid "Target to Find"
+msgstr "বিচাৰিবলগীয়া লক্ষ্য"
+
+msgid "Targets Spotted"
+msgstr "চিনাক্ত কৰা লক্ষ্য"
+
+msgid "Tea"
+msgstr "চাহ"
+
+msgid "Tea Caddy"
+msgstr "চাহৰ বৈয়াম"
+
+msgid "Tea Canister"
+msgstr "চাহৰ বৈয়াম"
+
+msgid "Tea Cosy"
+msgstr "টি-পটৰ গৰম আৱৰণ"
+
+msgid "Tea Cup"
+msgstr "চাহৰ কাপ"
+
+msgid "Tea Infuser"
+msgstr "টি ইনফ্যুজাৰ"
+
+msgid "Tea Kettle"
+msgstr "চাহৰ কেটলী"
+
+msgid "Tea Leaves"
+msgstr "চাহ পাত"
+
+msgid "Tea Slop Bowl"
+msgstr "চাহৰ বাটি"
+
+msgid "Tea Strainer"
+msgstr "চাহৰ চালনী"
+
+msgid "Teacup"
+msgstr "চাহৰ কাপ"
+
+msgid "Teal Blue"
+msgstr "টিল নীলা"
+
+msgid "Teal Circle"
+msgstr "টিল নীলা বৃত্ত"
+
+msgid "Teal Circle with Dot"
+msgstr "বিন্দুযুক্ত টিল বৃত্ত"
+
+msgid "Teal Cross"
+msgstr "টিল ক্ৰছ"
+
+msgid "Teal Diamond"
+msgstr "টিল নীলা হীৰা"
+
+msgid "Teal Diamond with Amber Dot"
+msgstr "এম্বাৰ বিন্দুযুক্ত টিল হীৰা"
+
+msgid "Teal Diamond with Teal Dot"
+msgstr "টিল বিন্দুযুক্ত টিল হীৰা"
+
+msgid "Teal Dot"
+msgstr "টিল নীলা বিন্দু"
+
+msgid "Teal Leaf"
+msgstr "টিল নীলা পাত"
+
+msgid "Teal Lotus"
+msgstr "টিল নীলা পদ্ম"
+
+msgid "Teal Moon"
+msgstr "টিল জোন"
+
+msgid "Teal Ring with Amber Dot"
+msgstr "এম্বাৰ বিন্দুযুক্ত টিল আঙুঠি"
+
+msgid "Teal Square"
+msgstr "টিল নীলা বৰ্গক্ষেত্ৰ"
+
+msgid "Teal Sun"
+msgstr "টিল সূৰ্য"
+
+msgid "Teal Triangle"
+msgstr "টিল নীলা ত্ৰিভুজ"
+
+msgid "Teapot"
+msgstr "চাহদানি"
+
+msgid "Teaspoon"
+msgstr "চাহ চামুচ"
+
+msgid "Telephone"
+msgstr "টেলিফোন"
+
+msgid "Telescope"
+msgstr "দূৰবীক্ষণ যন্ত্ৰ"
+
+msgid "Tending the Garden"
+msgstr "বাগানৰ যত্ন"
+
+msgid "Tension Square"
+msgstr "টেন্সন স্কোৱাৰ"
+
+msgid "Terracotta Circle"
+msgstr "টেৰাকোটা বৃত্ত"
+
+msgid "Terracotta Dot"
+msgstr "টেৰাকোটা বিন্দু"
+
+msgid "Terracotta Pot"
+msgstr "টেৰাকোটাৰ টব"
+
+msgid "Terracotta Square"
+msgstr "টেৰাকোটা বৰ্গক্ষেত্ৰ"
+
+msgid "Terracotta Square with Dot"
+msgstr "বিন্দুযুক্ত টেৰাকোটা বৰ্গক্ষেত্ৰ"
+
+msgid "Texture Transformation Grid"
+msgstr "বয়ন পৰিৱৰ্তনৰ তালিকা"
+
+msgid "Thank You!"
+msgstr "ধন্যবাদ!"
+
+msgid "Thank you for arranging the steps."
+msgstr "পদক্ষেপসমূহ সজোৱাৰ বাবে ধন্যবাদ।"
+
+msgid "Thank you for arranging the steps. Let's continue together to the next journey."
+msgstr "পদক্ষেপসমূহ সজোৱাৰ বাবে ধন্যবাদ। আহক আমি একেলগে পৰৱৰ্তী যাত্ৰালৈ আগবাঢ়োঁ।"
+
+msgid "Thank you for exercising your attention today."
+msgstr "আজি মনোযোগৰ অনুশীলন কৰাৰ বাবে ধন্যবাদ।"
+
+msgid "Thank you for exercising your memory today."
+msgstr "আজি স্মৃতিৰ অনুশীলন কৰাৰ বাবে ধন্যবাদ।"
+
+msgid "Thank you for exploring this memory connection."
+msgstr "এই স্মৃতিৰ সংযোগ অন্বেষণ কৰাৰ বাবে ধন্যবাদ।"
+
+msgid "Thank you for looking at this memory together."
+msgstr "একেলগে এই স্মৃতিটো চোৱাৰ বাবে ধন্যবাদ।"
+
+msgid "Thank you for spending time exercising with Cognicare today."
+msgstr "আজি Cognicare ৰ সৈতে মনৰ অনুশীলন কৰাৰ বাবে ধন্যবাদ।"
+
+msgid "Thank you for trying. Let's continue together to the next round."
+msgstr "চেষ্টা কৰাৰ বাবে ধন্যবাদ। আহক আমি একেলগে পৰৱৰ্তী ৰাউণ্ডলৈ আগবাঢ়োঁ।"
+
+msgid "That is %(name)s. Thank you for looking at this memory together."
+msgstr "তেওঁ হ’ল %(name)s। একেলগে এই স্মৃতিটো চোৱাৰ বাবে ধন্যবাদ।"
+
+msgid "That is your %(rel)s, %(name)s. Thank you for looking at this memory together."
+msgstr "তেওঁ হ’ল আপোনাৰ %(rel)s, %(name)s। একেলগে এই স্মৃতিটো চোৱাৰ বাবে ধন্যবাদ।"
+
+msgid "The border alternates between the Teal Diamond and the Amber Cross. The missing tile is the Amber Cross."
+msgstr "সীমাটো টিল হীৰা আৰু এম্বাৰ ক্ৰছৰ মাজত সলনি হয়। অনুপস্থিত টাইলটো হ’ল এম্বাৰ ক্ৰছ।"
+
+msgid "The correct answer was %(name)s."
+msgstr "সঠিক উত্তৰ আছিল %(name)s।"
+
+msgid "The correct answer was %(word)s."
+msgstr "সঠিক উত্তৰ আছিল %(word)s।"
+
+msgid "The crescent opening rotates clockwise by 90 degrees each step. Following the downward opening is the Crescent Opening Left."
+msgstr "অৰ্ধচন্দ্ৰৰ মুখখন প্ৰতিবাৰে ৯০ ডিগ্ৰী ঘড়ীৰ কাঁটাৰ দিশত ঘূৰে। তলমুৱা মুখৰ পিছত বাওঁফালে মেল খোৱা অৰ্ধচন্দ্ৰ আহে।"
+
+msgid "The curved crescent turns clockwise step by step. Which crescent shows the next quarter turn?"
+msgstr "বেঁকা অৰ্ধচন্দ্ৰটো ঘড়ীৰ কাঁটাৰ দিশত লাহে লাহে ঘূৰে। কোনটো অৰ্ধচন্দ্ৰই পৰৱৰ্তী ঘূৰণ দেখুৱায়?"
+
+msgid "The cycle repeats Gold, Teal, then Rose. Following the second Teal circle comes the Rose Circle."
+msgstr "চক্ৰটোত সোণালী, টিল আৰু তাৰ পিছত গুলপীয়া আহে। দ্বিতীয় টিল বৃত্তৰ পিছত গুলপীয়া বৃত্ত আহে।"
+
+msgid "The gentle garden alternates between a lotus flower and a diya lamp. Which one comes next?"
+msgstr "বাগানখনত এটা পদুম ফুল আৰু এটা চাকি পৰ্যায়ক্ৰমে আছে। পৰৱৰ্তীটো কি হ’ব?"
+
+msgid "The golden petal advances clockwise around the 4 petals (Top, Right, Bottom). The fourth position highlights the Left Petal."
+msgstr "সোণালী পাহিটো ৪ টা পাহিৰ চাৰিওফালে ঘড়ীৰ কাঁটাৰ দিশত ঘূৰে। চতুৰ্থ স্থানত বাওঁফালৰ পাহিটো চিহ্নিত হ’ব।"
+
+msgid "The golden petal moves clockwise: Top, Right, Bottom. Where does it light up next?"
+msgstr "সোণালী পাহিটো ঘড়ীৰ কাঁটাৰ দিশত আগবাঢ়ে: ওপৰত, সোঁফালে, তলত। ইয়াৰ পিছত ক’ত পোহৰাব?"
+
+msgid "The motif alternates between an upright square and a 45-degree tilted diamond. After the upright square comes the Tilted Diamond."
+msgstr "নকশাটো থিয় বৰ্গক্ষেত্ৰ আৰু ৪৫ ডিগ্ৰী হেলনীয়া হীৰাৰ মাজত সলনি হয়। থিয় বৰ্গক্ষেত্ৰৰ পিছত হেলনীয়া হীৰা আহে।"
+
+msgid "The natural connection was"
+msgstr "স্বাভাৱিক সংযোগ আছিল"
+
+msgid "The number of stars increases by one on each step (1, 2, 3). The missing tile contains 4 Golden Stars."
+msgstr "প্ৰতিটো পদক্ষেপতে তৰাৰ সংখ্যা এটাকৈ বাঢ়িছে (১, ২, ৩)। অনুপস্থিত টাইলটোত ৪ টা সোণালী তৰা থাকে।"
+
+msgid "The outer frame is set by the row; the inner symbol is set by the column. What belongs in the lower corner?"
+msgstr "বাহিৰৰ ফ্ৰেমটো শাৰীৰ দ্বাৰা আৰু ভিতৰৰ প্ৰতীকটো স্তম্ভৰ দ্বাৰা নিৰ্ধাৰিত হয়। তলৰ চুকত কি বহিব?"
+
+msgid "The pattern adds a central solid dot inside the outer border. The square gains a central dot, becoming Terracotta Square with Dot."
+msgstr "আৰ্হিটোৱে বাহিৰৰ সীমাৰ ভিতৰত এটা কেন্দ্ৰীয় বিন্দু যোগ কৰে। বৰ্গক্ষেত্ৰটো বিন্দুযুক্ত টেৰাকোটা বৰ্গক্ষেত্ৰ হয়।"
+
+msgid "The pattern alternates between a Blue Circle and a Terracotta Square. The missing shape is the Terracotta Square."
+msgstr "আৰ্হিটো নীলা বৃত্ত আৰু টেৰাকোটা বৰ্গক্ষেত্ৰৰ মাজত সলনি হয়। অনুপস্থিত আকৃতিটো হ’ল টেৰাকোটা বৰ্গক্ষেত্ৰ।"
+
+msgid "The pattern alternates between the Golden Sun and Teal Leaf. After the Sun, the next tile is the Teal Leaf."
+msgstr "আৰ্হিটো সোণালী সূৰ্য আৰু টিল পাতৰ মাজত পৰ্যায়ক্ৰমে সলনি হয়। সূৰ্যৰ পিছৰ টাইলটো হ’ল টিল পাত।"
+
+msgid "The pattern alternates between the Indigo Ring and the Amber Dot. Following the ring comes the Amber Dot."
+msgstr "আৰ্হিটো ইণ্ডিগো আঙুঠি আৰু এম্বাৰ বিন্দুৰ মাজত সলনি হয়। আঙুঠিৰ পিছত এম্বাৰ বিন্দু আহে।"
+
+msgid "The pattern sequence is Triangle, Square, Circle. After the second Triangle appears, the Square follows next."
+msgstr "আৰ্হিৰ ক্ৰমটো হ’ল ত্ৰিভুজ, বৰ্গক্ষেত্ৰ, বৃত্ত। দ্বিতীয় ত্ৰিভুজৰ পিছত বৰ্গক্ষেত্ৰ আহে।"
+
+msgid "The pattern synchronizes Size, Color, and Shape in alternation. Following the Large Teal Circle comes the Small Amber Square."
+msgstr "আৰ্হিটোৱে আকাৰ, ৰং আৰু আকৃতি একত্ৰিতভাৱে পৰ্যায়ক্ৰমে সলনি কৰে। ডাঙৰ টিল বৃত্তৰ পিছত সৰু এম্বাৰ বৰ্গক্ষেত্ৰ আহে।"
+
+msgid "The pointer rotates 90 degrees clockwise each turn (Up, Right, Down). The next quarter-turn points to the Left."
+msgstr "প্ৰতিবাৰ ঘূৰোঁতে কাঁড়ডাল ৯০ ডিগ্ৰী ঘড়ীৰ কাঁটাৰ দিশত ঘূৰে (ওপৰত, সোঁফালে, তলত)। পৰৱৰ্তী ঘূৰণ বাওঁফালে হ’ব।"
+
+msgid "The pointer turns clockwise by a quarter-turn at each step: Up, Right, Down. Which direction points next?"
+msgstr "প্ৰতিটো পদক্ষেপতে কাঁড়ডাল ঘড়ীৰ কাঁটাৰ দিশত এক-চতুৰ্থাংশ ঘূৰে: ওপৰলৈ, সোঁফালে, তললৈ। ইয়াৰ পিছত কোন দিশে আঙুলিয়াব?"
+
+msgid "The recurring group is Sun, Star, Moon. After the Sun returns, the Amber Star belongs in the next position."
+msgstr "পুনৰাবৃত্তিমূলক গোটটো হ’ল সূৰ্য, তৰা, চন্দ্ৰ। সূৰ্যৰ পিছত পৰৱৰ্তী স্থানত এম্বাৰ তৰা বহিব।"
+
+msgid "The sequence alternates between the Pink Lotus and the Golden Diya. The missing tile is the Golden Diya."
+msgstr "ক্ৰমটো গুলপীয়া পদ্ম আৰু সোণালী চাকিৰ মাজত সলনি হয়। অনুপস্থিত টাইলটো হ’ল সোণালী চাকি।"
+
+msgid "The shapes repeat in order: Triangle, Square, Circle. Which shape follows the Triangle?"
+msgstr "আকৃতিবোৰ ক্ৰমে পুনৰাবৃত্তি হয়: ত্ৰিভুজ, বৰ্গক্ষেত্ৰ, বৃত্ত। ত্ৰিভুজৰ পিছত কোনটো আকৃতি আহে?"
+
+msgid "The sky symbols repeat in a trio: Sun, Star, Moon. What symbol follows the Sun?"
+msgstr "আকাশৰ প্ৰতীকসমূহ তিনিটাৰ গোটত আহে: সূৰ্য, তৰা, চন্দ্ৰ। সূৰ্যৰ পিছত কোনটো প্ৰতীক আহে?"
+
+msgid "The square alternates between upright and a 45-degree diamond tilt. Which orientation comes next?"
+msgstr "বৰ্গক্ষেত্ৰটো থিয় আৰু ৪৫ ডিগ্ৰী হেলনীয়া হীৰাৰ মাজত পৰ্যায়ক্ৰমে আহে। পৰৱৰ্তী দিশ কি হ’ব?"
+
+msgid "The teal rings expand in size with each step. Which ring continues the expansion?"
+msgstr "প্ৰতিটো পদক্ষেপতে টিল আঙুঠিবোৰ ডাঙৰ হৈ গৈছে। কোনটো আঙুঠিয়ে এই সম্প্ৰসাৰণ অব্যাহত ৰাখে?"
+
+msgid "The top row changes from a solid shape to an outline. What happens to the rose blossom?"
+msgstr "ওপৰৰ শাৰীটো গাঢ় আকৃতিৰ পৰা ৰূপৰেখালৈ সলনি হৈছে। গুলপীয়া ফুলটোৰ ক্ষেত্ৰত কি হ’ব?"
+
+msgid "There are no timers. Look at the friendly face and take a moment to recall memories together."
+msgstr "কোনো সময়সীমা নাই। মৰমিয়াল মুখখন চাওক আৰু পুৰণি স্মৃতি মনত পেলাওক।"
+
+msgid "There is no timer or hurry. When you feel confident you remember the items, click the ready button."
+msgstr "কোনো সময়ৰ তাগিদা বা খৰখেদা নাই। যেতিয়া আপুনি নিশ্চিত হ’ব, সাজু বুটামটো টিপক।"
+
+msgid "There was a problem checking your selections. Please try again."
+msgstr "আপোনাৰ নিৰ্বাচনসমূহ পৰীক্ষা কৰাত সমস্যা হৈছে। অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।"
+
+msgid "There was a problem checking your sequence. Please try again."
+msgstr "আপোনাৰ ক্ৰম পৰীক্ষা কৰাত সমস্যা হৈছে। অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰক।"
+
+msgid "Thermal Flask"
+msgstr "ফ্লাস্ক"
+
+msgid "Thermometer"
+msgstr "থাৰ্মোমিটাৰ"
+
+msgid "Thimble"
+msgstr "থিম্বল"
+
+msgid "Think of the natural ingredient that creates warm, airy loaves."
+msgstr "পাউৰুটি কোমল আৰু ফুলাই তোলা প্ৰাকৃতিক উপাদানটোৰ কথা ভাবক।"
+
+msgid "This activity is scheduled for a future phase."
+msgstr "এই কাৰ্যকলাপটো ভৱিষ্যতৰ পৰ্যায়ৰ বাবে নিৰ্ধাৰিত।"
+
+msgid "This game is not yet active."
+msgstr "এই খেলটো এতিয়াও সক্ৰিয় নহয়।"
+
+msgid "Thorn Stripper"
+msgstr "কাঁইট গুচোৱা সঁজুলি"
+
+msgid "Thoughtful Effort!"
+msgstr "চিন্তাশীল প্ৰচেষ্টা!"
+
+msgid "Thread Spool"
+msgstr "সূতাৰ নলী"
+
+msgid "Three colors repeat in order: Gold, Teal, and Rose. Which blossom completes the second group?"
+msgstr "তিনিটা ৰং ক্ৰমে পুনৰাবৃত্তি হয়: সোণালী, টিল আৰু গুলপীয়া। কোনটো ফুলে দ্বিতীয় গোটটো সম্পূৰ্ণ কৰে?"
+
+msgid "Throw Pillow"
+msgstr "সৰু কুশ্বন"
+
+msgid "Tie on comfortable, supportive walking shoes for a secure stroll."
+msgstr "সুৰক্ষিত খোজৰ বাবে আৰামদায়ক জোতা পিন্ধি ফিতা বান্ধক।"
+
+msgid "Tile choices grid"
+msgstr "টাইল বিকল্পৰ তালিকা"
+
+msgid "Tilted Diamond"
+msgstr "হেলনীয়া হীৰা"
+
+msgid "Timber"
+msgstr "কাঠ"
+
+msgid "Timer"
+msgstr "টাইমাৰ"
+
+msgid "Toaster"
+msgstr "টোষ্টাৰ"
+
+msgid "Toothbrush"
+msgstr "দাঁতৰ ব্ৰাছ"
+
+msgid "Top Petal Highlighted"
+msgstr "ওপৰৰ পাহি চিহ্নিত"
+
+msgid "Total Score"
+msgstr "মুঠ নম্বৰ"
+
+msgid "Total Time"
+msgstr "মুঠ সময়"
+
+msgid "Tracing Paper"
+msgstr "ট্ৰেচিং পেপাৰ"
+
+msgid "Tracing Wheel"
+msgstr "ট্ৰেচিং চকা"
+
+msgid "Traditional Morning Shave"
+msgstr "পুৱাৰ পৰম্পৰাগত ক্ষৌৰকৰ্ম"
+
+msgid "Travel Mug"
+msgstr "যাত্ৰাৰ মগ"
+
+msgid "Travel Salt Shaker"
+msgstr "যাত্ৰাৰ নিমখদানি"
+
+msgid "Trenchcoat"
+msgstr "ট্ৰেঞ্চকোট"
+
+msgid "Tri-Color Blossom Cycle"
+msgstr "ত্ৰি-ৰঙী ফুলৰ চক্ৰ"
+
+msgid "Triangle with Crossbar"
+msgstr "আঁকযুক্ত ত্ৰিভুজ"
+
+msgid "Triangle with Dot"
+msgstr "বিন্দুযুক্ত ত্ৰিভুজ"
+
+msgid "Triple Attribute Alternation"
+msgstr "তিনিটা গুণৰ পৰ্যায়ক্ৰম"
+
+msgid "Tropical Gold"
+msgstr "উজ্জ্বল সোণালী"
+
+msgid "Trowel"
+msgstr "খন্তি"
+
+msgid "Try Again"
+msgstr "পুনৰ চেষ্টা কৰক"
+
+msgid "Turn On Water & Wet Hands"
+msgstr "পানী খুলি হাত তিয়াওক"
+
+msgid "Turning Golden Crescent"
+msgstr "ঘূৰ্ণীয়মান সোণালী অৰ্ধচন্দ্ৰ"
+
+msgid "Typewriter"
+msgstr "টাইপৰাইটাৰ"
+
+msgid "Umbrella"
+msgstr "ছাতি"
+
+msgid "Uncheck item"
+msgstr "সামগ্ৰীটো আঁতৰাওক"
+
+msgid "Undo last placed step"
+msgstr "শেষবাৰ ৰখা পদক্ষেপটো পূৰ্বৰ অৱস্থালৈ আনক"
+
+msgid "Undo last step placed"
+msgstr "শেষবাৰ ৰখা পদক্ষেপটো পূৰ্বৰ অৱস্থালৈ আনক"
+
+msgid "Unsalted Butter"
+msgstr "নিমখবিহীন মাখন"
+
+msgid "Unsupported game engine."
+msgstr "অপ্ৰচলিত খেলৰ ইঞ্জিন।"
+
+msgid "Upright Square"
+msgstr "থিয় বৰ্গক্ষেত্ৰ"
+
+msgid "Urn Pedestal"
+msgstr "কলহৰ বেদিকা"
+
+msgid "Vanilla"
+msgstr "ভেনিলাই"
+
+msgid "Vanilla Extract"
+msgstr "ভেনিলাই এছেন্স"
+
+msgid "Vanilla Pod"
+msgstr "ভেনিলাই ফল"
+
+msgid "Vase Filler Marbles"
+msgstr "ফুলদানিৰ মাৰ্বল গুটি"
+
+msgid "Vegetables"
+msgstr "শাক-পাচলি"
+
+msgid "Velvet Ribbon"
+msgstr "ভেলভেট ফিটা"
+
+msgid "Vibrant Amber"
+msgstr "উজ্জ্বল এম্বাৰ"
+
+msgid "View Activity Results →"
+msgstr "কাৰ্যকলাপৰ ফলাফল চাওক →"
+
+msgid "View Activity Summary →"
+msgstr "কাৰ্যকলাপৰ সাৰাংশ চাওক →"
+
+msgid "View Results"
+msgstr "ফলাফল চাওক"
+
+msgid "View Results →"
+msgstr "ফলাফল চাওক →"
+
+msgid "View Summary"
+msgstr "সাৰাংশ চাওক"
+
+msgid "View Summary →"
+msgstr "সাৰাংশ চাওক →"
+
+msgid "Vinegar"
+msgstr "ভিনেগাৰ"
+
+msgid "Violin"
+msgstr "বেহালা"
+
+msgid "Visual Attention & Focus"
+msgstr "দৃশ্যমান মনোযোগ আৰু একাগ্ৰতা"
+
+msgid "Visual Logic & Reasoning"
+msgstr "দৃশ্যমান যুক্তি আৰু বিশ্লেষণ"
+
+msgid "Visual pattern puzzle"
+msgstr "দৃশ্যমান আৰ্হিৰ খেল"
+
+msgid "Waffle Iron"
+msgstr "ৱাফেল মেকাৰ"
+
+msgid "Wall Clock"
+msgstr "বেৰৰ ঘড়ী"
+
+msgid "Warm Brass"
+msgstr "উষ্ম পিতল"
+
+msgid "Warm Chestnut"
+msgstr "উষ্ম চেষ্টনাট"
+
+msgid "Warm Face Towel"
+msgstr "উষ্ম মুখ মচা গামোচা"
+
+msgid "Warm Orange"
+msgstr "উষ্ম কমলা"
+
+msgid "Warm Quilt"
+msgstr "উষ্ম লেপ"
+
+msgid "Warm Scarf"
+msgstr "উষ্ম মাফলাৰ"
+
+msgid "Warm Teacup"
+msgstr "উষ্ম চাহৰ কাপ"
+
+msgid "Warm Terracotta"
+msgstr "উষ্ম টেৰাকোটা"
+
+msgid "Warm Walnut"
+msgstr "উষ্ম আখৰোট কাঠ"
+
+msgid "Warm Wooden Bowl"
+msgstr "উষ্ম কাঠৰ বাতি"
+
+msgid "Washcloth"
+msgstr "গা-ধোৱা সৰু গামোচা"
+
+msgid "Washing Hands Before a Meal"
+msgstr "খোৱাৰ আগতে হাত ধোৱা"
+
+msgid "Wastepaper Basket"
+msgstr "জাবৰ পেলোৱা পাচি"
+
+msgid "Water Bottle"
+msgstr "পানীৰ বটল"
+
+msgid "Water Glass"
+msgstr "পানীৰ গিলাচ"
+
+msgid "Water Pitcher"
+msgstr "পানীৰ জগ"
+
+msgid "Watering Can"
+msgstr "পানী ছটিওৱা পাত্ৰ"
+
+msgid "Wax Polish"
+msgstr "মোম পলিচ"
+
+msgid "Wax Polish Tin"
+msgstr "মম পলিচৰ কৌটা"
+
+msgid "Wax Seal Stamp"
+msgstr "গালা ছীল মোহৰ"
+
+msgid "We had trouble saving your answer. Please check your connection and try again."
+msgstr "আপোনাৰ উত্তৰ সংৰক্ষণ কৰাত সমস্যা হৈছে। অনুগ্ৰহ কৰি সংযোগ পৰীক্ষা কৰি পুনৰ চেষ্টা কৰক।"
+
+msgid "We had trouble saving your selection. Please check your connection and try again."
+msgstr "আপোনাৰ নিৰ্বাচন সংৰক্ষণ কৰাত সমস্যা হৈছে। অনুগ্ৰহ কৰি সংযোগ পৰীক্ষা কৰি পুনৰ চেষ্টা কৰক।"
+
+msgid "We had trouble saving your sequence. Please check your connection and try again."
+msgstr "আপোনাৰ ক্ৰম সংৰক্ষণ কৰাত সমস্যা হৈছে। অনুগ্ৰহ কৰি সংযোগ পৰীক্ষা কৰি পুনৰ চেষ্টা কৰক।"
+
+msgid "Wedging Board"
+msgstr "মাটি মথা ফলি"
+
+msgid "Welcome to your calm activity center. Each game is designed for unhurried focus and memory exercise. Take as much time as you need."
+msgstr "আপোনাৰ প্ৰশান্ত কাৰ্যকলাপ কেন্দ্ৰলৈ স্বাগতম। প্ৰতিটো খেল ধীৰ-স্থিৰ মনোযোগ আৰু স্মৃতিৰ অনুশীলনৰ বাবে নিৰ্মিত। আপোনাৰ প্ৰয়োজনীয় সময় লওক।"
+
+msgid "Well Done!"
+msgstr "বহুত ভাল কাম!"
+
+msgid "Well done!"
+msgstr "বহুত ভাল কাম!"
+
+msgid "Wheel Bat Pins"
+msgstr "চকীৰ বেট পিন"
+
+msgid "Wheelbarrow"
+msgstr "ঠেলা গাড়ী"
+
+msgid "When you feel satisfied with the sequence, tap Check My Sequence to continue."
+msgstr "যেতিয়া আপুনি ক্ৰমটো লৈ সন্তুষ্ট হ’ব, আগবাঢ়িবলৈ \"মোৰ ক্ৰম পৰীক্ষা কৰক\" টিপক।"
+
+msgid "Which aromatic sweet brown spice is traditionally sprinkled over baking apples?"
+msgstr "আপেলৰ মিঠাইত সুগন্ধি আৰু সোৱাদ বৃদ্ধি কৰিবলৈ কোনটো গুড়ি মছলা দিয়া হয়?"
+
+msgid "Which countertop appliance uses burrs or blades to crush whole roasted coffee beans?"
+msgstr "কফি বনোৱাৰ আগতে গোটা কফি গুটি পিহিবলৈ কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which decorative glass or ceramic container holds water and displays fresh cut stems?"
+msgstr "টেবুলত সতেজ ফুল আৰু পানী ৰাখিবলৈ কি পাত্ৰ ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which deep wooden container is traditionally used to collect harvested tree fruit?"
+msgstr "গছৰ পৰা আপেল আৰু ফল চিঙি সংগ্ৰহ কৰিবলৈ পৰম্পৰাগতভাৱে কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which dense horsehair brush is used to buff polished leather to a lustrous shine?"
+msgstr "জোতাত পলিচ ঘঁহি উজ্জ্বল উজ্জ্বল কৰিবলৈ কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which fragrant needle-leafed evergreen herb is often paired with roasted potatoes?"
+msgstr "সুগন্ধি খাদ্যত ব্যৱহাৰ কৰা চিৰসেউজীয়া বনৌষধি কোনটো?"
+
+msgid "Which hand tool is pushed along rough wood boards to shave them smooth and flat?"
+msgstr "কাঠৰ ফলি মিহি আৰু সমান কৰিবলৈ কোনটো সঁজুলি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which hearth tool is squeezed by hand to blow air and revive fading embers?"
+msgstr "জ্বলি থকা জুইত বতাহ দি শিখা বৃদ্ধি কৰিবলৈ কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which heavy wooden or marble cylinder is rolled back and forth to flatten pastry dough?"
+msgstr "আটা বা ময়দাৰ লেই সমানকৈ বেলিবলৈ কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which item is affixed to an envelope so postal carriers can deliver it?"
+msgstr "ডাকযোগে চিঠি বিলি কৰিবলৈ খামৰ ওপৰত কি লগোৱা হয়?"
+
+msgid "Which item is essential for making traditional dough rise?"
+msgstr "পাৰম্পৰিকভাৱে আটা ফুলি উঠিবলৈ কোনটো সামগ্ৰী অপৰিহাৰ্য?"
+
+msgid "Which items were on your shopping list?"
+msgstr "আপোনাৰ বজাৰৰ তালিকাত কি কি সামগ্ৰী আছিল?"
+
+msgid "Which items were on your shopping list? Click or tap each item you remember."
+msgstr "আপোনাৰ বজাৰৰ তালিকাত কি কি সামগ্ৰী আছিল? মনত থকা প্ৰতিটো সামগ্ৰীত টিপক।"
+
+msgid "Which material wound into soft skeins or balls is knitted into warm garments?"
+msgstr "ছুৱেটাৰ গুঠিবলৈ ক্ৰুচ বা শলাৰ সৈতে কি সূতা ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which motif completes this balanced alternating border?"
+msgstr "কোনটো নকশাই এই সুষম পৰ্যায়ক্ৰমিক সীমাটো সম্পূৰ্ণ কৰে?"
+
+msgid "Which natural pliable earth material is shaped by hand on a spinning wheel?"
+msgstr "কুমাৰৰ চকীত পাত্ৰ গঢ়িবলৈ কি প্ৰাকৃতিক কেঁচামাল ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which optical instrument with framed convex glass rests on the nose to clarify small print?"
+msgstr "সৰু আখৰবোৰ স্পষ্টকৈ দেখিবলৈ নাকৰ ওপৰত কি পিন্ধা হয়?"
+
+msgid "Which protective item unfolds overhead to keep rain showers off?"
+msgstr "হঠাৎ বৰষুণ আহিলে মূৰৰ ওপৰত কি মেলি ধৰা হয়?"
+
+msgid "Which shape continues this alternating rhythm?"
+msgstr "কোনটো আকৃতিয়ে এই পৰ্যায়ক্ৰমিক ছন্দ অব্যাহত ৰাখে?"
+
+msgid "Which small decorative paper triangles hold vintage pictures securely onto album pages?"
+msgstr "পুৰণি ফটো এলবামৰ পৃষ্ঠাত সুৰক্ষিতভাৱে লগাই ৰাখিবলৈ কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which small, dry twigs and wood splinters catch sparks easily to ignite large logs?"
+msgstr "ডাঙৰ কাঠত জুই ধৰাৰ আগতে জুই আৰম্ভ কৰিবলৈ কি শুকান খৰি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which soft bristle tool is swirled in a mug with soap to whip up rich lather?"
+msgstr "মুখত চাবোন আৰু ফেন সানিবলৈ কোনটো কোমল ব্ৰাছ ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which soft item filled with feathers or wool supports your head through the night?"
+msgstr "ৰাতি আৰামদায়ক টোপনিৰ বাবে মূৰৰ তলত কি লোৱা হয়?"
+
+msgid "Which thin card or ribbon slips between pages to save your reading place?"
+msgstr "কিতাপ পঢ়ি থাকোঁতে পৃষ্ঠা পাহৰি নোযোৱাকৈ কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which tool is worn on the fingertip to push needles safely?"
+msgstr "বেজী সুৰক্ষিতভাৱে হেঁচি দিবলৈ আঙুলিৰ মূৰত কি পিন্ধা হয়?"
+
+msgid "Which utensil is used to hold loose tea leaves inside hot water while steeping?"
+msgstr "গৰম পানীত চাহ পাত ডুবাই ৰাখিবলৈ কোনটো সঁজুলি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which vessel is traditionally used to sprinkle water gently on flowerbeds?"
+msgstr "ফুলৰ দলিত লাহে লাহে পানী ছটিয়াবলৈ পাৰম্পৰিকভাৱে কি পাত্ৰ ব্যৱহাৰ কৰা হয়?"
+
+msgid "Which wide woven wicker container with handles and lids carries lunch into the park?"
+msgstr "মুকলি ঠাইত বনভোজৰ খাদ্য আৰু সামগ্ৰী নিবলৈ কি ব্যৱহাৰ কৰা হয়?"
+
+msgid "Whisk"
+msgstr "ফেটা সঁজুলি"
+
+msgid "White Daisy"
+msgstr "বগা ডেইজী ফুল"
+
+msgid "White Gold"
+msgstr "শ্বেত সোণালী"
+
+msgid "White Jasmine"
+msgstr "বগা খৰিকাজাই"
+
+msgid "White Lily"
+msgstr "বগা পদুম"
+
+msgid "Who is this familiar person?"
+msgstr "এই চিনাকি ব্যক্তিজন কোন?"
+
+msgid "Whole Wheat Bread"
+msgstr "আটাৰ পাউৰুটি"
+
+msgid "Wicker Hamper"
+msgstr "বেতৰ পাচি"
+
+msgid "Windbreaker Jacket"
+msgstr "বতাহ প্ৰতিৰোধী জেকেট"
+
+msgid "Window Curtain"
+msgstr "খিৰিকীৰ পৰ্দা"
+
+msgid "Winter Gloves"
+msgstr "শীতৰ হাতমোজা"
+
+msgid "Winter Savory"
+msgstr "শীতৰ ছেভৰী বনৌষধি"
+
+msgid "Wire Clay Cutter"
+msgstr "তাঁৰৰ মাটি কটাৰী"
+
+msgid "Wonderful!"
+msgstr "চমৎকার!"
+
+msgid "Wonderful! %(explanation)s"
+msgstr "চমৎকার! %(explanation)s"
+
+msgid "Wonderful! That is %(name)s."
+msgstr "চমৎকার! তেওঁ হ’ল %(name)s।"
+
+msgid "Wonderful! That is your %(rel)s, %(name)s."
+msgstr "চমৎকার! তেওঁ হ’ল আপোনাৰ %(rel)s, %(name)s।"
+
+msgid "Wonderful! You found the %(name)s."
+msgstr "চমৎকার! আপুনি %(name)s বিচাৰি পালে।"
+
+msgid "Wonderful! You placed every step in the perfect order."
+msgstr "চমৎকার! আপুনি প্ৰতিটো পদক্ষেপ সঠিক ক্ৰমত সজাইছে।"
+
+msgid "Wonderful! You remembered all items on your list."
+msgstr "চমৎকার! আপোনাৰ তালিকাত থকা সকলো সামগ্ৰী মনত ৰাখিলে।"
+
+msgid "Wood Chisel"
+msgstr "কাঠৰ বটালী"
+
+msgid "Wood Glue"
+msgstr "কাঠৰ আঠা"
+
+msgid "Wooden Beads"
+msgstr "কাঠৰ মণি"
+
+msgid "Wooden Cane"
+msgstr "কাঠৰ লাখুটি"
+
+msgid "Wooden Clogs"
+msgstr "কাঠৰ খৰম"
+
+msgid "Wooden Clothes Peg"
+msgstr "কাঠৰ কাপোৰ মৰা ক্লিপ"
+
+msgid "Wooden Mallet"
+msgstr "কাঠৰ হাতুৰী"
+
+msgid "Wooden Nightstand"
+msgstr "কাঠৰ বিচনা কাষৰ মেজ"
+
+msgid "Wooden Pen Stand"
+msgstr "কাঠৰ কলমদান"
+
+msgid "Wooden Ruler"
+msgstr "কাঠৰ স্কেল"
+
+msgid "Wooden Shoe Tree"
+msgstr "কাঠৰ জোতাৰ খোপ"
+
+msgid "Wooden Spoon"
+msgstr "কাঠৰ চামুচ"
+
+msgid "Wooden Valet Box"
+msgstr "কাঠৰ অলংকাৰ বাকচ"
+
+msgid "Wooden Yarn Swift"
+msgstr "কাঠৰ সূতাৰ যঁতৰ"
+
+msgid "Woodworking Bench"
+msgstr "কাঠমিস্ত্ৰীৰ মেজ"
+
+msgid "Wool Socks"
+msgstr "পশমী মোজা"
+
+msgid "Wool Sweater"
+msgstr "পশমী ছুৱেটাৰ"
+
+msgid "Wool Yarn"
+msgstr "পশমী সূতা"
+
+msgid "Woolen Blanket"
+msgstr "পশমী কম্বল"
+
+msgid "Woolen Mittens"
+msgstr "পশমী হাতমোজা"
+
+msgid "Word Card"
+msgstr "শব্দৰ কাৰ্ড"
+
+msgid "Word Choice"
+msgstr "শব্দৰ বিকল্প"
+
+msgid "Word Connections"
+msgstr "শব্দৰ সংযোগ"
+
+msgid "Word Connections - Semantic Memory"
+msgstr "শব্দৰ সংযোগ - অৰ্থমূলক স্মৃতি"
+
+msgid "Word choice options"
+msgstr "শব্দ পছন্দৰ বিকল্পসমূহ"
+
+msgid "Word choices grid"
+msgstr "শব্দ বিকল্পৰ তালিকা"
+
+msgid "Work Gloves"
+msgstr "কামৰ হাতমোজা"
+
+msgid "Workbench"
+msgstr "কৰ্ম মেজ"
+
+msgid "Working with Pottery"
+msgstr "মৃৎশিল্প আৰু মাটিৰ কাম"
+
+msgid "Would you like to return to the Games menu?"
+msgstr "আপুনি খেলৰ মেনুলৈ উভতি যাব বিচাৰেনে?"
+
+msgid "Woven Bamboo Basket"
+msgstr "বাঁহৰ বৈ থোৱা পাচি"
+
+msgid "Wrapping Paper"
+msgstr "উপহাৰ মেৰিওৱা কাগজ"
+
+msgid "Wristwatch"
+msgstr "হাতঘড়ী"
+
+msgid "Writing Desk"
+msgstr "লিখা মেজ"
+
+msgid "Writing Pad"
+msgstr "লিখা পেড"
+
+msgid "Writing Quill"
+msgstr "ময়ূৰ পাখিৰ কলম"
+
+msgid "Yarn"
+msgstr "সূতা"
+
+msgid "Yarn Ball"
+msgstr "সূতাৰ লাড়ু"
+
+msgid "Yarn Bowl"
+msgstr "সূতাৰ বাতি"
+
+msgid "Yarn Needle"
+msgstr "সূতাৰ ডাঙৰ বেজী"
+
+msgid "Yeast"
+msgstr "ইষ্ট"
+
+msgid "Yeast is the living leavening agent that ferments and makes traditional bread dough rise."
+msgstr "ইষ্ট হৈছে এনে এক জীৱন্ত উপাদান যিয়ে আটা ফুলাই পাউৰুটি কোমল কৰি তোলে।"
+
+msgid "You are in complete control of your pace. Enjoy the exercise without pressure or deadlines."
+msgstr "আপোনাৰ গতি আপোনাৰ নিজৰ হাতত। কোনো চাপ বা সময়সীমা অবিহনে অনুশীলন উপভোগ কৰক।"
+
+msgid "You can tap any tile to change your choice anytime before confirming."
+msgstr "নিশ্চিত কৰাৰ আগতে পছন্দ সলাবলৈ যিকোনো টাইলত টিপিব পাৰে।"
+
+msgid "You will see a familiar daily routine, such as making morning tea or preparing for a stroll."
+msgstr "আপুনি পুৱাৰ চাহ বনোৱা বা খোজ কঢ়াৰ দৰে এটা চিনাকি দৈনন্দিন ৰুটিন দেখিব।"
+
+msgid "You will see a photograph of someone close to you—a family member, grandchild, or dear friend."
+msgstr "আপুনি আপোনাৰ কোনো আপোনজন—পৰিয়ালৰ সদস্য, নাতি-নাতিনী বা মৰমৰ বন্ধুৰ এখন ফটো দেখিব।"
+
+msgid "You will see a reference card showing one everyday object or flower to find."
+msgstr "আপুনি বিচাৰি উলিয়াবলগীয়া এটা দৈনন্দিন বস্তু বা ফুলৰ এখন উল্লেখনীয় কাৰ্ড দেখিব।"
+
+msgid "You will see a small grocery list of everyday items. Take all the time you need to read and memorize them."
+msgstr "আপুনি দৈনন্দিন সামগ্ৰীৰ এখন চুটি তালিকা দেখিব। সেয়া পঢ়িবলৈ আৰু মনত ৰাখিবলৈ আপোনাৰ প্ৰয়োজনীয় সকলো সময় লওক।"
+
+msgid "You will see an everyday theme or activity on the main card, along with a helpful contextual clue."
+msgstr "আপুনি মূল কাৰ্ডখনত এটা দৈনন্দিন বিষয় আৰু এটা সহায়ক সংকেত দেখিব।"
+
+msgid "Your Selections"
+msgstr "আপোনাৰ নিৰ্বাচনসমূহ"
+
+msgid "Your Sequence"
+msgstr "আপোনাৰ ক্ৰম"
+
+msgid "Your Sequence Review"
+msgstr "আপোনাৰ ক্ৰমৰ পৰ্যালোচনা"
+
+msgid "Your Step Tray"
+msgstr "আপোনাৰ পদক্ষেপৰ ট্ৰে"
+
+msgid "Your items list"
+msgstr "আপোনাৰ সামগ্ৰীৰ তালিকা"
+
+msgid "Your order tray"
+msgstr "আপোনাৰ ক্ৰমৰ ট্ৰে"
+
+msgid "Your score: %(score)s"
+msgstr "আপোনাৰ নম্বৰ: %(score)s"
+
+msgid "of"
+msgstr "ৰ ভিতৰত"
+
+msgid "{{ count }} Rounds"
+msgstr "{{ count }} টা ৰাউণ্ড"
+
+msgid "{{ name }} is coming soon in a future update"
+msgstr "{{ name }} শীঘ্ৰেই ভৱিষ্যতৰ সংস্কৰণত আহি আছে"
+
+msgid "✓ Connection Identified"
+msgstr "✓ সংযোগ চিনাক্ত কৰা হ’ল"
+
+msgid "✓ Correct"
+msgstr "✓ সঠিক"
+
+msgid "✓ Natural Order"
+msgstr "✓ স্বাভাৱিক ক্ৰম"
+
+msgid "✓ Pattern Completed"
+msgstr "✓ আৰ্হি সম্পূৰ্ণ হ’ল"
+
+msgid "✓ Perfect Order"
+msgstr "✓ নিখুঁত ক্ৰম"
+
+msgid "✓ Recognized"
+msgstr "✓ চিনাক্ত কৰা হ’ল"
+
+msgid "✓ Target Found"
+msgstr "✓ লক্ষ্য পোৱা গ’ল"
+
+msgid "Good effort! You remembered %(score)s out of %(total)s items."
+msgstr "ভাল প্ৰচেষ্টা! আপুনি %(total)s টাৰ ভিতৰত %(score)s টা সামগ্ৰী মনত ৰাখিলে।"
+
+msgid "Good effort! You placed %(score)s out of %(total)s steps in order."
+msgstr "ভাল প্ৰচেষ্টা! আপুনি %(total)s টাৰ ভিতৰত %(score)s টা পদক্ষেপ ক্ৰম অনুসাৰে সজালে।"
+
+msgid "Wonderful! That is your %(relationship)s, %(name)s."
+msgstr "চমৎকার! তেওঁ আপোনাৰ %(relationship)s, %(name)s।"
+
+msgid "That is your %(relationship)s, %(name)s. Thank you for looking at this memory together."
+msgstr "তেওঁ আপোনাৰ %(relationship)s, %(name)s। একেলগে এই স্মৃতিটো চোৱাৰ বাবে ধন্যবাদ।"
+
+msgid "Good effort! The closest connection is %(target_word)s. %(explanation)s"
+msgstr "ভাল প্ৰচেষ্টা! আটাইতকৈ ওচৰৰ সম্পৰ্কটো হ'ল %(target_word)s। %(explanation)s"
+
+msgid "Good effort! The harmonious choice is %(target_name)s. %(explanation)s"
+msgstr "ভাল প্ৰচেষ্টা! সুসমন্বিত পছন্দটো হ'ল %(target_name)s। %(explanation)s"
+
+msgid "Back to Familiar People"
+msgstr "চিনাকি ব্যক্তিসকললৈ উভতি যাওক"
+
+msgid "Person Name"
+msgstr "ব্যক্তিৰ নাম"
+
+msgid "Speak person name"
+msgstr "ব্যক্তিৰ নাম কওক"
+
+msgid "Enter how the patient knows this person (e.g. Priya, Aunt Meera, Rajesh)."
+msgstr "ৰোগীয়ে এই ব্যক্তিজনক কেনেকৈ চিনি পায় সেয়া দিয়ক (উদাহৰণস্বৰূপে প্ৰিয়া, খুড়ী মীৰা, ৰাজেশ)।"
+
+msgid "Speak relationship"
+msgstr "সম্পৰ্ক কওক"
+
+msgid "Active in Familiar Faces gameplay"
+msgstr "চিনাকি মুখ খেলত সক্ৰিয়"
+
+msgid "Unchecking pauses this person from appearing in the patient's recognition activity."
+msgstr "টিক চিন উঠাই দিলে এই ব্যক্তিজন ৰোগীৰ চিনাক্তকৰণ কাৰ্যসূচীত দেখা পোৱাৰ পৰা বিৰত থাকিব।"
+
+msgid "Close Voice Assistant"
+msgstr "ভইচ সহায়ক বন্ধ কৰক"
+
+msgid "Tap the microphone below and speak clearly, or use the direct touch shortcuts below."
+msgstr "তলৰ মাইক্ৰ’ফোনত স্পৰ্শ কৰক আৰু স্পষ্টকৈ কওক, বা তলৰ প্ৰত্যক্ষ চৰ্টকাটসমূহ ব্যৱহাৰ কৰক।"
+
+msgid "Try saying:"
+msgstr "এইদৰে কৈ চাওক:"
+
+msgid "to play cognitive exercises"
+msgstr "জ্ঞানমূলক খেল খেলিবলৈ"
+
+msgid "to check today's activities"
+msgstr "আজিৰ কাৰ্যসূচী চাবলৈ"
+
+msgid "to view family photographs"
+msgstr "পৰিয়ালৰ ছবি চাবলৈ"
+
+msgid "Tap to Speak"
+msgstr "কবলৈ স্পৰ্শ কৰক"
+
+msgid "Listening... Speak now"
+msgstr "শুনি থকা হৈছে... এতিয়া কওক"
+
+msgid "Microphone is ready. Tap the button above to begin."
+msgstr "মাইক্ৰ’ফোন সাজু। আৰম্ভ কৰিবলৈ ওপৰৰ বুটামত টিপক।"
+
+msgid "Direct Touch Shortcuts:"
+msgstr "পোনপটীয়া স্পৰ্শৰ চৰ্টকাটসমূহ:"
+
+msgid "Listening... Please speak now."
+msgstr "শুনি থকা হৈছে... অনুগ্ৰহ কৰি এতিয়া কওক।"
+
+msgid "Speech recognition is not supported in this browser. Please use the touch shortcuts below."
+msgstr "এই ব্ৰাউজাৰত কণ্ঠ চিনাক্তকৰণ সমৰ্থিত নহয়। অনুগ্ৰহ কৰি তলৰ চৰ্টকাটসমূহ ব্যৱহাৰ কৰক।"
+
+msgid "Microphone access was denied. You can still use the touch shortcuts below."
+msgstr "মাইক্ৰ’ফোনৰ অনুমতি প্ৰত্যাখ্যান কৰা হৈছে। আপুনি তথাপিও তলৰ চৰ্টকাটসমূহ ব্যৱহাৰ কৰিব পাৰে।"
+
+msgid "Opening Cognitive Games..."
+msgstr "জ্ঞানমূলক খেল খোলা হৈছে..."
+
+msgid "Opening Today's Routine..."
+msgstr "আজিৰ দিনলিপি খোলা হৈছে..."
+
+msgid "Opening My Memories..."
+msgstr "মোৰ স্মৃতিসমূহ খোলা হৈছে..."
+
+msgid "You said:"
+msgstr "আপুনি কৈছিল:"
+
+msgid "Try saying Games, Routine, or Memories, or tap a shortcut below."
+msgstr "'খেল', 'ৰুটিন', বা 'স্মৃতি' কৈ চাওক, অথবা তলৰ এটা চৰ্টকাটত টিপক।"
+
+msgid "Start Voice Assistant microphone"
+msgstr "ভইচ সহায়ক মাইক্ৰ’ফোন আৰম্ভ কৰক"
+
+
+
+msgid "Processing speech..."
+msgstr "কণ্ঠ প্ৰক্ৰিয়া কৰা হৈছে..."
+
+msgid "No speech was detected. Please tap the button to try again, or use the touch shortcuts below."
+msgstr "কোনো কণ্ঠ চিনাক্ত হোৱা নাই। অনুগ্ৰহ কৰি পুনৰ চেষ্টা কৰিবলৈ বুটামটো টিপক, বা তলৰ চৰ্টকাটসমূহ ব্যৱহাৰ কৰক।"
+
+msgid "Tap the microphone below and speak naturally, or use the direct touch shortcuts below."
+msgstr "তলৰ মাইক্ৰ’ফোনত স্পৰ্শ কৰক আৰু স্বাভাৱিকভাৱে কওক, অথবা তলৰ পোনপটীয়া স্পৰ্শৰ চৰ্টকাটসমূহ ব্যৱহাৰ কৰক।"
+

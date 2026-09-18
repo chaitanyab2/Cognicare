@@ -1,13 +1,14 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Activity Completed - {{ session.game.name }} - Cognicare{% endblock %}
+{% block title %}{% trans "Activity Completed" %} - {{ session.game.name }} - Cognicare{% endblock %}
 
 {% block content %}
 <div style="max-width: 760px; margin: 0 auto;">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb-nav" aria-label="Breadcrumb" style="margin-bottom: var(--space-4);">
+    <nav class="breadcrumb-nav" aria-label="{% trans 'Breadcrumb' %}" style="margin-bottom: var(--space-4);">
         <a href="{% url 'games:list' %}" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 16px;">
-            &larr; Back to Activities
+            &larr; {% trans "Back to Activities" %}
         </a>
     </nav>
 
@@ -15,57 +16,61 @@
     <article class="card" style="padding: var(--space-8); border: 2px solid var(--primary-border); background-color: var(--bg-surface); text-align: center;">
         
         <!-- Congratulatory Badge -->
-        <div style="width: 72px; height: 72px; border-radius: 50%; background-color: var(--color-teal-100); color: var(--color-teal-900); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto var(--space-4);">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background-color: var(--color-teal-100); color: var(--color-teal-900); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; margin: 0 auto var(--space-4);" aria-hidden="true">
             🌱
         </div>
 
         <h1 style="font-size: var(--font-size-2xl); color: var(--text-primary); margin-bottom: var(--space-2);">
-            Activity Completed
+            {% trans "Activity Completed" %}
         </h1>
         <p style="font-size: var(--font-size-lg); color: var(--text-secondary); margin-bottom: var(--space-4);">
             {{ encouragement }}
         </p>
         <div style="margin-bottom: var(--space-6);">
-            <button type="button" class="btn-voice" id="btn-speak-results" data-voice-speak="Activity completed. {{ encouragement }}. Your score is {{ session.score }} out of {{ session.max_score }} across all {{ rounds|length }} activity rounds today." aria-label="Listen to activity results summary">
+            <button type="button" class="btn-voice" id="btn-speak-results"
+                    data-voice-speak="{% blocktrans with score=session.score max=session.max_score count_rounds=rounds|length %}Activity completed. {{ encouragement }}. Your score is {{ score }} out of {{ max }} across all {{ count_rounds }} activity rounds today.{% endblocktrans %}"
+                    data-voice-stop-text="{% trans 'Stop' %}"
+                    data-voice-stop-aria="{% trans 'Stop reading summary' %}"
+                    aria-label="{% trans 'Listen to activity results summary' %}">
                 <svg class="voice-icon voice-icon-speaker" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
                 <svg class="voice-icon voice-icon-stop" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display: none;"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"></rect></svg>
-                <span class="voice-label">Listen</span>
+                <span class="voice-label">{% trans "Listen" %}</span>
             </button>
         </div>
 
         <!-- Summary Metric Card (Dignified and Simple) -->
         <div style="background-color: var(--color-teal-50); border: 1px solid var(--primary-border); border-radius: var(--radius-md); padding: var(--space-6); margin-bottom: var(--space-8);">
             <span style="font-size: 1rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-teal-800); font-weight: 700;">
-                {% if session.game.slug == 'memory-market' %}Items Remembered{% elif session.game.slug == 'familiar-faces' %}Familiar Faces Recognized{% elif session.game.slug == 'focus-finder' %}Targets Spotted{% elif session.game.slug == 'word-connections' %}Connections Made{% elif session.game.slug == 'pattern-detective' %}Patterns Solved{% else %}Steps in Natural Order{% endif %}
+                {% if session.game.slug == 'memory-market' %}{% trans "Items Remembered" %}{% elif session.game.slug == 'familiar-faces' %}{% trans "Familiar Faces Recognized" %}{% elif session.game.slug == 'focus-finder' %}{% trans "Targets Spotted" %}{% elif session.game.slug == 'word-connections' %}{% trans "Connections Made" %}{% elif session.game.slug == 'pattern-detective' %}{% trans "Patterns Solved" %}{% else %}{% trans "Steps in Natural Order" %}{% endif %}
             </span>
             <div style="font-size: 3rem; font-weight: 800; color: var(--color-teal-900); line-height: 1.2; margin: var(--space-2) 0;">
                 {{ session.score }} <span style="font-size: 1.5rem; font-weight: 500; color: var(--color-slate-600);">/ {{ session.max_score }}</span>
             </div>
             <p style="font-size: 1rem; color: var(--color-teal-800); margin: 0;">
-                Across all {{ rounds|length }} activity rounds today.
+                {% blocktrans with count=rounds|length %}Across all {{ count }} activity rounds today.{% endblocktrans %}
             </p>
         </div>
 
         <!-- Round Recap Section -->
         <section aria-labelledby="recap-heading" style="text-align: left; margin-bottom: var(--space-8);">
             <h2 id="recap-heading" style="font-size: var(--font-size-lg); color: var(--text-primary); margin-bottom: var(--space-4); border-bottom: 1px solid var(--border-subtle); padding-bottom: var(--space-2);">
-                Round Summary
+                {% trans "Round Summary" %}
             </h2>
 
             <div style="display: flex; flex-direction: column; gap: var(--space-3);">
                 {% for r in rounds %}
                     <div style="display: flex; justify-content: space-between; align-items: center; padding: var(--space-3) var(--space-4); background-color: var(--color-slate-50); border: 1px solid var(--border-color); border-radius: var(--radius-sm);">
                         <div>
-                            <strong style="font-size: 1.05rem; color: var(--text-primary);">Round {{ r.round_number }}</strong>
+                            <strong style="font-size: 1.05rem; color: var(--text-primary);">{% blocktrans with num=r.round_number %}Round {{ num }}{% endblocktrans %}</strong>
                         </div>
                         <div>
                             {% if r.is_correct %}
                                 <span class="badge" style="background-color: var(--state-success-bg); color: var(--state-success-text); border: 1px solid var(--state-success-border); font-weight: 600;">
-                                    {% if session.game.slug == 'familiar-faces' %}✓ Recognized{% elif session.game.slug == 'daily-life-journey' %}✓ Perfect Order{% elif session.game.slug == 'focus-finder' %}✓ Target Found{% elif session.game.slug == 'word-connections' %}✓ Connection Identified{% elif session.game.slug == 'pattern-detective' %}✓ Pattern Completed{% else %}✓ Correct{% endif %}
+                                    {% if session.game.slug == 'familiar-faces' %}{% trans "✓ Recognized" %}{% elif session.game.slug == 'daily-life-journey' %}{% trans "✓ Perfect Order" %}{% elif session.game.slug == 'focus-finder' %}{% trans "✓ Target Found" %}{% elif session.game.slug == 'word-connections' %}{% trans "✓ Connection Identified" %}{% elif session.game.slug == 'pattern-detective' %}{% trans "✓ Pattern Completed" %}{% else %}{% trans "✓ Correct" %}{% endif %}
                                 </span>
                             {% else %}
                                 <span class="badge" style="background-color: var(--color-teal-50); color: var(--color-teal-800); border: 1px solid var(--primary-border); font-weight: 600;">
-                                    Completed
+                                    {% trans "Completed" %}
                                 </span>
                             {% endif %}
                         </div>
@@ -79,17 +84,17 @@
             <form method="post" action="{% url 'games:start_session' slug=session.game.slug %}">
                 {% csrf_token %}
                 <input type="hidden" name="difficulty" value="{{ session.difficulty }}">
-                <button type="submit" class="btn btn-primary btn-block btn-lg" style="min-height: 56px; font-size: var(--font-size-lg);" aria-label="Play {{ session.game.name }} again">
-                    Play Again
+                <button type="submit" class="btn btn-primary btn-block btn-lg" style="min-height: 56px; font-size: var(--font-size-lg);" aria-label="{% blocktrans with name=session.game.name %}Play {{ name }} again{% endblocktrans %}">
+                    {% trans "Play Again" %}
                 </button>
             </form>
 
             <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap; margin-top: var(--space-2);">
                 <a href="{% url 'games:list' %}" class="btn btn-secondary" style="min-height: 48px; padding: 10px 24px;">
-                    Back to Activities
+                    {% trans "Back to Activities" %}
                 </a>
                 <a href="{% url 'accounts:patient_portal' %}" class="btn btn-outline" style="min-height: 48px; padding: 10px 24px;">
-                    Return to My Space
+                    {% trans "Return to My Space" %}
                 </a>
             </div>
         </div>

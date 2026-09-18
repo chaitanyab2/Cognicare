@@ -4,10 +4,13 @@ Provides modular game engine implementations and session lifecycle helpers.
 Phase 5: Gameplay Foundation + Memory Market.
 """
 
+import json
 import random
 from decimal import Decimal
 from django.core.exceptions import ValidationError
+from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from apps.accounts.models import Role
 from apps.games.models import Game, GameSession, GameRound
 
@@ -17,87 +20,87 @@ from apps.games.models import Game, GameSession, GameRound
 MARKET_ITEMS_CATALOG = {
     'apples': {
         'id': 'apples',
-        'name': 'Fresh Apples',
-        'short_name': 'Apples',
-        'category': 'Fruit',
-        'descriptor': 'Crisp and sweet',
+        'name': _('Fresh Apples'),
+        'short_name': _('Apples'),
+        'category': _('Fruit'),
+        'descriptor': _('Crisp and sweet'),
     },
     'milk': {
         'id': 'milk',
-        'name': 'Fresh Milk',
-        'short_name': 'Milk',
-        'category': 'Dairy',
-        'descriptor': 'Bottle of fresh milk',
+        'name': _('Fresh Milk'),
+        'short_name': _('Milk'),
+        'category': _('Dairy'),
+        'descriptor': _('Bottle of fresh milk'),
     },
     'bread': {
         'id': 'bread',
-        'name': 'Whole Wheat Bread',
-        'short_name': 'Bread',
-        'category': 'Bakery',
-        'descriptor': 'Freshly baked loaf',
+        'name': _('Whole Wheat Bread'),
+        'short_name': _('Bread'),
+        'category': _('Bakery'),
+        'descriptor': _('Freshly baked loaf'),
     },
     'tea': {
         'id': 'tea',
-        'name': 'Tea Leaves',
-        'short_name': 'Tea',
-        'category': 'Pantry',
-        'descriptor': 'Aromatic Assam tea',
+        'name': _('Tea Leaves'),
+        'short_name': _('Tea'),
+        'category': _('Pantry'),
+        'descriptor': _('Aromatic Assam tea'),
     },
     'rice': {
         'id': 'rice',
-        'name': 'Basmati Rice',
-        'short_name': 'Rice',
-        'category': 'Pantry',
-        'descriptor': 'Bag of long-grain rice',
+        'name': _('Basmati Rice'),
+        'short_name': _('Rice'),
+        'category': _('Pantry'),
+        'descriptor': _('Bag of long-grain rice'),
     },
     'honey': {
         'id': 'honey',
-        'name': 'Pure Honey',
-        'short_name': 'Honey',
-        'category': 'Pantry',
-        'descriptor': 'Jar of golden honey',
+        'name': _('Pure Honey'),
+        'short_name': _('Honey'),
+        'category': _('Pantry'),
+        'descriptor': _('Jar of golden honey'),
     },
     'carrots': {
         'id': 'carrots',
-        'name': 'Garden Carrots',
-        'short_name': 'Carrots',
-        'category': 'Vegetables',
-        'descriptor': 'Crunchy orange carrots',
+        'name': _('Garden Carrots'),
+        'short_name': _('Carrots'),
+        'category': _('Vegetables'),
+        'descriptor': _('Crunchy orange carrots'),
     },
     'bananas': {
         'id': 'bananas',
-        'name': 'Ripe Bananas',
-        'short_name': 'Bananas',
-        'category': 'Fruit',
-        'descriptor': 'Bunch of sweet bananas',
+        'name': _('Ripe Bananas'),
+        'short_name': _('Bananas'),
+        'category': _('Fruit'),
+        'descriptor': _('Bunch of sweet bananas'),
     },
     'potatoes': {
         'id': 'potatoes',
-        'name': 'Farm Potatoes',
-        'short_name': 'Potatoes',
-        'category': 'Vegetables',
-        'descriptor': 'Fresh russet potatoes',
+        'name': _('Farm Potatoes'),
+        'short_name': _('Potatoes'),
+        'category': _('Vegetables'),
+        'descriptor': _('Fresh russet potatoes'),
     },
     'flowers': {
         'id': 'flowers',
-        'name': 'Fresh Marigolds',
-        'short_name': 'Flowers',
-        'category': 'Garden',
-        'descriptor': 'Bright fragrant blossoms',
+        'name': _('Fresh Marigolds'),
+        'short_name': _('Flowers'),
+        'category': _('Garden'),
+        'descriptor': _('Bright fragrant blossoms'),
     },
     'oranges': {
         'id': 'oranges',
-        'name': 'Sweet Oranges',
-        'short_name': 'Oranges',
-        'category': 'Fruit',
-        'descriptor': 'Juicy citrus oranges',
+        'name': _('Sweet Oranges'),
+        'short_name': _('Oranges'),
+        'category': _('Fruit'),
+        'descriptor': _('Juicy citrus oranges'),
     },
     'spinach': {
         'id': 'spinach',
-        'name': 'Green Spinach',
-        'short_name': 'Spinach',
-        'category': 'Vegetables',
-        'descriptor': 'Fresh tender greens',
+        'name': _('Green Spinach'),
+        'short_name': _('Spinach'),
+        'category': _('Vegetables'),
+        'descriptor': _('Fresh tender greens'),
     },
 }
 
@@ -145,7 +148,7 @@ class MemoryMarketEngine:
         # Combined sorted/predictable market choices for selection stage
         all_market_items = target_items + distractor_items
         # Sort alphabetically by short_name for a neat, stable shelf presentation
-        all_market_items = sorted(all_market_items, key=lambda x: x['short_name'])
+        all_market_items = sorted(all_market_items, key=lambda x: str(x['short_name']))
 
         return {
             'round_number': round_number,
@@ -179,13 +182,16 @@ class MemoryMarketEngine:
 
         # Gentle, reassuring feedback messages (non-clinical, supportive)
         if is_all_correct:
-            feedback_message = "Wonderful! You remembered all items on your list."
+            feedback_message = str(_("Wonderful! You remembered all items on your list."))
             feedback_tone = "success"
         elif len(correct_picks) > 0:
-            feedback_message = f"Good effort! You remembered {len(correct_picks)} out of {max_score_for_round} items."
+            feedback_message = str(_("Good effort! You remembered %(score)s out of %(total)s items.") % {
+                'score': len(correct_picks),
+                'total': max_score_for_round,
+            })
             feedback_tone = "encouraging"
         else:
-            feedback_message = "Thank you for trying. Let's continue together to the next round."
+            feedback_message = str(_("Thank you for trying. Let's continue together to the next round."))
             feedback_tone = "neutral"
 
         return {
@@ -208,23 +214,23 @@ class MemoryMarketEngine:
         return [
             {
                 'number': 1,
-                'title': "Look & Remember",
-                'description': "You will see a small grocery list of everyday items. Take all the time you need to read and memorize them.",
+                'title': _("Look & Remember"),
+                'description': _("You will see a small grocery list of everyday items. Take all the time you need to read and memorize them."),
             },
             {
                 'number': 2,
-                'title': 'Click "I Am Ready"',
-                'description': "There is no timer or hurry. When you feel confident you remember the items, click the ready button.",
+                'title': _('Click "I Am Ready"'),
+                'description': _("There is no timer or hurry. When you feel confident you remember the items, click the ready button."),
             },
             {
                 'number': 3,
-                'title': "Pick Your Items",
-                'description': "Tap or click the items you remember from the market shelf. You can tap again to uncheck any item.",
+                'title': _("Pick Your Items"),
+                'description': _("Tap or click the items you remember from the market shelf. You can tap again to uncheck any item."),
             },
             {
                 'number': 4,
-                'title': "Receive Gentle Feedback",
-                'description': "Click \"Check My Items\" to review your picks. You will complete 3 short rounds.",
+                'title': _("Receive Gentle Feedback"),
+                'description': _("Click \"Check My Items\" to review your picks. You will complete 3 short rounds."),
             },
         ]
 
@@ -244,80 +250,80 @@ class DailyLifeJourneyEngine:
     # Round 3: Handwashing (4 steps)
     ROUND_CONFIGS = {
         1: {
-            'scenario_title': "Making a Morning Cup of Tea",
-            'scenario_instruction': "Arrange the steps to prepare a warm cup of morning tea.",
+            'scenario_title': _('Making a Morning Cup of Tea'),
+            'scenario_instruction': _('Arrange the steps to prepare a warm cup of morning tea.'),
             'target_ids': ['tea_boil', 'tea_leaves', 'tea_steep'],
             'steps': [
                 {
                     'id': 'tea_boil',
-                    'title': 'Boil Fresh Water',
-                    'description': 'Fill the kettle and bring clean water to a gentle boil.',
+                    'title': _('Boil Fresh Water'),
+                    'description': _('Fill the kettle and bring clean water to a gentle boil.'),
                 },
                 {
                     'id': 'tea_leaves',
-                    'title': 'Add Tea Leaves',
-                    'description': 'Place aromatic tea leaves or a tea bag into your cup or teapot.',
+                    'title': _('Add Tea Leaves'),
+                    'description': _('Place aromatic tea leaves or a tea bag into your cup or teapot.'),
                 },
                 {
                     'id': 'tea_steep',
-                    'title': 'Pour & Steep',
-                    'description': 'Pour the boiling water over the tea and allow it to steep for a few minutes.',
+                    'title': _('Pour & Steep'),
+                    'description': _('Pour the boiling water over the tea and allow it to steep for a few minutes.'),
                 },
             ],
             'shuffled_ids': ['tea_steep', 'tea_boil', 'tea_leaves'],
         },
         2: {
-            'scenario_title': "Preparing for a Morning Walk",
-            'scenario_instruction': "Arrange the steps in natural order before heading out for your walk.",
+            'scenario_title': _('Preparing for a Morning Walk'),
+            'scenario_instruction': _('Arrange the steps in natural order before heading out for your walk.'),
             'target_ids': ['walk_weather', 'walk_shoes', 'walk_keys', 'walk_door'],
             'steps': [
                 {
                     'id': 'walk_weather',
-                    'title': 'Check the Weather',
-                    'description': 'Look outside the window to see the sunshine and temperature.',
+                    'title': _('Check the Weather'),
+                    'description': _('Look outside the window to see the sunshine and temperature.'),
                 },
                 {
                     'id': 'walk_shoes',
-                    'title': 'Put On Walking Shoes',
-                    'description': 'Tie on comfortable, supportive walking shoes for a secure stroll.',
+                    'title': _('Put On Walking Shoes'),
+                    'description': _('Tie on comfortable, supportive walking shoes for a secure stroll.'),
                 },
                 {
                     'id': 'walk_keys',
-                    'title': 'Take House Keys & Water',
-                    'description': 'Gather your keys and a small bottle of water in your pocket.',
+                    'title': _('Take House Keys & Water'),
+                    'description': _('Gather your keys and a small bottle of water in your pocket.'),
                 },
                 {
                     'id': 'walk_door',
-                    'title': 'Step Outside & Lock Door',
-                    'description': 'Gently close and lock the front door as you head out.',
+                    'title': _('Step Outside & Lock Door'),
+                    'description': _('Gently close and lock the front door as you head out.'),
                 },
             ],
             'shuffled_ids': ['walk_door', 'walk_weather', 'walk_shoes', 'walk_keys'],
         },
         3: {
-            'scenario_title': "Washing Hands Before a Meal",
-            'scenario_instruction': "Arrange the everyday steps for washing your hands properly.",
+            'scenario_title': _('Washing Hands Before a Meal'),
+            'scenario_instruction': _('Arrange the everyday steps for washing your hands properly.'),
             'target_ids': ['wash_water', 'wash_soap', 'wash_rinse', 'wash_dry'],
             'steps': [
                 {
                     'id': 'wash_water',
-                    'title': 'Turn On Water & Wet Hands',
-                    'description': 'Open the tap and thoroughly wet your hands with clean water.',
+                    'title': _('Turn On Water & Wet Hands'),
+                    'description': _('Open the tap and thoroughly wet your hands with clean water.'),
                 },
                 {
                     'id': 'wash_soap',
-                    'title': 'Apply Gentle Soap',
-                    'description': 'Dispense soap and rub hands together to make a warm lather for 20 seconds.',
+                    'title': _('Apply Gentle Soap'),
+                    'description': _('Dispense soap and rub hands together to make a warm lather for 20 seconds.'),
                 },
                 {
                     'id': 'wash_rinse',
-                    'title': 'Rinse Thoroughly',
-                    'description': 'Hold hands under running water until all soap washes cleanly away.',
+                    'title': _('Rinse Thoroughly'),
+                    'description': _('Hold hands under running water until all soap washes cleanly away.'),
                 },
                 {
                     'id': 'wash_dry',
-                    'title': 'Dry with a Clean Towel',
-                    'description': 'Pat your hands gently with a soft, clean towel.',
+                    'title': _('Dry with a Clean Towel'),
+                    'description': _('Pat your hands gently with a soft, clean towel.'),
                 },
             ],
             'shuffled_ids': ['wash_rinse', 'wash_dry', 'wash_water', 'wash_soap'],
@@ -332,23 +338,23 @@ class DailyLifeJourneyEngine:
         return [
             {
                 'number': 1,
-                'title': "Read the Daily Story",
-                'description': "You will see a familiar daily routine, such as making morning tea or preparing for a stroll.",
+                'title': _("Read the Daily Story"),
+                'description': _("You will see a familiar daily routine, such as making morning tea or preparing for a stroll."),
             },
             {
                 'number': 2,
-                'title': "Choose the Next Step",
-                'description': "Tap each step in the order it happens naturally from start to finish.",
+                'title': _("Choose the Next Step"),
+                'description': _("Tap each step in the order it happens naturally from start to finish."),
             },
             {
                 'number': 3,
-                'title': "Adjust Your Order Anytime",
-                'description': "Tap any step in your tray to remove it, or use Undo to adjust your sequence.",
+                'title': _("Adjust Your Order Anytime"),
+                'description': _("Tap any step in your tray to remove it, or use Undo to adjust your sequence."),
             },
             {
                 'number': 4,
-                'title': "Check Your Sequence",
-                'description': "When you feel satisfied with the sequence, tap Check My Sequence to continue.",
+                'title': _("Check Your Sequence"),
+                'description': _("When you feel satisfied with the sequence, tap Check My Sequence to continue."),
             },
         ]
 
@@ -404,13 +410,16 @@ class DailyLifeJourneyEngine:
 
         # Gentle, reassuring feedback messages
         if is_all_correct:
-            feedback_message = "Wonderful! You placed every step in the perfect order."
+            feedback_message = str(_("Wonderful! You placed every step in the perfect order."))
             feedback_tone = "success"
         elif score_for_round > 0:
-            feedback_message = f"Good effort! You placed {score_for_round} out of {max_score_for_round} steps in order."
+            feedback_message = str(_("Good effort! You placed %(score)s out of %(total)s steps in order.") % {
+                'score': score_for_round,
+                'total': max_score_for_round,
+            })
             feedback_tone = "encouraging"
         else:
-            feedback_message = "Thank you for arranging the steps. Let's continue together to the next journey."
+            feedback_message = str(_("Thank you for arranging the steps. Let's continue together to the next journey."))
             feedback_tone = "neutral"
 
         return {
@@ -457,23 +466,23 @@ class FamiliarFacesEngine:
         return [
             {
                 'number': 1,
-                'title': "Look at the Photo",
-                'description': "You will see a photograph of someone close to you—a family member, grandchild, or dear friend.",
+                'title': _("Look at the Photo"),
+                'description': _("You will see a photograph of someone close to you—a family member, grandchild, or dear friend."),
             },
             {
                 'number': 2,
-                'title': "Take All the Time You Need",
-                'description': "There are no timers. Look at the friendly face and take a moment to recall memories together.",
+                'title': _("Take All the Time You Need"),
+                'description': _("There are no timers. Look at the friendly face and take a moment to recall memories together."),
             },
             {
                 'number': 3,
-                'title': "Select Who It Is",
-                'description': "Choose the matching name and relationship from the options below the picture.",
+                'title': _("Select Who It Is"),
+                'description': _("Choose the matching name and relationship from the options below the picture."),
             },
             {
                 'number': 4,
-                'title': "Enjoy the Connection",
-                'description': "Receive warm, encouraging feedback as you complete 3 pleasant rounds.",
+                'title': _("Enjoy the Connection"),
+                'description': _("Receive warm, encouraging feedback as you complete 3 pleasant rounds."),
             },
         ]
 
@@ -542,7 +551,7 @@ class FamiliarFacesEngine:
         return {
             'round_number': round_number,
             'total_rounds': cls.TOTAL_ROUNDS,
-            'prompt_text': "Who is this familiar person?",
+            'prompt_text': _("Who is this familiar person?"),
             'target_photo_url': target.photo.url if target.photo else '',
             'target_name': target.name,
             'target_relationship': target.relationship,
@@ -580,9 +589,14 @@ class FamiliarFacesEngine:
             mistake_count = 0
             score = 1
             if target_relationship:
-                feedback_message = f"Wonderful! That is your {target_relationship.lower()}, {target_name}."
+                feedback_message = str(_("Wonderful! That is your %(relationship)s, %(name)s.") % {
+                    'relationship': target_relationship.lower(),
+                    'name': target_name,
+                })
             else:
-                feedback_message = f"Wonderful! That is {target_name}."
+                feedback_message = str(_("Wonderful! That is %(name)s.") % {
+                    'name': target_name,
+                })
             feedback_tone = "success"
         else:
             correct_ids = []
@@ -591,9 +605,14 @@ class FamiliarFacesEngine:
             mistake_count = 1
             score = 0
             if target_relationship:
-                feedback_message = f"That is your {target_relationship.lower()}, {target_name}. Thank you for looking at this memory together."
+                feedback_message = str(_("That is your %(relationship)s, %(name)s. Thank you for looking at this memory together.") % {
+                    'relationship': target_relationship.lower(),
+                    'name': target_name,
+                })
             else:
-                feedback_message = f"That is {target_name}. Thank you for looking at this memory together."
+                feedback_message = str(_("That is %(name)s. Thank you for looking at this memory together.") % {
+                    'name': target_name,
+                })
             feedback_tone = "encouraging"
 
         return {
@@ -616,9 +635,9 @@ class FamiliarFacesEngine:
 FOCUS_FINDER_CATALOG = {
     'marigold': {
         'id': 'marigold',
-        'name': 'Golden Marigold',
-        'category': 'Flowers',
-        'color_theme': 'Amber Gold',
+        'name': _('Golden Marigold'),
+        'category': _('Flowers'),
+        'color_theme': _('Amber Gold'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Golden Marigold">
   <circle cx="32" cy="32" r="22" fill="#FEF3C7" stroke="#D97706" stroke-width="2"/>
   <circle cx="32" cy="32" r="15" fill="#FDE68A" stroke="#B45309" stroke-width="2"/>
@@ -628,9 +647,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'rose': {
         'id': 'rose',
-        'name': 'Red Rose',
-        'category': 'Flowers',
-        'color_theme': 'Crimson Red',
+        'name': _('Red Rose'),
+        'category': _('Flowers'),
+        'color_theme': _('Crimson Red'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Red Rose">
   <path d="M32 38C40 38 46 32 46 24C46 16 38 12 32 16C26 12 18 16 18 24C18 32 24 38 32 38Z" fill="#FEE2E2" stroke="#DC2626" stroke-width="2.5"/>
   <path d="M32 20C36 18 39 21 38 25C37 28 34 30 32 30C30 30 27 28 26 25C25 21 28 18 32 20Z" fill="#EF4444" stroke="#B91C1C" stroke-width="2"/>
@@ -639,9 +658,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'tulip': {
         'id': 'tulip',
-        'name': 'Pink Tulip',
-        'category': 'Flowers',
-        'color_theme': 'Soft Pink',
+        'name': _('Pink Tulip'),
+        'category': _('Flowers'),
+        'color_theme': _('Soft Pink'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pink Tulip">
   <path d="M32 12C36 18 38 28 32 38C26 28 28 18 32 12Z" fill="#F43F5E" stroke="#BE123C" stroke-width="2"/>
   <path d="M22 18C22 28 26 36 32 38C28 34 20 28 22 18Z" fill="#FDA4AF" stroke="#BE123C" stroke-width="2"/>
@@ -651,9 +670,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'sunflower': {
         'id': 'sunflower',
-        'name': 'Bright Sunflower',
-        'category': 'Flowers',
-        'color_theme': 'Golden Yellow',
+        'name': _('Bright Sunflower'),
+        'category': _('Flowers'),
+        'color_theme': _('Golden Yellow'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bright Sunflower">
   <circle cx="32" cy="32" r="13" fill="#78350F" stroke="#451A03" stroke-width="2"/>
   <circle cx="32" cy="32" r="8" fill="#92400E" stroke="#B45309" stroke-width="1.5" stroke-dasharray="2 2"/>
@@ -662,9 +681,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'daisy': {
         'id': 'daisy',
-        'name': 'White Daisy',
-        'category': 'Flowers',
-        'color_theme': 'White Gold',
+        'name': _('White Daisy'),
+        'category': _('Flowers'),
+        'color_theme': _('White Gold'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="White Daisy">
   <ellipse cx="32" cy="14" rx="5" ry="10" fill="#F8FAFC" stroke="#64748B" stroke-width="1.5"/>
   <ellipse cx="32" cy="50" rx="5" ry="10" fill="#F8FAFC" stroke="#64748B" stroke-width="1.5"/>
@@ -679,9 +698,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'bluebell': {
         'id': 'bluebell',
-        'name': 'Gentle Bluebell',
-        'category': 'Flowers',
-        'color_theme': 'Sky Blue',
+        'name': _('Gentle Bluebell'),
+        'category': _('Flowers'),
+        'color_theme': _('Sky Blue'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Gentle Bluebell">
   <path d="M18 56C20 40 28 26 44 14" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
   <path d="M38 18C44 18 52 26 48 36C45 38 41 36 38 34C35 36 31 38 28 36C24 26 32 18 38 18Z" fill="#BAE6FD" stroke="#0284C7" stroke-width="2"/>
@@ -690,9 +709,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'oak_leaf': {
         'id': 'oak_leaf',
-        'name': 'Green Oak Leaf',
-        'category': 'Foliage & Botanicals',
-        'color_theme': 'Forest Green',
+        'name': _('Green Oak Leaf'),
+        'category': _('Foliage & Botanicals'),
+        'color_theme': _('Forest Green'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Green Oak Leaf">
   <path d="M32 8C35 12 40 12 41 16C42 20 38 22 42 26C46 30 45 34 40 38C42 42 38 46 34 48V56H30V48C26 46 22 42 24 38C19 34 18 30 22 26C26 22 22 20 23 16C24 12 29 12 32 8Z" fill="#DCFCE7" stroke="#16A34A" stroke-width="2.5"/>
   <path d="M32 14V48M32 24L38 20M32 28L26 24M32 34L39 31M32 38L25 35" stroke="#15803D" stroke-width="2" stroke-linecap="round"/>
@@ -700,9 +719,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'maple_leaf': {
         'id': 'maple_leaf',
-        'name': 'Orange Maple Leaf',
-        'category': 'Foliage & Botanicals',
-        'color_theme': 'Warm Orange',
+        'name': _('Orange Maple Leaf'),
+        'category': _('Foliage & Botanicals'),
+        'color_theme': _('Warm Orange'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Orange Maple Leaf">
   <path d="M32 6L36 18L44 14L42 24L52 26L44 34L48 44L36 40L34 56H30L28 40L16 44L20 34L12 26L22 24L20 14L28 18L32 6Z" fill="#FFEDD5" stroke="#EA580C" stroke-width="2.5"/>
   <path d="M32 14V42M32 26L42 20M32 26L22 20M32 34L44 32M32 34L20 32" stroke="#C2410C" stroke-width="2" stroke-linecap="round"/>
@@ -710,9 +729,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'clover': {
         'id': 'clover',
-        'name': 'Four-Leaf Clover',
-        'category': 'Foliage & Botanicals',
-        'color_theme': 'Emerald Green',
+        'name': _('Four-Leaf Clover'),
+        'category': _('Foliage & Botanicals'),
+        'color_theme': _('Emerald Green'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four-Leaf Clover">
   <path d="M32 30C28 20 22 20 22 26C22 30 28 32 32 32C28 36 22 38 22 42C22 48 28 48 32 38C36 48 42 48 42 42C42 38 36 36 32 32C36 32 42 30 42 26C42 20 36 20 32 30Z" fill="#BBF7D0" stroke="#059669" stroke-width="2.5"/>
   <path d="M32 35C30 44 26 52 18 56" stroke="#047857" stroke-width="2.5" stroke-linecap="round"/>
@@ -720,9 +739,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'pinecone': {
         'id': 'pinecone',
-        'name': 'Brown Pinecone',
-        'category': 'Foliage & Botanicals',
-        'color_theme': 'Cedar Brown',
+        'name': _('Brown Pinecone'),
+        'category': _('Foliage & Botanicals'),
+        'color_theme': _('Cedar Brown'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Brown Pinecone">
   <path d="M32 8C24 16 18 28 18 40C18 50 24 56 32 56C40 56 46 50 46 40C46 28 40 16 32 8Z" fill="#EFE8E1" stroke="#78350F" stroke-width="2"/>
   <path d="M22 26C28 28 36 28 42 26M20 34C28 37 36 37 44 34M20 42C28 45 36 45 44 42M24 50C28 52 36 52 40 50M32 8V56" stroke="#92400E" stroke-width="2" stroke-linecap="round"/>
@@ -730,9 +749,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'acorn': {
         'id': 'acorn',
-        'name': 'Forest Acorn',
-        'category': 'Foliage & Botanicals',
-        'color_theme': 'Warm Chestnut',
+        'name': _('Forest Acorn'),
+        'category': _('Foliage & Botanicals'),
+        'color_theme': _('Warm Chestnut'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Forest Acorn">
   <path d="M32 8V16M32 8C34 6 38 6 40 8" stroke="#451A03" stroke-width="2.5" stroke-linecap="round"/>
   <path d="M16 22C16 16 23 16 32 16C41 16 48 16 48 22C48 26 44 28 32 28C20 28 16 26 16 22Z" fill="#D97706" stroke="#78350F" stroke-width="2"/>
@@ -741,9 +760,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'teacup': {
         'id': 'teacup',
-        'name': 'Warm Teacup',
-        'category': 'Kitchen & Table',
-        'color_theme': 'Calm Teal',
+        'name': _('Warm Teacup'),
+        'category': _('Kitchen & Table'),
+        'color_theme': _('Calm Teal'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Warm Teacup">
   <path d="M14 26H46V38C46 46 38 50 30 50C22 50 14 46 14 38V26Z" fill="#CCFBF1" stroke="#0D9488" stroke-width="2.5"/>
   <path d="M46 30H52C55 30 57 32 57 35C57 38 55 40 52 40H45" stroke="#0D9488" stroke-width="2.5" stroke-linecap="round"/>
@@ -753,9 +772,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'teapot': {
         'id': 'teapot',
-        'name': 'Ceramic Teapot',
-        'category': 'Kitchen & Table',
-        'color_theme': 'Classic Navy',
+        'name': _('Ceramic Teapot'),
+        'category': _('Kitchen & Table'),
+        'color_theme': _('Classic Navy'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ceramic Teapot">
   <path d="M18 32C18 24 24 20 32 20C40 20 46 24 46 32C46 44 40 48 32 48C24 48 18 44 18 32Z" fill="#E0F2FE" stroke="#0369A1" stroke-width="2.5"/>
   <path d="M26 20C26 16 28 14 32 14C36 14 38 16 38 20" fill="#BAE6FD" stroke="#0369A1" stroke-width="2"/>
@@ -766,9 +785,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'pitcher': {
         'id': 'pitcher',
-        'name': 'Water Pitcher',
-        'category': 'Kitchen & Table',
-        'color_theme': 'Warm Terracotta',
+        'name': _('Water Pitcher'),
+        'category': _('Kitchen & Table'),
+        'color_theme': _('Warm Terracotta'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Water Pitcher">
   <path d="M24 16L18 22H42L38 16H24Z" fill="#FFEDD5" stroke="#C2410C" stroke-width="2"/>
   <path d="M20 22L16 46C16 52 22 56 30 56C38 56 44 52 44 46L40 22" fill="#FED7AA" stroke="#C2410C" stroke-width="2.5"/>
@@ -777,9 +796,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'apple': {
         'id': 'apple',
-        'name': 'Crisp Red Apple',
-        'category': 'Kitchen & Table',
-        'color_theme': 'Bright Red',
+        'name': _('Crisp Red Apple'),
+        'category': _('Kitchen & Table'),
+        'color_theme': _('Bright Red'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Crisp Red Apple">
   <path d="M32 14C24 14 16 20 16 32C16 46 24 54 32 54C40 54 48 46 48 32C48 20 40 14 32 14Z" fill="#FEE2E2" stroke="#DC2626" stroke-width="2.5"/>
   <path d="M32 8C33 12 33 14 32 17" stroke="#78350F" stroke-width="2.5" stroke-linecap="round"/>
@@ -788,9 +807,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'pear': {
         'id': 'pear',
-        'name': 'Sweet Green Pear',
-        'category': 'Kitchen & Table',
-        'color_theme': 'Olive Green',
+        'name': _('Sweet Green Pear'),
+        'category': _('Kitchen & Table'),
+        'color_theme': _('Olive Green'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sweet Green Pear">
   <path d="M32 16C26 16 24 24 20 32C16 40 16 52 32 54C48 52 48 40 44 32C40 24 38 16 32 16Z" fill="#DCFCE7" stroke="#15803D" stroke-width="2.5"/>
   <path d="M32 8C33 11 34 13 32 16" stroke="#78350F" stroke-width="2.5" stroke-linecap="round"/>
@@ -799,9 +818,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'honey_jar': {
         'id': 'honey_jar',
-        'name': 'Golden Honey Jar',
-        'category': 'Kitchen & Table',
-        'color_theme': 'Honey Amber',
+        'name': _('Golden Honey Jar'),
+        'category': _('Kitchen & Table'),
+        'color_theme': _('Honey Amber'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Golden Honey Jar">
   <path d="M22 16H42V20H22V16Z" fill="#FDE68A" stroke="#B45309" stroke-width="2"/>
   <path d="M20 20C16 26 16 48 20 52C24 56 40 56 44 52C48 48 48 26 44 20H20Z" fill="#FEF3C7" stroke="#D97706" stroke-width="2.5"/>
@@ -812,9 +831,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'brass_key': {
         'id': 'brass_key',
-        'name': 'Antique Brass Key',
-        'category': 'Keepsakes',
-        'color_theme': 'Antique Gold',
+        'name': _('Antique Brass Key'),
+        'category': _('Keepsakes'),
+        'color_theme': _('Antique Gold'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Antique Brass Key">
   <circle cx="22" cy="24" r="10" fill="#FEF3C7" stroke="#B45309" stroke-width="2.5"/>
   <circle cx="22" cy="24" r="4" fill="#FFFFFF" stroke="#B45309" stroke-width="1.5"/>
@@ -823,9 +842,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'pocket_watch': {
         'id': 'pocket_watch',
-        'name': 'Pocket Watch',
-        'category': 'Keepsakes',
-        'color_theme': 'Antique Silver',
+        'name': _('Pocket Watch'),
+        'category': _('Keepsakes'),
+        'color_theme': _('Antique Silver'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pocket Watch">
   <circle cx="32" cy="36" r="20" fill="#F8FAFC" stroke="#475569" stroke-width="2.5"/>
   <circle cx="32" cy="36" r="15" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.5"/>
@@ -835,9 +854,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'lantern': {
         'id': 'lantern',
-        'name': 'Garden Lantern',
-        'category': 'Keepsakes',
-        'color_theme': 'Bronze Amber',
+        'name': _('Garden Lantern'),
+        'category': _('Keepsakes'),
+        'color_theme': _('Bronze Amber'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Garden Lantern">
   <path d="M24 16C24 10 40 10 40 16" stroke="#78350F" stroke-width="2.5" stroke-linecap="round"/>
   <path d="M22 20L26 16H38L42 20H22Z" fill="#FEF3C7" stroke="#78350F" stroke-width="2"/>
@@ -848,9 +867,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'hand_bell': {
         'id': 'hand_bell',
-        'name': 'Brass Hand Bell',
-        'category': 'Keepsakes',
-        'color_theme': 'Warm Brass',
+        'name': _('Brass Hand Bell'),
+        'category': _('Keepsakes'),
+        'color_theme': _('Warm Brass'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Brass Hand Bell">
   <path d="M32 6V20" stroke="#78350F" stroke-width="3" stroke-linecap="round"/>
   <path d="M32 20C24 20 20 32 18 44H46C44 32 40 20 32 20Z" fill="#FEF3C7" stroke="#B45309" stroke-width="2.5"/>
@@ -860,9 +879,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'quill': {
         'id': 'quill',
-        'name': 'Writing Quill',
-        'category': 'Keepsakes',
-        'color_theme': 'Plum Purple',
+        'name': _('Writing Quill'),
+        'category': _('Keepsakes'),
+        'color_theme': _('Plum Purple'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Writing Quill">
   <path d="M48 10C34 16 26 28 18 48L14 54L20 50C28 42 36 34 50 20C54 16 52 10 48 10Z" fill="#F3E8FF" stroke="#7E22CE" stroke-width="2"/>
   <path d="M14 54L18 48M28 36L34 40M34 30L40 34" stroke="#6B21A8" stroke-width="1.5" stroke-linecap="round"/>
@@ -870,9 +889,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'compass': {
         'id': 'compass',
-        'name': 'Pocket Compass',
-        'category': 'Keepsakes',
-        'color_theme': 'Deep Indigo',
+        'name': _('Pocket Compass'),
+        'category': _('Keepsakes'),
+        'color_theme': _('Deep Indigo'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pocket Compass">
   <circle cx="32" cy="32" r="22" fill="#EEF2FF" stroke="#3730A3" stroke-width="2.5"/>
   <circle cx="32" cy="32" r="17" fill="#FFFFFF" stroke="#818CF8" stroke-width="1.5"/>
@@ -883,9 +902,9 @@ FOCUS_FINDER_CATALOG = {
     },
     'magnifier': {
         'id': 'magnifier',
-        'name': 'Reading Glass',
-        'category': 'Keepsakes',
-        'color_theme': 'Pewter Slate',
+        'name': _('Reading Glass'),
+        'category': _('Keepsakes'),
+        'color_theme': _('Pewter Slate'),
         'svg_icon': '''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reading Glass">
   <circle cx="26" cy="26" r="16" fill="#F0FDFA" stroke="#0F766E" stroke-width="3"/>
   <circle cx="26" cy="26" r="12" fill="#CCFBF1" stroke="#5EEAD4" stroke-width="1.5"/>
@@ -923,23 +942,23 @@ class FocusFinderEngine:
         return [
             {
                 'number': 1,
-                'title': "Look at the Target Item",
-                'description': "You will see a reference card showing one everyday object or flower to find.",
+                'title': _("Look at the Target Item"),
+                'description': _("You will see a reference card showing one everyday object or flower to find."),
             },
             {
                 'number': 2,
-                'title': "Scan the Picture Grid",
-                'description': "Look across the calm grid at your own pace. There is no timer or hurry.",
+                'title': _("Scan the Picture Grid"),
+                'description': _("Look across the calm grid at your own pace. There is no timer or hurry."),
             },
             {
                 'number': 3,
-                'title': "Tap Your Choice",
-                'description': "Tap the tile that matches the target. You can change your selection at any time without penalty.",
+                'title': _("Tap Your Choice"),
+                'description': _("Tap the tile that matches the target. You can change your selection at any time without penalty."),
             },
             {
                 'number': 4,
-                'title': "Confirm & Receive Gentle Feedback",
-                'description': "Press \"Confirm My Selection\" to review your choice and complete 3 pleasant rounds.",
+                'title': _("Confirm & Receive Gentle Feedback"),
+                'description': _("Press \"Confirm My Selection\" to review your choice and complete 3 pleasant rounds."),
             },
         ]
 
@@ -1014,7 +1033,7 @@ class FocusFinderEngine:
         return {
             'round_number': round_number,
             'total_rounds': cls.TOTAL_ROUNDS,
-            'prompt_text': "Find the matching item in the grid below.",
+            'prompt_text': _("Find the matching item in the grid below."),
             'target_item': round_plan['target_item'],
             'target_name': round_plan['target_item']['name'],
             'target_category': round_plan['target_item']['category'],
@@ -1042,7 +1061,7 @@ class FocusFinderEngine:
             missed_ids = []
             mistake_count = 0
             score = 1
-            feedback_message = f"Wonderful! You found the {target_name}."
+            feedback_message = str(_("Wonderful! You found the %(name)s.") % {'name': target_name})
             feedback_tone = "success"
         else:
             correct_ids = []
@@ -1050,7 +1069,7 @@ class FocusFinderEngine:
             missed_ids = [target_id]
             mistake_count = 1
             score = 0
-            feedback_message = f"Good effort! The {target_name} was resting in the grid. Taking your time to search is what matters most."
+            feedback_message = str(_("Good effort! The %(name)s was resting in the grid. Taking your time to search is what matters most.") % {'name': target_name})
             feedback_tone = "encouraging"
 
         return {
@@ -1072,411 +1091,411 @@ class FocusFinderEngine:
 WORD_CONNECTIONS_CATALOG = {
     'baking_bread': {
         'scenario_id': 'baking_bread',
-        'theme': 'Food & Kitchen',
-        'prompt': 'Which item is essential for making traditional dough rise?',
-        'concept': 'Baking Bread',
-        'contextual_clue': 'Think of the natural ingredient that creates warm, airy loaves.',
+        'theme': _('Food & Kitchen'),
+        'prompt': _('Which item is essential for making traditional dough rise?'),
+        'concept': _('Baking Bread'),
+        'contextual_clue': _('Think of the natural ingredient that creates warm, airy loaves.'),
         'target_word_id': 'yeast',
-        'target_word': 'Yeast',
+        'target_word': _('Yeast'),
         'distractors': {
-            1: [('teacup', 'Teacup'), ('hammer', 'Hammer'), ('umbrella', 'Umbrella')],
-            2: [('frying_pan', 'Frying Pan'), ('refrigerator', 'Refrigerator'), ('blender', 'Blender')],
-            3: [('honey', 'Honey'), ('vinegar', 'Vinegar'), ('olive_oil', 'Olive Oil'), ('cinnamon', 'Cinnamon')],
-            4: [('cornstarch', 'Cornstarch'), ('gelatin', 'Gelatin'), ('cocoa', 'Cocoa Powder'), ('vanilla', 'Vanilla')],
-            5: [('baking_tin', 'Baking Tin'), ('rolling_pin', 'Rolling Pin'), ('bread_knife', 'Bread Knife'), ('cooling_rack', 'Cooling Rack'), ('apron', 'Kitchen Apron')],
+            1: [('teacup', _('''Teacup''')), ('hammer', _('''Hammer''')), ('umbrella', _('''Umbrella'''))],
+            2: [('frying_pan', _('''Frying Pan''')), ('refrigerator', _('''Refrigerator''')), ('blender', _('''Blender'''))],
+            3: [('honey', _('''Honey''')), ('vinegar', _('''Vinegar''')), ('olive_oil', _('''Olive Oil''')), ('cinnamon', _('''Cinnamon'''))],
+            4: [('cornstarch', _('''Cornstarch''')), ('gelatin', _('''Gelatin''')), ('cocoa', _('''Cocoa Powder''')), ('vanilla', _('''Vanilla'''))],
+            5: [('baking_tin', _('''Baking Tin''')), ('rolling_pin', _('''Rolling Pin''')), ('bread_knife', _('''Bread Knife''')), ('cooling_rack', _('''Cooling Rack''')), ('apron', _('''Kitchen Apron'''))],
         },
-        'explanation': 'Yeast is the living leavening agent that ferments and makes traditional bread dough rise.',
+        'explanation': _('Yeast is the living leavening agent that ferments and makes traditional bread dough rise.'),
     },
     'sewing_basket': {
         'scenario_id': 'sewing_basket',
-        'theme': 'Crafts & Trades',
-        'prompt': 'Which tool is worn on the fingertip to push needles safely?',
-        'concept': 'Sewing Basket',
-        'contextual_clue': 'A small metal shield used when hand-stitching thick fabric.',
+        'theme': _('Crafts & Trades'),
+        'prompt': _('Which tool is worn on the fingertip to push needles safely?'),
+        'concept': _('Sewing Basket'),
+        'contextual_clue': _('A small metal shield used when hand-stitching thick fabric.'),
         'target_word_id': 'thimble',
-        'target_word': 'Thimble',
+        'target_word': _('Thimble'),
         'distractors': {
-            1: [('garden_rake', 'Garden Rake'), ('alarm_clock', 'Alarm Clock'), ('sailboat', 'Sailboat')],
-            2: [('teaspoon', 'Teaspoon'), ('doorbell', 'Doorbell'), ('hairbrush', 'Hairbrush')],
-            3: [('safety_pin', 'Safety Pin'), ('tape_measure', 'Tape Measure'), ('cushion', 'Pin Cushion'), ('button', 'Spare Button')],
-            4: [('embroidery_hoop', 'Embroidery Hoop'), ('seam_ripper', 'Seam Ripper'), ('bobbin', 'Bobbin'), ('tailors_chalk', "Tailor's Chalk")],
-            5: [('pinking_shears', 'Pinking Shears'), ('needle_threader', 'Needle Threader'), ('measuring_gauge', 'Sewing Gauge'), ('tracing_wheel', 'Tracing Wheel'), ('bodkin', 'Bodkin')],
+            1: [('garden_rake', _('''Garden Rake''')), ('alarm_clock', _('''Alarm Clock''')), ('sailboat', _('''Sailboat'''))],
+            2: [('teaspoon', _('''Teaspoon''')), ('doorbell', _('''Doorbell''')), ('hairbrush', _('''Hairbrush'''))],
+            3: [('safety_pin', _('''Safety Pin''')), ('tape_measure', _('''Tape Measure''')), ('cushion', _('''Pin Cushion''')), ('button', _('''Spare Button'''))],
+            4: [('embroidery_hoop', _('''Embroidery Hoop''')), ('seam_ripper', _('''Seam Ripper''')), ('bobbin', _('''Bobbin''')), ('tailors_chalk', _('''Tailor's Chalk'''))],
+            5: [('pinking_shears', _('''Pinking Shears''')), ('needle_threader', _('''Needle Threader''')), ('measuring_gauge', _('''Sewing Gauge''')), ('tracing_wheel', _('''Tracing Wheel''')), ('bodkin', _('''Bodkin'''))],
         },
-        'explanation': 'A thimble is worn over the fingertip to shield it while pushing a needle through tough cloth.',
+        'explanation': _('A thimble is worn over the fingertip to shield it while pushing a needle through tough cloth.'),
     },
     'morning_gardening': {
         'scenario_id': 'morning_gardening',
-        'theme': 'Garden & Nature',
-        'prompt': 'Which vessel is traditionally used to sprinkle water gently on flowerbeds?',
-        'concept': 'Tending the Garden',
-        'contextual_clue': 'A handheld container with a spout and perforated rose.',
+        'theme': _('Garden & Nature'),
+        'prompt': _('Which vessel is traditionally used to sprinkle water gently on flowerbeds?'),
+        'concept': _('Tending the Garden'),
+        'contextual_clue': _('A handheld container with a spout and perforated rose.'),
         'target_word_id': 'watering_can',
-        'target_word': 'Watering Can',
+        'target_word': _('Watering Can'),
         'distractors': {
-            1: [('typewriter', 'Typewriter'), ('pillowcase', 'Pillowcase'), ('violin', 'Violin')],
-            2: [('bookshelf', 'Bookshelf'), ('armchair', 'Armchair'), ('tea_kettle', 'Tea Kettle')],
-            3: [('flower_pot', 'Flower Pot'), ('garden_trowel', 'Garden Trowel'), ('pruning_shears', 'Pruning Shears'), ('seed_packet', 'Seed Packet')],
-            4: [('wheelbarrow', 'Wheelbarrow'), ('garden_kneeler', 'Garden Kneeler'), ('trellis', 'Plant Trellis'), ('compost_bin', 'Compost Bin')],
-            5: [('sprinkler_head', 'Lawn Sprinkler'), ('hose_nozzle', 'Hose Nozzle'), ('rain_gauge', 'Rain Gauge'), ('soil_scoop', 'Soil Scoop'), ('plant_mister', 'Glass Mister')],
+            1: [('typewriter', _('''Typewriter''')), ('pillowcase', _('''Pillowcase''')), ('violin', _('''Violin'''))],
+            2: [('bookshelf', _('''Bookshelf''')), ('armchair', _('''Armchair''')), ('tea_kettle', _('''Tea Kettle'''))],
+            3: [('flower_pot', _('''Flower Pot''')), ('garden_trowel', _('''Garden Trowel''')), ('pruning_shears', _('''Pruning Shears''')), ('seed_packet', _('''Seed Packet'''))],
+            4: [('wheelbarrow', _('''Wheelbarrow''')), ('garden_kneeler', _('''Garden Kneeler''')), ('trellis', _('''Plant Trellis''')), ('compost_bin', _('''Compost Bin'''))],
+            5: [('sprinkler_head', _('''Lawn Sprinkler''')), ('hose_nozzle', _('''Hose Nozzle''')), ('rain_gauge', _('''Rain Gauge''')), ('soil_scoop', _('''Soil Scoop''')), ('plant_mister', _('''Glass Mister'''))],
         },
-        'explanation': 'A watering can is designed specifically to carry and sprinkle water gently onto delicate plants.',
+        'explanation': _('A watering can is designed specifically to carry and sprinkle water gently onto delicate plants.'),
     },
     'letter_writing': {
         'scenario_id': 'letter_writing',
-        'theme': 'Daily Routines',
-        'prompt': 'Which item is affixed to an envelope so postal carriers can deliver it?',
-        'concept': 'Sending a Letter',
-        'contextual_clue': 'A small gummed paper receipt showing postal payment.',
+        'theme': _('Daily Routines'),
+        'prompt': _('Which item is affixed to an envelope so postal carriers can deliver it?'),
+        'concept': _('Sending a Letter'),
+        'contextual_clue': _('A small gummed paper receipt showing postal payment.'),
         'target_word_id': 'postage_stamp',
-        'target_word': 'Postage Stamp',
+        'target_word': _('Postage Stamp'),
         'distractors': {
-            1: [('toaster', 'Toaster'), ('rain_boots', 'Rain Boots'), ('bicycle', 'Bicycle')],
-            2: [('paper_clip', 'Paper Clip'), ('pencil_sharpener', 'Pencil Sharpener'), ('bookmark', 'Bookmark')],
-            3: [('fountain_pen', 'Fountain Pen'), ('writing_pad', 'Writing Pad'), ('envelope', 'Postal Envelope'), ('sealing_wax', 'Sealing Wax')],
-            4: [('rubber_stamp', 'Rubber Date Stamp'), ('blotting_paper', 'Blotting Paper'), ('letter_opener', 'Letter Opener'), ('address_book', 'Address Book')],
-            5: [('postcard', 'Picture Postcard'), ('airmail_sticker', 'Airmail Label'), ('stationery_box', 'Stationery Box'), ('pen_holder', 'Wooden Pen Stand'), ('wax_seal_stamp', 'Embossing Seal')],
+            1: [('toaster', _('''Toaster''')), ('rain_boots', _('''Rain Boots''')), ('bicycle', _('''Bicycle'''))],
+            2: [('paper_clip', _('''Paper Clip''')), ('pencil_sharpener', _('''Pencil Sharpener''')), ('bookmark', _('''Bookmark'''))],
+            3: [('fountain_pen', _('''Fountain Pen''')), ('writing_pad', _('''Writing Pad''')), ('envelope', _('''Postal Envelope''')), ('sealing_wax', _('''Sealing Wax'''))],
+            4: [('rubber_stamp', _('''Rubber Date Stamp''')), ('blotting_paper', _('''Blotting Paper''')), ('letter_opener', _('''Letter Opener''')), ('address_book', _('''Address Book'''))],
+            5: [('postcard', _('''Picture Postcard''')), ('airmail_sticker', _('''Airmail Label''')), ('stationery_box', _('''Stationery Box''')), ('pen_holder', _('''Wooden Pen Stand''')), ('wax_seal_stamp', _('''Embossing Seal'''))],
         },
-        'explanation': 'A postage stamp is the official paper token affixed to an envelope confirming postal delivery fees.',
+        'explanation': _('A postage stamp is the official paper token affixed to an envelope confirming postal delivery fees.'),
     },
     'afternoon_tea': {
         'scenario_id': 'afternoon_tea',
-        'theme': 'Food & Kitchen',
-        'prompt': 'Which utensil is used to hold loose tea leaves inside hot water while steeping?',
-        'concept': 'Afternoon Tea',
-        'contextual_clue': 'A small mesh sphere or perforated basket placed in the cup or pot.',
+        'theme': _('Food & Kitchen'),
+        'prompt': _('Which utensil is used to hold loose tea leaves inside hot water while steeping?'),
+        'concept': _('Afternoon Tea'),
+        'contextual_clue': _('A small mesh sphere or perforated basket placed in the cup or pot.'),
         'target_word_id': 'tea_infuser',
-        'target_word': 'Tea Infuser',
+        'target_word': _('Tea Infuser'),
         'distractors': {
-            1: [('garden_rake', 'Garden Rake'), ('flashlight', 'Flashlight'), ('telescope', 'Telescope')],
-            2: [('soup_ladle', 'Soup Ladle'), ('rolling_pin', 'Rolling Pin'), ('breadbox', 'Breadbox')],
-            3: [('teacup', 'Teacup'), ('sugar_bowl', 'Sugar Bowl'), ('milk_pitcher', 'Milk Pitcher'), ('tea_cosy', 'Tea Cosy')],
-            4: [('tea_tray', 'Serving Tray'), ('honey_dipper', 'Honey Dipper'), ('cake_stand', 'Cake Stand'), ('biscuit_tin', 'Biscuit Tin')],
-            5: [('tea_strainer', 'Tea Strainer'), ('tea_caddy', 'Tea Caddy'), ('lemon_fork', 'Lemon Fork'), ('sugar_tongs', 'Sugar Tongs'), ('slop_bowl', 'Tea Slop Bowl')],
+            1: [('garden_rake', _('''Garden Rake''')), ('flashlight', _('''Flashlight''')), ('telescope', _('''Telescope'''))],
+            2: [('soup_ladle', _('''Soup Ladle''')), ('rolling_pin', _('''Rolling Pin''')), ('breadbox', _('''Breadbox'''))],
+            3: [('teacup', _('''Teacup''')), ('sugar_bowl', _('''Sugar Bowl''')), ('milk_pitcher', _('''Milk Pitcher''')), ('tea_cosy', _('''Tea Cosy'''))],
+            4: [('tea_tray', _('''Serving Tray''')), ('honey_dipper', _('''Honey Dipper''')), ('cake_stand', _('''Cake Stand''')), ('biscuit_tin', _('''Biscuit Tin'''))],
+            5: [('tea_strainer', _('''Tea Strainer''')), ('tea_caddy', _('''Tea Caddy''')), ('lemon_fork', _('''Lemon Fork''')), ('sugar_tongs', _('''Sugar Tongs''')), ('slop_bowl', _('''Tea Slop Bowl'''))],
         },
-        'explanation': 'A tea infuser holds dried tea leaves securely while allowing boiling water to circulate and steep.',
+        'explanation': _('A tea infuser holds dried tea leaves securely while allowing boiling water to circulate and steep.'),
     },
     'rainy_weather': {
         'scenario_id': 'rainy_weather',
-        'theme': 'Nature & Seasons',
-        'prompt': 'Which protective item unfolds overhead to keep rain showers off?',
-        'concept': 'Rainy Afternoon',
-        'contextual_clue': 'A portable fabric canopy on ribs carried when dark clouds gather.',
+        'theme': _('Nature & Seasons'),
+        'prompt': _('Which protective item unfolds overhead to keep rain showers off?'),
+        'concept': _('Rainy Afternoon'),
+        'contextual_clue': _('A portable fabric canopy on ribs carried when dark clouds gather.'),
         'target_word_id': 'umbrella',
-        'target_word': 'Umbrella',
+        'target_word': _('Umbrella'),
         'distractors': {
-            1: [('harmonica', 'Harmonica'), ('desk_lamp', 'Desk Lamp'), ('flowerbed', 'Flowerbed')],
-            2: [('beach_towel', 'Beach Towel'), ('sunhat', 'Straw Sunhat'), ('sunglasses', 'Sunglasses')],
-            3: [('waterproof_boots', 'Rain Boots'), ('warm_scarf', 'Warm Scarf'), ('woolen_mittens', 'Woolen Mittens'), ('trenchcoat', 'Trenchcoat')],
-            4: [('storm_lantern', 'Storm Lantern'), ('doormat', 'Mud Mat'), ('galoshes', 'Rubber Galoshes'), ('rain_gauge', 'Outdoor Rain Gauge')],
-            5: [('umbrella_stand', 'Hall Umbrella Stand'), ('windbreaker', 'Windbreaker Jacket'), ('hatbox', 'Felt Hatbox'), ('walking_stick', 'Wooden Cane'), ('waterproof_hat', 'Souwester Hat')],
+            1: [('harmonica', _('''Harmonica''')), ('desk_lamp', _('''Desk Lamp''')), ('flowerbed', _('''Flowerbed'''))],
+            2: [('beach_towel', _('''Beach Towel''')), ('sunhat', _('''Straw Sunhat''')), ('sunglasses', _('''Sunglasses'''))],
+            3: [('waterproof_boots', _('''Rain Boots''')), ('warm_scarf', _('''Warm Scarf''')), ('woolen_mittens', _('''Woolen Mittens''')), ('trenchcoat', _('''Trenchcoat'''))],
+            4: [('storm_lantern', _('''Storm Lantern''')), ('doormat', _('''Mud Mat''')), ('galoshes', _('''Rubber Galoshes''')), ('rain_gauge', _('''Outdoor Rain Gauge'''))],
+            5: [('umbrella_stand', _('''Hall Umbrella Stand''')), ('windbreaker', _('''Windbreaker Jacket''')), ('hatbox', _('''Felt Hatbox''')), ('walking_stick', _('''Wooden Cane''')), ('waterproof_hat', _('''Souwester Hat'''))],
         },
-        'explanation': 'An umbrella is designed specifically to open overhead and shield a person from falling rain.',
+        'explanation': _('An umbrella is designed specifically to open overhead and shield a person from falling rain.'),
     },
     'carpentry_bench': {
         'scenario_id': 'carpentry_bench',
-        'theme': 'Crafts & Trades',
-        'prompt': 'Which hand tool is pushed along rough wood boards to shave them smooth and flat?',
-        'concept': 'Woodworking Bench',
-        'contextual_clue': 'A block tool with a sharp angled iron blade underneath.',
+        'theme': _('Crafts & Trades'),
+        'prompt': _('Which hand tool is pushed along rough wood boards to shave them smooth and flat?'),
+        'concept': _('Woodworking Bench'),
+        'contextual_clue': _('A block tool with a sharp angled iron blade underneath.'),
         'target_word_id': 'hand_plane',
-        'target_word': 'Hand Plane',
+        'target_word': _('Hand Plane'),
         'distractors': {
-            1: [('telephone', 'Telephone'), ('pillow', 'Bed Pillow'), ('cookbook', 'Cookbook')],
-            2: [('garden_hose', 'Garden Hose'), ('frying_pan', 'Frying Pan'), ('washcloth', 'Washcloth')],
-            3: [('claw_hammer', 'Claw Hammer'), ('handsaw', 'Handsaw'), ('tape_measure', 'Measuring Tape'), ('wood_glue', 'Wood Glue')],
-            4: [('wood_chisel', 'Wood Chisel'), ('try_square', 'Carpenter Square'), ('bench_vise', 'Bench Vise'), ('sandpaper', 'Sandpaper Sheet')],
-            5: [('marking_gauge', 'Marking Gauge'), ('spoke_shave', 'Spokeshave'), ('draw_knife', 'Drawknife'), ('coping_saw', 'Coping Saw'), ('wood_rasp', 'Cabinet Rasp')],
+            1: [('telephone', _('''Telephone''')), ('pillow', _('''Bed Pillow''')), ('cookbook', _('''Cookbook'''))],
+            2: [('garden_hose', _('''Garden Hose''')), ('frying_pan', _('''Frying Pan''')), ('washcloth', _('''Washcloth'''))],
+            3: [('claw_hammer', _('''Claw Hammer''')), ('handsaw', _('''Handsaw''')), ('tape_measure', _('''Measuring Tape''')), ('wood_glue', _('''Wood Glue'''))],
+            4: [('wood_chisel', _('''Wood Chisel''')), ('try_square', _('''Carpenter Square''')), ('bench_vise', _('''Bench Vise''')), ('sandpaper', _('''Sandpaper Sheet'''))],
+            5: [('marking_gauge', _('''Marking Gauge''')), ('spoke_shave', _('''Spokeshave''')), ('draw_knife', _('''Drawknife''')), ('coping_saw', _('''Coping Saw''')), ('wood_rasp', _('''Cabinet Rasp'''))],
         },
-        'explanation': 'A hand plane is pushed across timber surfaces to shave off thin curls and create a true, smooth plane.',
+        'explanation': _('A hand plane is pushed across timber surfaces to shave off thin curls and create a true, smooth plane.'),
     },
     'autumn_fireplace': {
         'scenario_id': 'autumn_fireplace',
-        'theme': 'Home & Hearth',
-        'prompt': 'Which hearth tool is squeezed by hand to blow air and revive fading embers?',
-        'concept': 'Living Room Fireplace',
-        'contextual_clue': 'An accordion-like wooden tool with leather sides and a brass nozzle.',
+        'theme': _('Home & Hearth'),
+        'prompt': _('Which hearth tool is squeezed by hand to blow air and revive fading embers?'),
+        'concept': _('Living Room Fireplace'),
+        'contextual_clue': _('An accordion-like wooden tool with leather sides and a brass nozzle.'),
         'target_word_id': 'fireplace_bellows',
-        'target_word': 'Fireplace Bellows',
+        'target_word': _('Fireplace Bellows'),
         'distractors': {
-            1: [('wristwatch', 'Wristwatch'), ('watering_can', 'Watering Can'), ('paint_brush', 'Paint Brush')],
-            2: [('dustpan', 'Dustpan'), ('window_curtain', 'Window Curtain'), ('carpet_sweeper', 'Carpet Sweeper')],
-            3: [('iron_poker', 'Fire Poker'), ('log_grate', 'Hearth Grate'), ('kindling_bucket', 'Kindling Bucket'), ('spark_screen', 'Firescreen')],
-            4: [('hearth_shovel', 'Ash Shovel'), ('fire_tongs', 'Log Tongs'), ('hearth_broom', 'Ash Broom'), ('log_basket', 'Firewood Basket')],
-            5: [('andiron', 'Brass Andiron'), ('fender', 'Hearth Fender'), ('chimney_cap', 'Chimney Flue'), ('fire_starter', 'Flint Striker'), ('coal_scuttle', 'Coal Scuttle')],
+            1: [('wristwatch', _('''Wristwatch''')), ('watering_can', _('''Watering Can''')), ('paint_brush', _('''Paint Brush'''))],
+            2: [('dustpan', _('''Dustpan''')), ('window_curtain', _('''Window Curtain''')), ('carpet_sweeper', _('''Carpet Sweeper'''))],
+            3: [('iron_poker', _('''Fire Poker''')), ('log_grate', _('''Hearth Grate''')), ('kindling_bucket', _('''Kindling Bucket''')), ('spark_screen', _('''Firescreen'''))],
+            4: [('hearth_shovel', _('''Ash Shovel''')), ('fire_tongs', _('''Log Tongs''')), ('hearth_broom', _('''Ash Broom''')), ('log_basket', _('''Firewood Basket'''))],
+            5: [('andiron', _('''Brass Andiron''')), ('fender', _('''Hearth Fender''')), ('chimney_cap', _('''Chimney Flue''')), ('fire_starter', _('''Flint Striker''')), ('coal_scuttle', _('''Coal Scuttle'''))],
         },
-        'explanation': 'Fireplace bellows pump a concentrated blast of fresh air into the coals to kindle and feed the flames.',
+        'explanation': _('Fireplace bellows pump a concentrated blast of fresh air into the coals to kindle and feed the flames.'),
     },
     'bedtime_routine': {
         'scenario_id': 'bedtime_routine',
-        'theme': 'Daily Routines',
-        'prompt': 'Which soft item filled with feathers or wool supports your head through the night?',
-        'concept': 'Evening Bedtime',
-        'contextual_clue': 'A comfortable resting cushion dressed in a clean cotton slip.',
+        'theme': _('Daily Routines'),
+        'prompt': _('Which soft item filled with feathers or wool supports your head through the night?'),
+        'concept': _('Evening Bedtime'),
+        'contextual_clue': _('A comfortable resting cushion dressed in a clean cotton slip.'),
         'target_word_id': 'bed_pillow',
-        'target_word': 'Bed Pillow',
+        'target_word': _('Bed Pillow'),
         'distractors': {
-            1: [('watering_can', 'Watering Can'), ('lawnmower', 'Lawnmower'), ('bicycle_pump', 'Bicycle Pump')],
-            2: [('dinner_plate', 'Dinner Plate'), ('soup_spoon', 'Soup Spoon'), ('kitchen_clock', 'Kitchen Clock')],
-            3: [('bedside_lamp', 'Bedside Lamp'), ('warm_quilt', 'Warm Quilt'), ('alarm_clock', 'Alarm Clock'), ('slippers', 'House Slippers')],
-            4: [('woolen_blanket', 'Woolen Blanket'), ('mattress_pad', 'Mattress Pad'), ('nightstand', 'Wooden Nightstand'), ('hot_water_bottle', 'Hot Water Bottle')],
-            5: [('bolster_cushion', 'Bolster Cushion'), ('bedspread', 'Linen Bedspread'), ('feather_duvet', 'Feather Duvet'), ('sleep_mask', 'Silk Eye Mask'), ('valance_sheet', 'Bed Skirt')],
+            1: [('watering_can', _('''Watering Can''')), ('lawnmower', _('''Lawnmower''')), ('bicycle_pump', _('''Bicycle Pump'''))],
+            2: [('dinner_plate', _('''Dinner Plate''')), ('soup_spoon', _('''Soup Spoon''')), ('kitchen_clock', _('''Kitchen Clock'''))],
+            3: [('bedside_lamp', _('''Bedside Lamp''')), ('warm_quilt', _('''Warm Quilt''')), ('alarm_clock', _('''Alarm Clock''')), ('slippers', _('''House Slippers'''))],
+            4: [('woolen_blanket', _('''Woolen Blanket''')), ('mattress_pad', _('''Mattress Pad''')), ('nightstand', _('''Wooden Nightstand''')), ('hot_water_bottle', _('''Hot Water Bottle'''))],
+            5: [('bolster_cushion', _('''Bolster Cushion''')), ('bedspread', _('''Linen Bedspread''')), ('feather_duvet', _('''Feather Duvet''')), ('sleep_mask', _('''Silk Eye Mask''')), ('valance_sheet', _('''Bed Skirt'''))],
         },
-        'explanation': 'A bed pillow provides head and neck support for restful sleep throughout the night.',
+        'explanation': _('A bed pillow provides head and neck support for restful sleep throughout the night.'),
     },
     'baking_apple_pie': {
         'scenario_id': 'baking_apple_pie',
-        'theme': 'Food & Kitchen',
-        'prompt': 'Which aromatic sweet brown spice is traditionally sprinkled over baking apples?',
-        'concept': 'Apple Pie Baking',
-        'contextual_clue': 'A warm ground bark spice fragrant with comforting holiday aromas.',
+        'theme': _('Food & Kitchen'),
+        'prompt': _('Which aromatic sweet brown spice is traditionally sprinkled over baking apples?'),
+        'concept': _('Apple Pie Baking'),
+        'contextual_clue': _('A warm ground bark spice fragrant with comforting holiday aromas.'),
         'target_word_id': 'cinnamon',
-        'target_word': 'Ground Cinnamon',
+        'target_word': _('Ground Cinnamon'),
         'distractors': {
-            1: [('roller_skate', 'Roller Skate'), ('harmonica', 'Harmonica'), ('birdcage', 'Birdcage')],
-            2: [('black_pepper', 'Black Pepper'), ('garlic_salt', 'Garlic Salt'), ('mustard_seed', 'Mustard Seed')],
-            3: [('cane_sugar', 'Cane Sugar'), ('unsalted_butter', 'Unsalted Butter'), ('lemon_juice', 'Lemon Juice'), ('pastry_flour', 'Pastry Flour')],
-            4: [('ground_nutmeg', 'Ground Nutmeg'), ('allspice', 'Ground Allspice'), ('ground_cloves', 'Ground Cloves'), ('vanilla_pod', 'Vanilla Pod')],
-            5: [('pie_dish', 'Ceramic Pie Dish'), ('pastry_brush', 'Pastry Brush'), ('pie_crust_shield', 'Pie Crust Shield'), ('dough_blender', 'Pastry Blender'), ('apple_peeler', 'Apple Corer')],
+            1: [('roller_skate', _('''Roller Skate''')), ('harmonica', _('''Harmonica''')), ('birdcage', _('''Birdcage'''))],
+            2: [('black_pepper', _('''Black Pepper''')), ('garlic_salt', _('''Garlic Salt''')), ('mustard_seed', _('''Mustard Seed'''))],
+            3: [('cane_sugar', _('''Cane Sugar''')), ('unsalted_butter', _('''Unsalted Butter''')), ('lemon_juice', _('''Lemon Juice''')), ('pastry_flour', _('''Pastry Flour'''))],
+            4: [('ground_nutmeg', _('''Ground Nutmeg''')), ('allspice', _('''Ground Allspice''')), ('ground_cloves', _('''Ground Cloves''')), ('vanilla_pod', _('''Vanilla Pod'''))],
+            5: [('pie_dish', _('''Ceramic Pie Dish''')), ('pastry_brush', _('''Pastry Brush''')), ('pie_crust_shield', _('''Pie Crust Shield''')), ('dough_blender', _('''Pastry Blender''')), ('apple_peeler', _('''Apple Corer'''))],
         },
-        'explanation': 'Cinnamon is the classic warm spice paired with apples in traditional homemade pies.',
+        'explanation': _('Cinnamon is the classic warm spice paired with apples in traditional homemade pies.'),
     },
     'knitting_sweaters': {
         'scenario_id': 'knitting_sweaters',
-        'theme': 'Crafts & Trades',
-        'prompt': 'Which material wound into soft skeins or balls is knitted into warm garments?',
-        'concept': 'Knitting a Warm Sweater',
-        'contextual_clue': 'Spun strands of wool or cotton pulled loop by loop onto needles.',
+        'theme': _('Crafts & Trades'),
+        'prompt': _('Which material wound into soft skeins or balls is knitted into warm garments?'),
+        'concept': _('Knitting a Warm Sweater'),
+        'contextual_clue': _('Spun strands of wool or cotton pulled loop by loop onto needles.'),
         'target_word_id': 'knitting_yarn',
-        'target_word': 'Spun Yarn',
+        'target_word': _('Spun Yarn'),
         'distractors': {
-            1: [('garden_rake', 'Garden Rake'), ('typewriter', 'Typewriter'), ('pocket_knife', 'Pocket Knife')],
-            2: [('fishing_line', 'Fishing Line'), ('electrical_wire', 'Copper Wire'), ('twine', 'Garden Twine')],
-            3: [('knitting_needles', 'Knitting Needles'), ('measuring_tape', 'Measuring Tape'), ('stitch_markers', 'Stitch Markers'), ('tapestry_needle', 'Tapestry Needle')],
-            4: [('yarn_bowl', 'Ceramic Yarn Bowl'), ('row_counter', 'Row Counter'), ('stitch_holder', 'Stitch Holder'), ('crochet_hook', 'Crochet Hook')],
-            5: [('skein_winder', 'Ball Winder'), ('yarn_swift', 'Wooden Yarn Swift'), ('blocking_mats', 'Blocking Board'), ('gauge_ruler', 'Needle Gauge'), ('yarn_gauge', 'Tension Square')],
+            1: [('garden_rake', _('''Garden Rake''')), ('typewriter', _('''Typewriter''')), ('pocket_knife', _('''Pocket Knife'''))],
+            2: [('fishing_line', _('''Fishing Line''')), ('electrical_wire', _('''Copper Wire''')), ('twine', _('''Garden Twine'''))],
+            3: [('knitting_needles', _('''Knitting Needles''')), ('measuring_tape', _('''Measuring Tape''')), ('stitch_markers', _('''Stitch Markers''')), ('tapestry_needle', _('''Tapestry Needle'''))],
+            4: [('yarn_bowl', _('''Ceramic Yarn Bowl''')), ('row_counter', _('''Row Counter''')), ('stitch_holder', _('''Stitch Holder''')), ('crochet_hook', _('''Crochet Hook'''))],
+            5: [('skein_winder', _('''Ball Winder''')), ('yarn_swift', _('''Wooden Yarn Swift''')), ('blocking_mats', _('''Blocking Board''')), ('gauge_ruler', _('''Needle Gauge''')), ('yarn_gauge', _('''Tension Square'''))],
         },
-        'explanation': 'Spun yarn is the primary fibrous material knitted with needles to form blankets and sweaters.',
+        'explanation': _('Spun yarn is the primary fibrous material knitted with needles to form blankets and sweaters.'),
     },
     'morning_coffee': {
         'scenario_id': 'morning_coffee',
-        'theme': 'Daily Routines',
-        'prompt': 'Which countertop appliance uses burrs or blades to crush whole roasted coffee beans?',
-        'concept': 'Fresh Morning Coffee',
-        'contextual_clue': 'A mill used to turn whole aromatic beans into grounds before brewing.',
+        'theme': _('Daily Routines'),
+        'prompt': _('Which countertop appliance uses burrs or blades to crush whole roasted coffee beans?'),
+        'concept': _('Fresh Morning Coffee'),
+        'contextual_clue': _('A mill used to turn whole aromatic beans into grounds before brewing.'),
         'target_word_id': 'coffee_grinder',
-        'target_word': 'Coffee Grinder',
+        'target_word': _('Coffee Grinder'),
         'distractors': {
-            1: [('garden_spade', 'Garden Spade'), ('sewing_needle', 'Sewing Needle'), ('binoculars', 'Binoculars')],
-            2: [('toaster', 'Bread Toaster'), ('waffle_iron', 'Waffle Iron'), ('can_opener', 'Can Opener')],
-            3: [('coffee_mug', 'Ceramic Mug'), ('french_press', 'French Press'), ('coffee_pot', 'Glass Coffee Pot'), ('paper_filter', 'Paper Filter')],
-            4: [('espresso_tamper', 'Espresso Tamper'), ('milk_frother', 'Milk Frother'), ('water_kettle', 'Pour-Over Kettle'), ('ceramic_dripper', 'Coffee Dripper')],
-            5: [('beans_canister', 'Beans Canister'), ('coffee_scale', 'Digital Coffee Scale'), ('measuring_scoop', 'Coffee Scoop'), ('carafe_warmer', 'Carafe Warmer'), ('filter_stand', 'Filter Holder')],
+            1: [('garden_spade', _('''Garden Spade''')), ('sewing_needle', _('''Sewing Needle''')), ('binoculars', _('''Binoculars'''))],
+            2: [('toaster', _('''Bread Toaster''')), ('waffle_iron', _('''Waffle Iron''')), ('can_opener', _('''Can Opener'''))],
+            3: [('coffee_mug', _('''Ceramic Mug''')), ('french_press', _('''French Press''')), ('coffee_pot', _('''Glass Coffee Pot''')), ('paper_filter', _('''Paper Filter'''))],
+            4: [('espresso_tamper', _('''Espresso Tamper''')), ('milk_frother', _('''Milk Frother''')), ('water_kettle', _('''Pour-Over Kettle''')), ('ceramic_dripper', _('''Coffee Dripper'''))],
+            5: [('beans_canister', _('''Beans Canister''')), ('coffee_scale', _('''Digital Coffee Scale''')), ('measuring_scoop', _('''Coffee Scoop''')), ('carafe_warmer', _('''Carafe Warmer''')), ('filter_stand', _('''Filter Holder'''))],
         },
-        'explanation': 'A coffee grinder crushes whole roasted beans into fresh grounds for brewing.',
+        'explanation': _('A coffee grinder crushes whole roasted beans into fresh grounds for brewing.'),
     },
     'visiting_library': {
         'scenario_id': 'visiting_library',
-        'theme': 'Community & Culture',
-        'prompt': 'Which thin card or ribbon slips between pages to save your reading place?',
-        'concept': 'A Quiet Afternoon at the Library',
-        'contextual_clue': 'A gentle paper or ribbon keeper tucked inside a book.',
+        'theme': _('Community & Culture'),
+        'prompt': _('Which thin card or ribbon slips between pages to save your reading place?'),
+        'concept': _('A Quiet Afternoon at the Library'),
+        'contextual_clue': _('A gentle paper or ribbon keeper tucked inside a book.'),
         'target_word_id': 'bookmark',
-        'target_word': 'Bookmark',
+        'target_word': _('Bookmark'),
         'distractors': {
-            1: [('rolling_pin', 'Rolling Pin'), ('garden_hose', 'Garden Hose'), ('tea_kettle', 'Tea Kettle')],
-            2: [('pencil_sharpener', 'Pencil Sharpener'), ('desk_ruler', 'Wooden Ruler'), ('paperweight', 'Glass Paperweight')],
-            3: [('reading_glasses', 'Reading Glasses'), ('hardcover_book', 'Hardcover Book'), ('library_card', 'Library Card'), ('desk_lamp', 'Study Lamp')],
-            4: [('bookends', 'Brass Bookends'), ('magnifying_glass', 'Magnifying Glass'), ('book_stand', 'Book Display Stand'), ('card_catalog', 'Card Catalog Drawer')],
-            5: [('bookplate', 'Ex Libris Bookplate'), ('dust_jacket', 'Book Dust Jacket'), ('ribbon_marker', 'Bound Ribbon Page Marker'), ('book_pocket', 'Checkout Pocket'), ('stamp_pad', 'Due Date Stamp')],
+            1: [('rolling_pin', _('''Rolling Pin''')), ('garden_hose', _('''Garden Hose''')), ('tea_kettle', _('''Tea Kettle'''))],
+            2: [('pencil_sharpener', _('''Pencil Sharpener''')), ('desk_ruler', _('''Wooden Ruler''')), ('paperweight', _('''Glass Paperweight'''))],
+            3: [('reading_glasses', _('''Reading Glasses''')), ('hardcover_book', _('''Hardcover Book''')), ('library_card', _('''Library Card''')), ('desk_lamp', _('''Study Lamp'''))],
+            4: [('bookends', _('''Brass Bookends''')), ('magnifying_glass', _('''Magnifying Glass''')), ('book_stand', _('''Book Display Stand''')), ('card_catalog', _('''Card Catalog Drawer'''))],
+            5: [('bookplate', _('''Ex Libris Bookplate''')), ('dust_jacket', _('''Book Dust Jacket''')), ('ribbon_marker', _('''Bound Ribbon Page Marker''')), ('book_pocket', _('''Checkout Pocket''')), ('stamp_pad', _('''Due Date Stamp'''))],
         },
-        'explanation': 'A bookmark is placed between the pages of a book to preserve your reading position safely.',
+        'explanation': _('A bookmark is placed between the pages of a book to preserve your reading position safely.'),
     },
     'autumn_orchard': {
         'scenario_id': 'autumn_orchard',
-        'theme': 'Garden & Nature',
-        'prompt': 'Which deep wooden container is traditionally used to collect harvested tree fruit?',
-        'concept': 'Autumn Apple Orchard',
-        'contextual_clue': 'A sturdy slatted box or woven vessel used during seasonal harvests.',
+        'theme': _('Garden & Nature'),
+        'prompt': _('Which deep wooden container is traditionally used to collect harvested tree fruit?'),
+        'concept': _('Autumn Apple Orchard'),
+        'contextual_clue': _('A sturdy slatted box or woven vessel used during seasonal harvests.'),
         'target_word_id': 'bushel_basket',
-        'target_word': 'Bushel Basket',
+        'target_word': _('Bushel Basket'),
         'distractors': {
-            1: [('teacup', 'Teacup'), ('typewriter', 'Typewriter'), ('fireplace_poker', 'Fireplace Poker')],
-            2: [('dustpan', 'Dustpan'), ('breadbox', 'Breadbox'), ('shoe_rack', 'Shoe Rack')],
-            3: [('gardening_gloves', 'Gardening Gloves'), ('step_ladder', 'Step Ladder'), ('pruning_clippers', 'Pruning Clippers'), ('sun_hat', 'Canvas Sun Hat')],
-            4: [('wooden_crate', 'Storage Crate'), ('cider_jug', 'Glass Cider Jug'), ('fruit_picker_pole', 'Fruit Picker Pole'), ('orchard_tarp', 'Harvest Tarp')],
-            5: [('apple_press', 'Cider Press'), ('produce_scale', 'Hanging Produce Scale'), ('harvest_apron', 'Harvest Apron'), ('wheelbarrow', 'Garden Wheelbarrow'), ('fruit_sorter', 'Grading Sieve')],
+            1: [('teacup', _('''Teacup''')), ('typewriter', _('''Typewriter''')), ('fireplace_poker', _('''Fireplace Poker'''))],
+            2: [('dustpan', _('''Dustpan''')), ('breadbox', _('''Breadbox''')), ('shoe_rack', _('''Shoe Rack'''))],
+            3: [('gardening_gloves', _('''Gardening Gloves''')), ('step_ladder', _('''Step Ladder''')), ('pruning_clippers', _('''Pruning Clippers''')), ('sun_hat', _('''Canvas Sun Hat'''))],
+            4: [('wooden_crate', _('''Storage Crate''')), ('cider_jug', _('''Glass Cider Jug''')), ('fruit_picker_pole', _('''Fruit Picker Pole''')), ('orchard_tarp', _('''Harvest Tarp'''))],
+            5: [('apple_press', _('''Cider Press''')), ('produce_scale', _('''Hanging Produce Scale''')), ('harvest_apron', _('''Harvest Apron''')), ('wheelbarrow', _('''Garden Wheelbarrow''')), ('fruit_sorter', _('''Grading Sieve'''))],
         },
-        'explanation': 'A bushel basket is the traditional woven container used to hold picked apples and pears in an orchard.',
+        'explanation': _('A bushel basket is the traditional woven container used to hold picked apples and pears in an orchard.'),
     },
     'family_album': {
         'scenario_id': 'family_album',
-        'theme': 'Community & Culture',
-        'prompt': 'Which small decorative paper triangles hold vintage pictures securely onto album pages?',
-        'concept': 'Family Photo Album',
-        'contextual_clue': 'Adhesive corner tabs that hold photographs without damaging delicate backing.',
+        'theme': _('Community & Culture'),
+        'prompt': _('Which small decorative paper triangles hold vintage pictures securely onto album pages?'),
+        'concept': _('Family Photo Album'),
+        'contextual_clue': _('Adhesive corner tabs that hold photographs without damaging delicate backing.'),
         'target_word_id': 'photo_corners',
-        'target_word': 'Photo Corners',
+        'target_word': _('Photo Corners'),
         'distractors': {
-            1: [('watering_can', 'Watering Can'), ('soup_ladle', 'Soup Ladle'), ('garden_rake', 'Garden Rake')],
-            2: [('scotch_tape', 'Cellophane Tape'), ('paper_clip', 'Paper Clip'), ('rubber_band', 'Rubber Band')],
-            3: [('picture_frame', 'Picture Frame'), ('album_page', 'Black Album Page'), ('fountain_pen', 'Fountain Pen'), ('magnifying_glass', 'Magnifying Glass')],
-            4: [('tissue_interleaving', 'Glassine Tissue Sheet'), ('film_negative', 'Film Negative Sleeve'), ('keepsake_envelope', 'Keepsake Envelope'), ('scrapbook_binder', 'Leather Binder')],
-            5: [('mounting_squares', 'Mounting Squares'), ('corner_punch', 'Corner Punch'), ('archival_glue', 'Acid-Free Glue Stick'), ('labeling_tabs', 'Embossed Labeling Tape'), ('slipcase', 'Album Slipcase')],
+            1: [('watering_can', _('''Watering Can''')), ('soup_ladle', _('''Soup Ladle''')), ('garden_rake', _('''Garden Rake'''))],
+            2: [('scotch_tape', _('''Cellophane Tape''')), ('paper_clip', _('''Paper Clip''')), ('rubber_band', _('''Rubber Band'''))],
+            3: [('picture_frame', _('''Picture Frame''')), ('album_page', _('''Black Album Page''')), ('fountain_pen', _('''Fountain Pen''')), ('magnifying_glass', _('''Magnifying Glass'''))],
+            4: [('tissue_interleaving', _('''Glassine Tissue Sheet''')), ('film_negative', _('''Film Negative Sleeve''')), ('keepsake_envelope', _('''Keepsake Envelope''')), ('scrapbook_binder', _('''Leather Binder'''))],
+            5: [('mounting_squares', _('''Mounting Squares''')), ('corner_punch', _('''Corner Punch''')), ('archival_glue', _('''Acid-Free Glue Stick''')), ('labeling_tabs', _('''Embossed Labeling Tape''')), ('slipcase', _('''Album Slipcase'''))],
         },
-        'explanation': 'Photo corners are adhesive pockets that gently hold the corners of photographs onto album pages without damaging them.',
+        'explanation': _('Photo corners are adhesive pockets that gently hold the corners of photographs onto album pages without damaging them.'),
     },
     'shoe_polishing': {
         'scenario_id': 'shoe_polishing',
-        'theme': 'Daily Routines',
-        'prompt': 'Which dense horsehair brush is used to buff polished leather to a lustrous shine?',
-        'concept': 'Caring for Leather Shoes',
-        'contextual_clue': 'A wooden-backed bristle brush rubbed vigorously across the shoe.',
+        'theme': _('Daily Routines'),
+        'prompt': _('Which dense horsehair brush is used to buff polished leather to a lustrous shine?'),
+        'concept': _('Caring for Leather Shoes'),
+        'contextual_clue': _('A wooden-backed bristle brush rubbed vigorously across the shoe.'),
         'target_word_id': 'buffing_brush',
-        'target_word': 'Shoe Buffing Brush',
+        'target_word': _('Shoe Buffing Brush'),
         'distractors': {
-            1: [('harmonica', 'Harmonica'), ('tea_kettle', 'Tea Kettle'), ('garden_hose', 'Garden Hose')],
-            2: [('hairbrush', 'Hairbrush'), ('toothbrush', 'Toothbrush'), ('paint_brush', 'Paint Brush')],
-            3: [('shoe_polish_tin', 'Wax Polish Tin'), ('polishing_cloth', 'Cotton Buffing Rag'), ('shoe_horn', 'Brass Shoe Horn'), ('wooden_shoe_tree', 'Wooden Shoe Tree')],
-            4: [('edge_dressing', 'Sole Edge Dressing'), ('saddle_soap', 'Saddle Soap'), ('welt_brush', 'Small Welt Brush'), ('dauber_brush', 'Polish Applicator Dauber')],
-            5: [('chamois_leather', 'Chamois Leather'), ('shine_box', 'Wooden Valet Box'), ('leather_conditioner', 'Leather Balm'), ('waterproof_wax', 'Dubbin Wax'), ('heel_shifter', 'Heel Pad')],
+            1: [('harmonica', _('''Harmonica''')), ('tea_kettle', _('''Tea Kettle''')), ('garden_hose', _('''Garden Hose'''))],
+            2: [('hairbrush', _('''Hairbrush''')), ('toothbrush', _('''Toothbrush''')), ('paint_brush', _('''Paint Brush'''))],
+            3: [('shoe_polish_tin', _('''Wax Polish Tin''')), ('polishing_cloth', _('''Cotton Buffing Rag''')), ('shoe_horn', _('''Brass Shoe Horn''')), ('wooden_shoe_tree', _('''Wooden Shoe Tree'''))],
+            4: [('edge_dressing', _('''Sole Edge Dressing''')), ('saddle_soap', _('''Saddle Soap''')), ('welt_brush', _('''Small Welt Brush''')), ('dauber_brush', _('''Polish Applicator Dauber'''))],
+            5: [('chamois_leather', _('''Chamois Leather''')), ('shine_box', _('''Wooden Valet Box''')), ('leather_conditioner', _('''Leather Balm''')), ('waterproof_wax', _('''Dubbin Wax''')), ('heel_shifter', _('''Heel Pad'''))],
         },
-        'explanation': 'A shoe buffing brush made of horsehair creates friction to bring leather wax to a rich, warm shine.',
+        'explanation': _('A shoe buffing brush made of horsehair creates friction to bring leather wax to a rich, warm shine.'),
     },
     'flower_arranging': {
         'scenario_id': 'flower_arranging',
-        'theme': 'Garden & Nature',
-        'prompt': 'Which decorative glass or ceramic container holds water and displays fresh cut stems?',
-        'concept': 'Arranging Fresh Flowers',
-        'contextual_clue': 'A classic table vessel designed specifically to hold fresh-cut floral bouquets.',
+        'theme': _('Garden & Nature'),
+        'prompt': _('Which decorative glass or ceramic container holds water and displays fresh cut stems?'),
+        'concept': _('Arranging Fresh Flowers'),
+        'contextual_clue': _('A classic table vessel designed specifically to hold fresh-cut floral bouquets.'),
         'target_word_id': 'flower_vase',
-        'target_word': 'Flower Vase',
+        'target_word': _('Flower Vase'),
         'distractors': {
-            1: [('bicycle_bell', 'Bicycle Bell'), ('alarm_clock', 'Alarm Clock'), ('typewriter', 'Typewriter')],
-            2: [('soup_bowl', 'Soup Bowl'), ('coffee_mug', 'Coffee Mug'), ('water_jug', 'Water Pitcher')],
-            3: [('floral_shears', 'Floral Shears'), ('garden_twine', 'Garden Twine'), ('plant_food_packet', 'Plant Food Packet'), ('ribbon', 'Satin Ribbon')],
-            4: [('flower_frog', 'Metal Flower Frog'), ('floral_foam', 'Floral Foam Block'), ('stem_wire', 'Floral Stem Wire'), ('table_runner', 'Linen Table Runner')],
-            5: [('urn_pedestal', 'Urn Pedestal'), ('rose_stripper', 'Thorn Stripper'), ('glass_marbles', 'Vase Filler Marbles'), ('floral_tape', 'Green Stem Tape'), ('water_pipette', 'Orchid Water Tube')],
+            1: [('bicycle_bell', _('''Bicycle Bell''')), ('alarm_clock', _('''Alarm Clock''')), ('typewriter', _('''Typewriter'''))],
+            2: [('soup_bowl', _('''Soup Bowl''')), ('coffee_mug', _('''Coffee Mug''')), ('water_jug', _('''Water Pitcher'''))],
+            3: [('floral_shears', _('''Floral Shears''')), ('garden_twine', _('''Garden Twine''')), ('plant_food_packet', _('''Plant Food Packet''')), ('ribbon', _('''Satin Ribbon'''))],
+            4: [('flower_frog', _('''Metal Flower Frog''')), ('floral_foam', _('''Floral Foam Block''')), ('stem_wire', _('''Floral Stem Wire''')), ('table_runner', _('''Linen Table Runner'''))],
+            5: [('urn_pedestal', _('''Urn Pedestal''')), ('rose_stripper', _('''Thorn Stripper''')), ('glass_marbles', _('''Vase Filler Marbles''')), ('floral_tape', _('''Green Stem Tape''')), ('water_pipette', _('''Orchid Water Tube'''))],
         },
-        'explanation': 'A flower vase is the dedicated vessel used to hold water and display freshly cut floral arrangements.',
+        'explanation': _('A flower vase is the dedicated vessel used to hold water and display freshly cut floral arrangements.'),
     },
     'picnic_lunch': {
         'scenario_id': 'picnic_lunch',
-        'theme': 'Community & Culture',
-        'prompt': 'Which wide woven wicker container with handles and lids carries lunch into the park?',
-        'concept': 'An Afternoon Picnic',
-        'contextual_clue': 'A classic lidded hamper carried outdoors for alfresco meals.',
+        'theme': _('Community & Culture'),
+        'prompt': _('Which wide woven wicker container with handles and lids carries lunch into the park?'),
+        'concept': _('An Afternoon Picnic'),
+        'contextual_clue': _('A classic lidded hamper carried outdoors for alfresco meals.'),
         'target_word_id': 'picnic_basket',
-        'target_word': 'Picnic Basket',
+        'target_word': _('Picnic Basket'),
         'distractors': {
-            1: [('fireplace_poker', 'Fireplace Poker'), ('typewriter', 'Typewriter'), ('feather_pillow', 'Feather Pillow')],
-            2: [('laundry_basket', 'Laundry Basket'), ('wastepaper_basket', 'Wastepaper Basket'), ('sewing_basket', 'Sewing Basket')],
-            3: [('gingham_blanket', 'Checkered Blanket'), ('thermos_flask', 'Insulated Thermos'), ('cloth_napkins', 'Cloth Napkins'), ('sandwich_box', 'Sandwich Tin')],
-            4: [('enamel_plates', 'Enamel Camp Plates'), ('cutlery_roll', 'Cutlery Roll'), ('salt_cellar', 'Travel Salt Shaker'), ('folding_corkscrew', 'Pocket Corkscrew')],
-            5: [('picnic_rug_strap', 'Leather Blanket Carrier'), ('ice_flask', 'Cooler Flask'), ('bento_tins', 'Stacking Food Tins'), ('parasol', 'Paper Parasol'), ('canvas_cooler', 'Insulated Canvas Bag')],
+            1: [('fireplace_poker', _('''Fireplace Poker''')), ('typewriter', _('''Typewriter''')), ('feather_pillow', _('''Feather Pillow'''))],
+            2: [('laundry_basket', _('''Laundry Basket''')), ('wastepaper_basket', _('''Wastepaper Basket''')), ('sewing_basket', _('''Sewing Basket'''))],
+            3: [('gingham_blanket', _('''Checkered Blanket''')), ('thermos_flask', _('''Insulated Thermos''')), ('cloth_napkins', _('''Cloth Napkins''')), ('sandwich_box', _('''Sandwich Tin'''))],
+            4: [('enamel_plates', _('''Enamel Camp Plates''')), ('cutlery_roll', _('''Cutlery Roll''')), ('salt_cellar', _('''Travel Salt Shaker''')), ('folding_corkscrew', _('''Pocket Corkscrew'''))],
+            5: [('picnic_rug_strap', _('''Leather Blanket Carrier''')), ('ice_flask', _('''Cooler Flask''')), ('bento_tins', _('''Stacking Food Tins''')), ('parasol', _('''Paper Parasol''')), ('canvas_cooler', _('''Insulated Canvas Bag'''))],
         },
-        'explanation': 'A picnic basket or wicker hamper is the traditional portable carrier for outdoor lunches and tablecloths.',
+        'explanation': _('A picnic basket or wicker hamper is the traditional portable carrier for outdoor lunches and tablecloths.'),
     },
     'winter_hearth': {
         'scenario_id': 'winter_hearth',
-        'theme': 'Home & Hearth',
-        'prompt': 'Which small, dry twigs and wood splinters catch sparks easily to ignite large logs?',
-        'concept': 'Building a Winter Fire',
-        'contextual_clue': 'Slender dry wood used between crumpled paper and heavy firewood.',
+        'theme': _('Home & Hearth'),
+        'prompt': _('Which small, dry twigs and wood splinters catch sparks easily to ignite large logs?'),
+        'concept': _('Building a Winter Fire'),
+        'contextual_clue': _('Slender dry wood used between crumpled paper and heavy firewood.'),
         'target_word_id': 'kindling',
-        'target_word': 'Dry Kindling',
+        'target_word': _('Dry Kindling'),
         'distractors': {
-            1: [('rubber_duck', 'Rubber Duck'), ('alarm_clock', 'Alarm Clock'), ('bicycle_helmet', 'Bicycle Helmet')],
-            2: [('dry_leaves', 'Raked Leaves'), ('sawdust', 'Sawdust'), ('newspaper', 'Old Newspaper')],
-            3: [('oak_firewood', 'Heavy Oak Logs'), ('iron_poker', 'Fire Poker'), ('fireplace_hearth', 'Stone Hearth'), ('ash_bucket', 'Ash Bucket')],
-            4: [('matches_box', 'Safety Matches'), ('fire_bellows', 'Hearth Bellows'), ('fatwood_sticks', 'Resinous Pine Sticks'), ('chimney_grate', 'Cast Iron Grate')],
-            5: [('fire_tongs', 'Log Tongs'), ('hearth_fender', 'Brass Hearth Fender'), ('birch_bark', 'Dried Birch Bark Strips'), ('spark_screen', 'Mesh Fireplace Screen'), ('ember_rake', 'Ember Rake')],
+            1: [('rubber_duck', _('''Rubber Duck''')), ('alarm_clock', _('''Alarm Clock''')), ('bicycle_helmet', _('''Bicycle Helmet'''))],
+            2: [('dry_leaves', _('''Raked Leaves''')), ('sawdust', _('''Sawdust''')), ('newspaper', _('''Old Newspaper'''))],
+            3: [('oak_firewood', _('''Heavy Oak Logs''')), ('iron_poker', _('''Fire Poker''')), ('fireplace_hearth', _('''Stone Hearth''')), ('ash_bucket', _('''Ash Bucket'''))],
+            4: [('matches_box', _('''Safety Matches''')), ('fire_bellows', _('''Hearth Bellows''')), ('fatwood_sticks', _('''Resinous Pine Sticks''')), ('chimney_grate', _('''Cast Iron Grate'''))],
+            5: [('fire_tongs', _('''Log Tongs''')), ('hearth_fender', _('''Brass Hearth Fender''')), ('birch_bark', _('''Dried Birch Bark Strips''')), ('spark_screen', _('''Mesh Fireplace Screen''')), ('ember_rake', _('''Ember Rake'''))],
         },
-        'explanation': 'Kindling consists of dry, thin sticks that catch fire easily and produce enough sustained heat to ignite heavy logs.',
+        'explanation': _('Kindling consists of dry, thin sticks that catch fire easily and produce enough sustained heat to ignite heavy logs.'),
     },
     'morning_shave': {
         'scenario_id': 'morning_shave',
-        'theme': 'Daily Routines',
-        'prompt': 'Which soft bristle tool is swirled in a mug with soap to whip up rich lather?',
-        'concept': 'Traditional Morning Shave',
-        'contextual_clue': 'A wooden or resin handle with dense badger or boar hair bristles.',
+        'theme': _('Daily Routines'),
+        'prompt': _('Which soft bristle tool is swirled in a mug with soap to whip up rich lather?'),
+        'concept': _('Traditional Morning Shave'),
+        'contextual_clue': _('A wooden or resin handle with dense badger or boar hair bristles.'),
         'target_word_id': 'shaving_brush',
-        'target_word': 'Shaving Brush',
+        'target_word': _('Shaving Brush'),
         'distractors': {
-            1: [('garden_spade', 'Garden Spade'), ('rolling_pin', 'Rolling Pin'), ('harmonica', 'Harmonica')],
-            2: [('hairbrush', 'Hairbrush'), ('toothbrush', 'Toothbrush'), ('shoe_brush', 'Shoe Brush')],
-            3: [('safety_razor', 'Safety Razor'), ('shaving_soap', 'Shaving Soap Puck'), ('warm_towel', 'Warm Face Towel'), ('aftershave_lotion', 'Aftershave Splash')],
-            4: [('shaving_mug', 'Ceramic Shave Mug'), ('leather_strop', 'Leather Strop'), ('alum_block', 'Alum Block'), ('razor_stand', 'Chrome Razor Stand')],
-            5: [('styptic_pencil', 'Styptic Pencil'), ('shaving_scuttle', 'Hot Water Scuttle'), ('blade_dispenser', 'Razor Blade Pack'), ('pre_shave_oil', 'Pre-Shave Oil'), ('mirror_stand', 'Magnifying Shave Mirror')],
+            1: [('garden_spade', _('''Garden Spade''')), ('rolling_pin', _('''Rolling Pin''')), ('harmonica', _('''Harmonica'''))],
+            2: [('hairbrush', _('''Hairbrush''')), ('toothbrush', _('''Toothbrush''')), ('shoe_brush', _('''Shoe Brush'''))],
+            3: [('safety_razor', _('''Safety Razor''')), ('shaving_soap', _('''Shaving Soap Puck''')), ('warm_towel', _('''Warm Face Towel''')), ('aftershave_lotion', _('''Aftershave Splash'''))],
+            4: [('shaving_mug', _('''Ceramic Shave Mug''')), ('leather_strop', _('''Leather Strop''')), ('alum_block', _('''Alum Block''')), ('razor_stand', _('''Chrome Razor Stand'''))],
+            5: [('styptic_pencil', _('''Styptic Pencil''')), ('shaving_scuttle', _('''Hot Water Scuttle''')), ('blade_dispenser', _('''Razor Blade Pack''')), ('pre_shave_oil', _('''Pre-Shave Oil''')), ('mirror_stand', _('''Magnifying Shave Mirror'''))],
         },
-        'explanation': 'A shaving brush whips warm water and soap into a thick, protective lather applied to the face.',
+        'explanation': _('A shaving brush whips warm water and soap into a thick, protective lather applied to the face.'),
     },
     'pottery_wheel': {
         'scenario_id': 'pottery_wheel',
-        'theme': 'Crafts & Trades',
-        'prompt': 'Which natural pliable earth material is shaped by hand on a spinning wheel?',
-        'concept': 'Working with Pottery',
-        'contextual_clue': 'Moist mineral soil molded into bowls and baked in a kiln.',
+        'theme': _('Crafts & Trades'),
+        'prompt': _('Which natural pliable earth material is shaped by hand on a spinning wheel?'),
+        'concept': _('Working with Pottery'),
+        'contextual_clue': _('Moist mineral soil molded into bowls and baked in a kiln.'),
         'target_word_id': 'pottery_clay',
-        'target_word': 'Pottery Clay',
+        'target_word': _('Pottery Clay'),
         'distractors': {
-            1: [('alarm_clock', 'Alarm Clock'), ('typewriter', 'Typewriter'), ('frying_pan', 'Frying Pan')],
-            2: [('garden_soil', 'Garden Soil'), ('sandpaper', 'Sandpaper'), ('flour_dough', 'Flour Dough')],
-            3: [('potters_wheel', "Potter's Wheel"), ('water_sponge', 'Pottery Sponge'), ('ceramic_glaze', 'Ceramic Glaze'), ('pottery_kiln', 'Firing Kiln')],
-            4: [('wire_cutter', 'Wire Clay Cutter'), ('wooden_rib', 'Shaping Rib'), ('carving_loop', 'Loop Carving Tool'), ('canvas_board', 'Wedging Board')],
-            5: [('bat_pins', 'Wheel Bat Pins'), ('slip_cup', 'Clay Slip Cup'), ('calipers', 'Pottery Calipers'), ('sculpting_needle', 'Needle Tool'), ('banding_wheel', 'Banding Wheel')],
+            1: [('alarm_clock', _('''Alarm Clock''')), ('typewriter', _('''Typewriter''')), ('frying_pan', _('''Frying Pan'''))],
+            2: [('garden_soil', _('''Garden Soil''')), ('sandpaper', _('''Sandpaper''')), ('flour_dough', _('''Flour Dough'''))],
+            3: [('potters_wheel', _('''Potter's Wheel''')), ('water_sponge', _('''Pottery Sponge''')), ('ceramic_glaze', _('''Ceramic Glaze''')), ('pottery_kiln', _('''Firing Kiln'''))],
+            4: [('wire_cutter', _('''Wire Clay Cutter''')), ('wooden_rib', _('''Shaping Rib''')), ('carving_loop', _('''Loop Carving Tool''')), ('canvas_board', _('''Wedging Board'''))],
+            5: [('bat_pins', _('''Wheel Bat Pins''')), ('slip_cup', _('''Clay Slip Cup''')), ('calipers', _('''Pottery Calipers''')), ('sculpting_needle', _('''Needle Tool''')), ('banding_wheel', _('''Banding Wheel'''))],
         },
-        'explanation': 'Clay is the natural, malleable earthen material centered and shaped by hand on the potter’s wheel.',
+        'explanation': _('Clay is the natural, malleable earthen material centered and shaped by hand on the potter’s wheel.'),
     },
     'herb_garden': {
         'scenario_id': 'herb_garden',
-        'theme': 'Garden & Nature',
-        'prompt': 'Which fragrant needle-leafed evergreen herb is often paired with roasted potatoes?',
-        'concept': 'Kitchen Herb Garden',
-        'contextual_clue': 'A woody Mediterranean bush with pine-like aroma used in roasting.',
+        'theme': _('Garden & Nature'),
+        'prompt': _('Which fragrant needle-leafed evergreen herb is often paired with roasted potatoes?'),
+        'concept': _('Kitchen Herb Garden'),
+        'contextual_clue': _('A woody Mediterranean bush with pine-like aroma used in roasting.'),
         'target_word_id': 'rosemary',
-        'target_word': 'Fresh Rosemary',
+        'target_word': _('Fresh Rosemary'),
         'distractors': {
-            1: [('teacup', 'Teacup'), ('harmonica', 'Harmonica'), ('lawnmower', 'Lawnmower')],
-            2: [('pine_needle', 'Pine Needle'), ('clover', 'Clover Leaf'), ('oak_leaf', 'Oak Leaf')],
-            3: [('garden_trowel', 'Garden Trowel'), ('herb_shears', 'Herb Shears'), ('plant_marker', 'Slate Plant Marker'), ('terracotta_pot', 'Terracotta Pot')],
-            4: [('fresh_parsley', 'Fresh Parsley'), ('sweet_basil', 'Sweet Basil'), ('garden_thyme', 'Garden Thyme'), ('garden_mint', 'Spearmint')],
-            5: [('sage_leaves', 'Garden Sage'), ('french_tarragon', 'French Tarragon'), ('winter_savory', 'Winter Savory'), ('bay_laurel', 'Bay Laurel Leaves'), ('marjoram', 'Sweet Marjoram')],
+            1: [('teacup', _('''Teacup''')), ('harmonica', _('''Harmonica''')), ('lawnmower', _('''Lawnmower'''))],
+            2: [('pine_needle', _('''Pine Needle''')), ('clover', _('''Clover Leaf''')), ('oak_leaf', _('''Oak Leaf'''))],
+            3: [('garden_trowel', _('''Garden Trowel''')), ('herb_shears', _('''Herb Shears''')), ('plant_marker', _('''Slate Plant Marker''')), ('terracotta_pot', _('''Terracotta Pot'''))],
+            4: [('fresh_parsley', _('''Fresh Parsley''')), ('sweet_basil', _('''Sweet Basil''')), ('garden_thyme', _('''Garden Thyme''')), ('garden_mint', _('''Spearmint'''))],
+            5: [('sage_leaves', _('''Garden Sage''')), ('french_tarragon', _('''French Tarragon''')), ('winter_savory', _('''Winter Savory''')), ('bay_laurel', _('''Bay Laurel Leaves''')), ('marjoram', _('''Sweet Marjoram'''))],
         },
-        'explanation': 'Rosemary is the aromatic, needle-leaved garden herb traditionally roasted with potatoes and meats.',
+        'explanation': _('Rosemary is the aromatic, needle-leaved garden herb traditionally roasted with potatoes and meats.'),
     },
     'sunday_baking': {
         'scenario_id': 'sunday_baking',
-        'theme': 'Food & Kitchen',
-        'prompt': 'Which heavy wooden or marble cylinder is rolled back and forth to flatten pastry dough?',
-        'concept': 'Making Homemade Pies',
-        'contextual_clue': 'A smooth cylindrical roller with handles on both ends.',
+        'theme': _('Food & Kitchen'),
+        'prompt': _('Which heavy wooden or marble cylinder is rolled back and forth to flatten pastry dough?'),
+        'concept': _('Making Homemade Pies'),
+        'contextual_clue': _('A smooth cylindrical roller with handles on both ends.'),
         'target_word_id': 'rolling_pin',
-        'target_word': 'Rolling Pin',
+        'target_word': _('Rolling Pin'),
         'distractors': {
-            1: [('garden_rake', 'Garden Rake'), ('telephone', 'Telephone'), ('violin', 'Violin')],
-            2: [('hammer', 'Hammer'), ('frying_pan', 'Frying Pan'), ('soup_spoon', 'Soup Spoon')],
-            3: [('pastry_board', 'Pastry Board'), ('mixing_bowl', 'Mixing Bowl'), ('measuring_cup', 'Measuring Cup'), ('pastry_cutter', 'Pastry Cutter')],
-            4: [('pie_tin', 'Pie Dish'), ('dough_scraper', 'Bench Scraper'), ('flour_sifter', 'Flour Sifter'), ('pastry_brush', 'Pastry Brush')],
-            5: [('marble_board', 'Marble Pastry Slab'), ('pie_weights', 'Ceramic Pie Weights'), ('lattice_cutter', 'Pastry Lattice Roller'), ('crust_crimper', 'Pie Crust Fluter'), ('dough_docking_tool', 'Dough Docker')],
+            1: [('garden_rake', _('''Garden Rake''')), ('telephone', _('''Telephone''')), ('violin', _('''Violin'''))],
+            2: [('hammer', _('''Hammer''')), ('frying_pan', _('''Frying Pan''')), ('soup_spoon', _('''Soup Spoon'''))],
+            3: [('pastry_board', _('''Pastry Board''')), ('mixing_bowl', _('''Mixing Bowl''')), ('measuring_cup', _('''Measuring Cup''')), ('pastry_cutter', _('''Pastry Cutter'''))],
+            4: [('pie_tin', _('''Pie Dish''')), ('dough_scraper', _('''Bench Scraper''')), ('flour_sifter', _('''Flour Sifter''')), ('pastry_brush', _('''Pastry Brush'''))],
+            5: [('marble_board', _('''Marble Pastry Slab''')), ('pie_weights', _('''Ceramic Pie Weights''')), ('lattice_cutter', _('''Pastry Lattice Roller''')), ('crust_crimper', _('''Pie Crust Fluter''')), ('dough_docking_tool', _('''Dough Docker'''))],
         },
-        'explanation': 'A rolling pin is rolled across dough to flatten it to an even, uniform thickness for pies and tarts.',
+        'explanation': _('A rolling pin is rolled across dough to flatten it to an even, uniform thickness for pies and tarts.'),
     },
     'evening_reading': {
         'scenario_id': 'evening_reading',
-        'theme': 'Home & Hearth',
-        'prompt': 'Which optical instrument with framed convex glass rests on the nose to clarify small print?',
-        'concept': 'Quiet Evening Reading',
-        'contextual_clue': 'A pair of corrective lenses worn to bring book pages into sharp focus.',
+        'theme': _('Home & Hearth'),
+        'prompt': _('Which optical instrument with framed convex glass rests on the nose to clarify small print?'),
+        'concept': _('Quiet Evening Reading'),
+        'contextual_clue': _('A pair of corrective lenses worn to bring book pages into sharp focus.'),
         'target_word_id': 'reading_glasses',
-        'target_word': 'Reading Glasses',
+        'target_word': _('Reading Glasses'),
         'distractors': {
-            1: [('garden_spade', 'Garden Spade'), ('teapot', 'Teapot'), ('rain_boots', 'Rain Boots')],
-            2: [('sunglasses', 'Sunglasses'), ('pocket_watch', 'Pocket Watch'), ('compass', 'Pocket Compass')],
-            3: [('bookmark', 'Silk Bookmark'), ('hardcover_book', 'Hardcover Book'), ('bedside_lamp', 'Bedside Lamp'), ('armchair', 'Reading Armchair')],
-            4: [('magnifying_glass', 'Handheld Magnifier'), ('eyeglass_case', 'Hard Eyeglass Case'), ('cleaning_cloth', 'Microfiber Lens Cloth'), ('book_light', 'Clip-on Book Light')],
-            5: [('bifocals', 'Bifocal Lenses'), ('pince_nez', 'Pince-Nez Spectacles'), ('opera_glasses', 'Opera Glasses'), ('spectacle_chain', 'Eyeglass Neck Cord'), ('reading_loupe', 'Jeweler Loupe')],
+            1: [('garden_spade', _('''Garden Spade''')), ('teapot', _('''Teapot''')), ('rain_boots', _('''Rain Boots'''))],
+            2: [('sunglasses', _('''Sunglasses''')), ('pocket_watch', _('''Pocket Watch''')), ('compass', _('''Pocket Compass'''))],
+            3: [('bookmark', _('''Silk Bookmark''')), ('hardcover_book', _('''Hardcover Book''')), ('bedside_lamp', _('''Bedside Lamp''')), ('armchair', _('''Reading Armchair'''))],
+            4: [('magnifying_glass', _('''Handheld Magnifier''')), ('eyeglass_case', _('''Hard Eyeglass Case''')), ('cleaning_cloth', _('''Microfiber Lens Cloth''')), ('book_light', _('''Clip-on Book Light'''))],
+            5: [('bifocals', _('''Bifocal Lenses''')), ('pince_nez', _('''Pince-Nez Spectacles''')), ('opera_glasses', _('''Opera Glasses''')), ('spectacle_chain', _('''Eyeglass Neck Cord''')), ('reading_loupe', _('''Jeweler Loupe'''))],
         },
-        'explanation': 'Reading glasses magnify close-up printed text, making books and newspapers clear and easy to read.',
+        'explanation': _('Reading glasses magnify close-up printed text, making books and newspapers clear and easy to read.'),
     },
 }
 
@@ -1508,23 +1527,23 @@ class WordConnectionsEngine:
         return [
             {
                 'number': 1,
-                'title': "Read the Central Concept",
-                'description': "You will see an everyday theme or activity on the main card, along with a helpful contextual clue.",
+                'title': _("Read the Central Concept"),
+                'description': _("You will see an everyday theme or activity on the main card, along with a helpful contextual clue."),
             },
             {
                 'number': 2,
-                'title': "Review the Word Options",
-                'description': "Read through the word choices below at your own pace. There are no timers or rushing.",
+                'title': _("Review the Word Options"),
+                'description': _("Read through the word choices below at your own pace. There are no timers or rushing."),
             },
             {
                 'number': 3,
-                'title': "Select the Matching Word",
-                'description': "Tap the card that has the closest natural connection. You can change your choice anytime without penalty.",
+                'title': _("Select the Matching Word"),
+                'description': _("Tap the card that has the closest natural connection. You can change your choice anytime without penalty."),
             },
             {
                 'number': 4,
-                'title': "Confirm & Receive Gentle Feedback",
-                'description': "Press \"Confirm My Selection\" to review the connection and complete 3 pleasant rounds.",
+                'title': _("Confirm & Receive Gentle Feedback"),
+                'description': _("Press \"Confirm My Selection\" to review the connection and complete 3 pleasant rounds."),
             },
         ]
 
@@ -1622,7 +1641,7 @@ class WordConnectionsEngine:
             missed_ids = []
             mistake_count = 0
             score = 1
-            feedback_message = f"Wonderful! {explanation}"
+            feedback_message = str(_("Wonderful! %(explanation)s") % {'explanation': explanation})
             feedback_tone = "success"
         else:
             correct_ids = []
@@ -1630,7 +1649,10 @@ class WordConnectionsEngine:
             missed_ids = [target_id]
             mistake_count = 1
             score = 0
-            feedback_message = f"Good effort! The closest connection is {target_word}. {explanation}"
+            feedback_message = str(_("Good effort! The closest connection is %(target_word)s. %(explanation)s") % {
+                'target_word': target_word,
+                'explanation': explanation,
+            })
             feedback_tone = "encouraging"
 
         return {
@@ -1844,24 +1866,24 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 1,
         'pattern_type': 'linear_alternating',
         'layout': 'linear_sequence',
-        'title': 'Sun & Leaf Alternation',
-        'prompt': 'Look at how the sun and leaf take turns. Which tile comes next?',
+        'title': _('Sun & Leaf Alternation'),
+        'prompt': _('Look at how the sun and leaf take turns. Which tile comes next?'),
         'sequence': [
-            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
-            {'tile_id': 'leaf_teal', 'name': 'Teal Leaf', 'svg': make_leaf('#CCFBF1', '#0F766E')},
-            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'tile_id': 'sun_gold', 'name': _('Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'tile_id': 'leaf_teal', 'name': _('Teal Leaf'), 'svg': make_leaf('#CCFBF1', '#0F766E')},
+            {'tile_id': 'sun_gold', 'name': _('Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'leaf_teal',
-            'name': 'Teal Leaf',
+            'name': _('Teal Leaf'),
             'svg': make_leaf('#CCFBF1', '#0F766E'),
         },
         'distractors': [
-            {'id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
-            {'id': 'star_amber', 'name': 'Amber Star', 'svg': make_star('#FEF3C7', '#D97706')},
+            {'id': 'sun_gold', 'name': _('Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'id': 'star_amber', 'name': _('Amber Star'), 'svg': make_star('#FEF3C7', '#D97706')},
         ],
-        'explanation': 'The pattern alternates between the Golden Sun and Teal Leaf. After the Sun, the next tile is the Teal Leaf.',
+        'explanation': _('The pattern alternates between the Golden Sun and Teal Leaf. After the Sun, the next tile is the Teal Leaf.'),
     },
 
     'lvl1_circle_square_alternate': {
@@ -1869,24 +1891,24 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 1,
         'pattern_type': 'linear_alternating',
         'layout': 'linear_sequence',
-        'title': 'Circle & Square Rhythm',
-        'prompt': 'Which shape continues this alternating rhythm?',
+        'title': _('Circle & Square Rhythm'),
+        'prompt': _('Which shape continues this alternating rhythm?'),
         'sequence': [
-            {'tile_id': 'circle_blue', 'name': 'Blue Circle', 'svg': make_circle('#DBEAFE', '#1D4ED8')},
-            {'tile_id': 'square_terracotta', 'name': 'Terracotta Square', 'svg': make_square('#FFEDD5', '#C2410C')},
-            {'tile_id': 'circle_blue', 'name': 'Blue Circle', 'svg': make_circle('#DBEAFE', '#1D4ED8')},
+            {'tile_id': 'circle_blue', 'name': _('Blue Circle'), 'svg': make_circle('#DBEAFE', '#1D4ED8')},
+            {'tile_id': 'square_terracotta', 'name': _('Terracotta Square'), 'svg': make_square('#FFEDD5', '#C2410C')},
+            {'tile_id': 'circle_blue', 'name': _('Blue Circle'), 'svg': make_circle('#DBEAFE', '#1D4ED8')},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'square_terracotta',
-            'name': 'Terracotta Square',
+            'name': _('Terracotta Square'),
             'svg': make_square('#FFEDD5', '#C2410C'),
         },
         'distractors': [
-            {'id': 'circle_blue', 'name': 'Blue Circle', 'svg': make_circle('#DBEAFE', '#1D4ED8')},
-            {'id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#E0F2FE', '#0284C7')},
+            {'id': 'circle_blue', 'name': _('Blue Circle'), 'svg': make_circle('#DBEAFE', '#1D4ED8')},
+            {'id': 'diamond_teal', 'name': _('Teal Diamond'), 'svg': make_diamond('#E0F2FE', '#0284C7')},
         ],
-        'explanation': 'The pattern alternates between a Blue Circle and a Terracotta Square. The missing shape is the Terracotta Square.',
+        'explanation': _('The pattern alternates between a Blue Circle and a Terracotta Square. The missing shape is the Terracotta Square.'),
     },
 
     'lvl1_lotus_diya_alternate': {
@@ -1894,24 +1916,24 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 1,
         'pattern_type': 'linear_alternating',
         'layout': 'linear_sequence',
-        'title': 'Lotus & Diya Lamp',
-        'prompt': 'The gentle garden alternates between a lotus flower and a diya lamp. Which one comes next?',
+        'title': _('Lotus & Diya Lamp'),
+        'prompt': _('The gentle garden alternates between a lotus flower and a diya lamp. Which one comes next?'),
         'sequence': [
-            {'tile_id': 'lotus_pink', 'name': 'Pink Lotus', 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
-            {'tile_id': 'diya_gold', 'name': 'Golden Diya', 'svg': make_diya('#FEF3C7', '#B45309', '#F59E0B', '#B45309')},
-            {'tile_id': 'lotus_pink', 'name': 'Pink Lotus', 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
+            {'tile_id': 'lotus_pink', 'name': _('Pink Lotus'), 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
+            {'tile_id': 'diya_gold', 'name': _('Golden Diya'), 'svg': make_diya('#FEF3C7', '#B45309', '#F59E0B', '#B45309')},
+            {'tile_id': 'lotus_pink', 'name': _('Pink Lotus'), 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'diya_gold',
-            'name': 'Golden Diya',
+            'name': _('Golden Diya'),
             'svg': make_diya('#FEF3C7', '#B45309', '#F59E0B', '#B45309'),
         },
         'distractors': [
-            {'id': 'lotus_pink', 'name': 'Pink Lotus', 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
-            {'id': 'leaf_teal', 'name': 'Teal Leaf', 'svg': make_leaf('#CCFBF1', '#0F766E')},
+            {'id': 'lotus_pink', 'name': _('Pink Lotus'), 'svg': make_lotus('#FCE7F3', '#BE185D', '#F472B6', '#9D174D')},
+            {'id': 'leaf_teal', 'name': _('Teal Leaf'), 'svg': make_leaf('#CCFBF1', '#0F766E')},
         ],
-        'explanation': 'The sequence alternates between the Pink Lotus and the Golden Diya. The missing tile is the Golden Diya.',
+        'explanation': _('The sequence alternates between the Pink Lotus and the Golden Diya. The missing tile is the Golden Diya.'),
     },
 
     'lvl1_diamond_cross_alternate': {
@@ -1919,24 +1941,24 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 1,
         'pattern_type': 'linear_alternating',
         'layout': 'linear_sequence',
-        'title': 'Diamond & Cross Border',
-        'prompt': 'Which motif completes this balanced alternating border?',
+        'title': _('Diamond & Cross Border'),
+        'prompt': _('Which motif completes this balanced alternating border?'),
         'sequence': [
-            {'tile_id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
-            {'tile_id': 'cross_amber', 'name': 'Amber Cross', 'svg': make_cross('#FEF3C7', '#D97706')},
-            {'tile_id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'tile_id': 'diamond_teal', 'name': _('Teal Diamond'), 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'tile_id': 'cross_amber', 'name': _('Amber Cross'), 'svg': make_cross('#FEF3C7', '#D97706')},
+            {'tile_id': 'diamond_teal', 'name': _('Teal Diamond'), 'svg': make_diamond('#CCFBF1', '#0F766E')},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'cross_amber',
-            'name': 'Amber Cross',
+            'name': _('Amber Cross'),
             'svg': make_cross('#FEF3C7', '#D97706'),
         },
         'distractors': [
-            {'id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
-            {'id': 'circle_amber', 'name': 'Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'id': 'diamond_teal', 'name': _('Teal Diamond'), 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'id': 'circle_amber', 'name': _('Amber Circle'), 'svg': make_circle('#FEF3C7', '#D97706')},
         ],
-        'explanation': 'The border alternates between the Teal Diamond and the Amber Cross. The missing tile is the Amber Cross.',
+        'explanation': _('The border alternates between the Teal Diamond and the Amber Cross. The missing tile is the Amber Cross.'),
     },
 
     'lvl1_ring_dot_alternate': {
@@ -1944,24 +1966,24 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 1,
         'pattern_type': 'linear_alternating',
         'layout': 'linear_sequence',
-        'title': 'Ring & Dot Harmony',
-        'prompt': 'Notice how the hollow ring and solid dot alternate. What belongs in the empty space?',
+        'title': _('Ring & Dot Harmony'),
+        'prompt': _('Notice how the hollow ring and solid dot alternate. What belongs in the empty space?'),
         'sequence': [
-            {'tile_id': 'ring_indigo', 'name': 'Indigo Ring', 'svg': make_ring('#3730A3')},
-            {'tile_id': 'dot_amber', 'name': 'Amber Dot', 'svg': make_dot('#F59E0B', '#B45309')},
-            {'tile_id': 'ring_indigo', 'name': 'Indigo Ring', 'svg': make_ring('#3730A3')},
+            {'tile_id': 'ring_indigo', 'name': _('Indigo Ring'), 'svg': make_ring('#3730A3')},
+            {'tile_id': 'dot_amber', 'name': _('Amber Dot'), 'svg': make_dot('#F59E0B', '#B45309')},
+            {'tile_id': 'ring_indigo', 'name': _('Indigo Ring'), 'svg': make_ring('#3730A3')},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'dot_amber',
-            'name': 'Amber Dot',
+            'name': _('Amber Dot'),
             'svg': make_dot('#F59E0B', '#B45309'),
         },
         'distractors': [
-            {'id': 'ring_indigo', 'name': 'Indigo Ring', 'svg': make_ring('#3730A3')},
-            {'id': 'dot_indigo', 'name': 'Indigo Dot', 'svg': make_dot('#3730A3', '#1E1B4B')},
+            {'id': 'ring_indigo', 'name': _('Indigo Ring'), 'svg': make_ring('#3730A3')},
+            {'id': 'dot_indigo', 'name': _('Indigo Dot'), 'svg': make_dot('#3730A3', '#1E1B4B')},
         ],
-        'explanation': 'The pattern alternates between the Indigo Ring and the Amber Dot. Following the ring comes the Amber Dot.',
+        'explanation': _('The pattern alternates between the Indigo Ring and the Amber Dot. Following the ring comes the Amber Dot.'),
     },
 
     # -------------------------------------------------------------
@@ -1972,27 +1994,27 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 2,
         'pattern_type': 'linear_cycle',
         'layout': 'linear_sequence',
-        'title': 'Tri-Color Blossom Cycle',
-        'prompt': 'Three colors repeat in order: Gold, Teal, and Rose. Which blossom completes the second group?',
+        'title': _('Tri-Color Blossom Cycle'),
+        'prompt': _('Three colors repeat in order: Gold, Teal, and Rose. Which blossom completes the second group?'),
         'sequence': [
-            {'tile_id': 'circle_gold', 'name': 'Golden Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
-            {'tile_id': 'circle_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
-            {'tile_id': 'circle_rose', 'name': 'Rose Circle', 'svg': make_circle('#FCE7F3', '#BE185D')},
-            {'tile_id': 'circle_gold', 'name': 'Golden Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
-            {'tile_id': 'circle_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'tile_id': 'circle_gold', 'name': _('Golden Circle'), 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'tile_id': 'circle_teal', 'name': _('Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'tile_id': 'circle_rose', 'name': _('Rose Circle'), 'svg': make_circle('#FCE7F3', '#BE185D')},
+            {'tile_id': 'circle_gold', 'name': _('Golden Circle'), 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'tile_id': 'circle_teal', 'name': _('Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E')},
             {'is_missing': True, 'position': 6},
         ],
         'target_tile': {
             'id': 'circle_rose',
-            'name': 'Rose Circle',
+            'name': _('Rose Circle'),
             'svg': make_circle('#FCE7F3', '#BE185D'),
         },
         'distractors': [
-            {'id': 'circle_gold', 'name': 'Golden Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
-            {'id': 'circle_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
-            {'id': 'circle_indigo', 'name': 'Indigo Circle', 'svg': make_circle('#EEF2FF', '#4338CA')},
+            {'id': 'circle_gold', 'name': _('Golden Circle'), 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'id': 'circle_teal', 'name': _('Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'id': 'circle_indigo', 'name': _('Indigo Circle'), 'svg': make_circle('#EEF2FF', '#4338CA')},
         ],
-        'explanation': 'The cycle repeats Gold, Teal, then Rose. Following the second Teal circle comes the Rose Circle.',
+        'explanation': _('The cycle repeats Gold, Teal, then Rose. Following the second Teal circle comes the Rose Circle.'),
     },
 
     'lvl2_size_growth_circles': {
@@ -2000,25 +2022,25 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 2,
         'pattern_type': 'size_progression',
         'layout': 'linear_sequence',
-        'title': 'Expanding Teal Rings',
-        'prompt': 'The teal rings expand in size with each step. Which ring continues the expansion?',
+        'title': _('Expanding Teal Rings'),
+        'prompt': _('The teal rings expand in size with each step. Which ring continues the expansion?'),
         'sequence': [
-            {'tile_id': 'ring_teal_sm', 'name': 'Small Teal Ring', 'svg': make_ring('#0F766E', 4, 12)},
-            {'tile_id': 'ring_teal_md', 'name': 'Medium Teal Ring', 'svg': make_ring('#0F766E', 4, 18)},
-            {'tile_id': 'ring_teal_lg', 'name': 'Large Teal Ring', 'svg': make_ring('#0F766E', 4, 24)},
+            {'tile_id': 'ring_teal_sm', 'name': _('Small Teal Ring'), 'svg': make_ring('#0F766E', 4, 12)},
+            {'tile_id': 'ring_teal_md', 'name': _('Medium Teal Ring'), 'svg': make_ring('#0F766E', 4, 18)},
+            {'tile_id': 'ring_teal_lg', 'name': _('Large Teal Ring'), 'svg': make_ring('#0F766E', 4, 24)},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'ring_teal_xl',
-            'name': 'Extra Large Teal Ring',
+            'name': _('Extra Large Teal Ring'),
             'svg': make_ring('#0F766E', 4, 29),
         },
         'distractors': [
-            {'id': 'ring_teal_sm', 'name': 'Small Teal Ring', 'svg': make_ring('#0F766E', 4, 12)},
-            {'id': 'ring_teal_md', 'name': 'Medium Teal Ring', 'svg': make_ring('#0F766E', 4, 18)},
-            {'id': 'square_teal_lg', 'name': 'Large Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'id': 'ring_teal_sm', 'name': _('Small Teal Ring'), 'svg': make_ring('#0F766E', 4, 12)},
+            {'id': 'ring_teal_md', 'name': _('Medium Teal Ring'), 'svg': make_ring('#0F766E', 4, 18)},
+            {'id': 'square_teal_lg', 'name': _('Large Teal Square'), 'svg': make_square('#CCFBF1', '#0F766E')},
         ],
-        'explanation': 'Each ring grows progressively wider in diameter. The next size in the expansion is the Extra Large Teal Ring.',
+        'explanation': _('Each ring grows progressively wider in diameter. The next size in the expansion is the Extra Large Teal Ring.'),
     },
 
     'lvl2_shape_cycle_tri_sq_cir': {
@@ -2026,26 +2048,26 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 2,
         'pattern_type': 'linear_cycle',
         'layout': 'linear_sequence',
-        'title': 'Geometric Trio Cycle',
-        'prompt': 'The shapes repeat in order: Triangle, Square, Circle. Which shape follows the Triangle?',
+        'title': _('Geometric Trio Cycle'),
+        'prompt': _('The shapes repeat in order: Triangle, Square, Circle. Which shape follows the Triangle?'),
         'sequence': [
-            {'tile_id': 'tri_amber', 'name': 'Amber Triangle', 'svg': make_triangle('#FEF3C7', '#D97706')},
-            {'tile_id': 'sq_teal', 'name': 'Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
-            {'tile_id': 'cir_indigo', 'name': 'Indigo Circle', 'svg': make_circle('#EEF2FF', '#3730A3')},
-            {'tile_id': 'tri_amber', 'name': 'Amber Triangle', 'svg': make_triangle('#FEF3C7', '#D97706')},
+            {'tile_id': 'tri_amber', 'name': _('Amber Triangle'), 'svg': make_triangle('#FEF3C7', '#D97706')},
+            {'tile_id': 'sq_teal', 'name': _('Teal Square'), 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'tile_id': 'cir_indigo', 'name': _('Indigo Circle'), 'svg': make_circle('#EEF2FF', '#3730A3')},
+            {'tile_id': 'tri_amber', 'name': _('Amber Triangle'), 'svg': make_triangle('#FEF3C7', '#D97706')},
             {'is_missing': True, 'position': 5},
         ],
         'target_tile': {
             'id': 'sq_teal',
-            'name': 'Teal Square',
+            'name': _('Teal Square'),
             'svg': make_square('#CCFBF1', '#0F766E'),
         },
         'distractors': [
-            {'id': 'cir_indigo', 'name': 'Indigo Circle', 'svg': make_circle('#EEF2FF', '#3730A3')},
-            {'id': 'tri_amber', 'name': 'Amber Triangle', 'svg': make_triangle('#FEF3C7', '#D97706')},
-            {'id': 'star_amber', 'name': 'Amber Star', 'svg': make_star('#FEF3C7', '#D97706')},
+            {'id': 'cir_indigo', 'name': _('Indigo Circle'), 'svg': make_circle('#EEF2FF', '#3730A3')},
+            {'id': 'tri_amber', 'name': _('Amber Triangle'), 'svg': make_triangle('#FEF3C7', '#D97706')},
+            {'id': 'star_amber', 'name': _('Amber Star'), 'svg': make_star('#FEF3C7', '#D97706')},
         ],
-        'explanation': 'The pattern sequence is Triangle, Square, Circle. After the second Triangle appears, the Square follows next.',
+        'explanation': _('The pattern sequence is Triangle, Square, Circle. After the second Triangle appears, the Square follows next.'),
     },
 
     'lvl2_count_progression_dots': {
@@ -2053,25 +2075,25 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 2,
         'pattern_type': 'count_progression',
         'layout': 'linear_sequence',
-        'title': 'Counting Golden Stars',
-        'prompt': 'Each tile gains one golden star. Which tile continues the counting series?',
+        'title': _('Counting Golden Stars'),
+        'prompt': _('Each tile gains one golden star. Which tile continues the counting series?'),
         'sequence': [
-            {'tile_id': 'stars_1', 'name': '1 Golden Star', 'svg': make_count_stars(1)},
-            {'tile_id': 'stars_2', 'name': '2 Golden Stars', 'svg': make_count_stars(2)},
-            {'tile_id': 'stars_3', 'name': '3 Golden Stars', 'svg': make_count_stars(3)},
+            {'tile_id': 'stars_1', 'name': _('1 Golden Star'), 'svg': make_count_stars(1)},
+            {'tile_id': 'stars_2', 'name': _('2 Golden Stars'), 'svg': make_count_stars(2)},
+            {'tile_id': 'stars_3', 'name': _('3 Golden Stars'), 'svg': make_count_stars(3)},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'stars_4',
-            'name': '4 Golden Stars',
+            'name': _('4 Golden Stars'),
             'svg': make_count_stars(4),
         },
         'distractors': [
-            {'id': 'stars_1', 'name': '1 Golden Star', 'svg': make_count_stars(1)},
-            {'id': 'stars_3', 'name': '3 Golden Stars', 'svg': make_count_stars(3)},
-            {'id': 'stars_5', 'name': '5 Golden Stars', 'svg': make_count_stars(5)},
+            {'id': 'stars_1', 'name': _('1 Golden Star'), 'svg': make_count_stars(1)},
+            {'id': 'stars_3', 'name': _('3 Golden Stars'), 'svg': make_count_stars(3)},
+            {'id': 'stars_5', 'name': _('5 Golden Stars'), 'svg': make_count_stars(5)},
         ],
-        'explanation': 'The number of stars increases by one on each step (1, 2, 3). The missing tile contains 4 Golden Stars.',
+        'explanation': _('The number of stars increases by one on each step (1, 2, 3). The missing tile contains 4 Golden Stars.'),
     },
 
     'lvl2_celestial_trio_cycle': {
@@ -2079,26 +2101,26 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 2,
         'pattern_type': 'linear_cycle',
         'layout': 'linear_sequence',
-        'title': 'Celestial Trio Cycle',
-        'prompt': 'The sky symbols repeat in a trio: Sun, Star, Moon. What symbol follows the Sun?',
+        'title': _('Celestial Trio Cycle'),
+        'prompt': _('The sky symbols repeat in a trio: Sun, Star, Moon. What symbol follows the Sun?'),
         'sequence': [
-            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
-            {'tile_id': 'star_amber', 'name': 'Amber Star', 'svg': make_star('#FEF3C7', '#D97706')},
-            {'tile_id': 'crescent_teal', 'name': 'Teal Moon', 'svg': make_crescent(0, '#CCFBF1', '#0F766E')},
-            {'tile_id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'tile_id': 'sun_gold', 'name': _('Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'tile_id': 'star_amber', 'name': _('Amber Star'), 'svg': make_star('#FEF3C7', '#D97706')},
+            {'tile_id': 'crescent_teal', 'name': _('Teal Moon'), 'svg': make_crescent(0, '#CCFBF1', '#0F766E')},
+            {'tile_id': 'sun_gold', 'name': _('Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
             {'is_missing': True, 'position': 5},
         ],
         'target_tile': {
             'id': 'star_amber',
-            'name': 'Amber Star',
+            'name': _('Amber Star'),
             'svg': make_star('#FEF3C7', '#D97706'),
         },
         'distractors': [
-            {'id': 'crescent_teal', 'name': 'Teal Moon', 'svg': make_crescent(0, '#CCFBF1', '#0F766E')},
-            {'id': 'sun_gold', 'name': 'Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
-            {'id': 'diamond_teal', 'name': 'Teal Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'id': 'crescent_teal', 'name': _('Teal Moon'), 'svg': make_crescent(0, '#CCFBF1', '#0F766E')},
+            {'id': 'sun_gold', 'name': _('Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'id': 'diamond_teal', 'name': _('Teal Diamond'), 'svg': make_diamond('#CCFBF1', '#0F766E')},
         ],
-        'explanation': 'The recurring group is Sun, Star, Moon. After the Sun returns, the Amber Star belongs in the next position.',
+        'explanation': _('The recurring group is Sun, Star, Moon. After the Sun returns, the Amber Star belongs in the next position.'),
     },
 
     # -------------------------------------------------------------
@@ -2109,29 +2131,29 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 3,
         'pattern_type': 'matrix_analogy',
         'layout': 'matrix_2x2',
-        'title': 'Shape & Color Harmony Grid',
-        'prompt': 'Examine the rows and columns. Which shape and color combination completes the grid?',
+        'title': _('Shape & Color Harmony Grid'),
+        'prompt': _('Examine the rows and columns. Which shape and color combination completes the grid?'),
         'matrix': [
             [
-                {'tile_id': 'cir_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
-                {'tile_id': 'cir_amber', 'name': 'Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+                {'tile_id': 'cir_teal', 'name': _('Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E')},
+                {'tile_id': 'cir_amber', 'name': _('Amber Circle'), 'svg': make_circle('#FEF3C7', '#D97706')},
             ],
             [
-                {'tile_id': 'sq_teal', 'name': 'Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+                {'tile_id': 'sq_teal', 'name': _('Teal Square'), 'svg': make_square('#CCFBF1', '#0F766E')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'sq_amber',
-            'name': 'Amber Square',
+            'name': _('Amber Square'),
             'svg': make_square('#FEF3C7', '#D97706'),
         },
         'distractors': [
-            {'id': 'cir_amber', 'name': 'Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
-            {'id': 'sq_teal', 'name': 'Teal Square', 'svg': make_square('#CCFBF1', '#0F766E')},
-            {'id': 'sq_indigo', 'name': 'Indigo Square', 'svg': make_square('#EEF2FF', '#4338CA')},
+            {'id': 'cir_amber', 'name': _('Amber Circle'), 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'id': 'sq_teal', 'name': _('Teal Square'), 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'id': 'sq_indigo', 'name': _('Indigo Square'), 'svg': make_square('#EEF2FF', '#4338CA')},
         ],
-        'explanation': 'Row 1 has Circles and Row 2 has Squares. Column 1 is Teal and Column 2 is Amber. The matching tile is the Amber Square.',
+        'explanation': _('Row 1 has Circles and Row 2 has Squares. Column 1 is Teal and Column 2 is Amber. The matching tile is the Amber Square.'),
     },
 
     'lvl3_analogy_solid_to_outline': {
@@ -2139,29 +2161,29 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 3,
         'pattern_type': 'matrix_analogy',
         'layout': 'matrix_2x2',
-        'title': 'Solid to Outline Analogy',
-        'prompt': 'The top row changes from a solid shape to an outline. What happens to the rose blossom?',
+        'title': _('Solid to Outline Analogy'),
+        'prompt': _('The top row changes from a solid shape to an outline. What happens to the rose blossom?'),
         'matrix': [
             [
-                {'tile_id': 'dia_solid', 'name': 'Solid Diamond', 'svg': make_diamond('#0F766E', '#0F766E')},
-                {'tile_id': 'dia_outline', 'name': 'Outline Diamond', 'svg': make_diamond('none', '#0F766E', 4)},
+                {'tile_id': 'dia_solid', 'name': _('Solid Diamond'), 'svg': make_diamond('#0F766E', '#0F766E')},
+                {'tile_id': 'dia_outline', 'name': _('Outline Diamond'), 'svg': make_diamond('none', '#0F766E', 4)},
             ],
             [
-                {'tile_id': 'cir_solid', 'name': 'Solid Circle', 'svg': make_circle('#BE185D', '#BE185D')},
+                {'tile_id': 'cir_solid', 'name': _('Solid Circle'), 'svg': make_circle('#BE185D', '#BE185D')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'cir_outline',
-            'name': 'Outline Circle',
+            'name': _('Outline Circle'),
             'svg': make_circle('none', '#BE185D', 4),
         },
         'distractors': [
-            {'id': 'cir_solid', 'name': 'Solid Circle', 'svg': make_circle('#BE185D', '#BE185D')},
-            {'id': 'dia_outline', 'name': 'Outline Diamond', 'svg': make_diamond('none', '#0F766E', 4)},
-            {'id': 'sq_outline', 'name': 'Outline Square', 'svg': make_square('none', '#BE185D', 4)},
+            {'id': 'cir_solid', 'name': _('Solid Circle'), 'svg': make_circle('#BE185D', '#BE185D')},
+            {'id': 'dia_outline', 'name': _('Outline Diamond'), 'svg': make_diamond('none', '#0F766E', 4)},
+            {'id': 'sq_outline', 'name': _('Outline Square'), 'svg': make_square('none', '#BE185D', 4)},
         ],
-        'explanation': 'Across each row, a solid filled shape becomes a hollow outline. The solid circle transforms into an Outline Circle.',
+        'explanation': _('Across each row, a solid filled shape becomes a hollow outline. The solid circle transforms into an Outline Circle.'),
     },
 
     'lvl3_matrix_motif_fill': {
@@ -2169,29 +2191,29 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 3,
         'pattern_type': 'matrix_analogy',
         'layout': 'matrix_2x2',
-        'title': 'Motif & Color Correspondence',
-        'prompt': 'Look at the motifs in each row and the colors in each column. Which tile fits the empty corner?',
+        'title': _('Motif & Color Correspondence'),
+        'prompt': _('Look at the motifs in each row and the colors in each column. Which tile fits the empty corner?'),
         'matrix': [
             [
-                {'tile_id': 'leaf_teal', 'name': 'Teal Leaf', 'svg': make_leaf('#CCFBF1', '#0F766E')},
-                {'tile_id': 'leaf_amber', 'name': 'Amber Leaf', 'svg': make_leaf('#FEF3C7', '#D97706')},
+                {'tile_id': 'leaf_teal', 'name': _('Teal Leaf'), 'svg': make_leaf('#CCFBF1', '#0F766E')},
+                {'tile_id': 'leaf_amber', 'name': _('Amber Leaf'), 'svg': make_leaf('#FEF3C7', '#D97706')},
             ],
             [
-                {'tile_id': 'sun_teal', 'name': 'Teal Sun', 'svg': make_sun('#CCFBF1', '#0F766E', '#0F766E')},
+                {'tile_id': 'sun_teal', 'name': _('Teal Sun'), 'svg': make_sun('#CCFBF1', '#0F766E', '#0F766E')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'sun_amber',
-            'name': 'Amber Sun',
+            'name': _('Amber Sun'),
             'svg': make_sun('#FEF3C7', '#D97706', '#D97706'),
         },
         'distractors': [
-            {'id': 'sun_teal', 'name': 'Teal Sun', 'svg': make_sun('#CCFBF1', '#0F766E', '#0F766E')},
-            {'id': 'leaf_amber', 'name': 'Amber Leaf', 'svg': make_leaf('#FEF3C7', '#D97706')},
-            {'id': 'sun_rose', 'name': 'Rose Sun', 'svg': make_sun('#FCE7F3', '#BE185D', '#BE185D')},
+            {'id': 'sun_teal', 'name': _('Teal Sun'), 'svg': make_sun('#CCFBF1', '#0F766E', '#0F766E')},
+            {'id': 'leaf_amber', 'name': _('Amber Leaf'), 'svg': make_leaf('#FEF3C7', '#D97706')},
+            {'id': 'sun_rose', 'name': _('Rose Sun'), 'svg': make_sun('#FCE7F3', '#BE185D', '#BE185D')},
         ],
-        'explanation': 'Row 1 displays leaves and Row 2 displays suns. Column 1 is teal and Column 2 is amber. The missing tile is the Amber Sun.',
+        'explanation': _('Row 1 displays leaves and Row 2 displays suns. Column 1 is teal and Column 2 is amber. The missing tile is the Amber Sun.'),
     },
 
     'lvl3_striped_pattern_matrix': {
@@ -2199,29 +2221,29 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 3,
         'pattern_type': 'matrix_analogy',
         'layout': 'matrix_2x2',
-        'title': 'Texture Transformation Grid',
-        'prompt': 'Notice how the first shape gains diagonal stripes in the second column. What belongs in the lower right?',
+        'title': _('Texture Transformation Grid'),
+        'prompt': _('Notice how the first shape gains diagonal stripes in the second column. What belongs in the lower right?'),
         'matrix': [
             [
-                {'tile_id': 'cir_plain', 'name': 'Plain Indigo Circle', 'svg': make_circle('#EEF2FF', '#4338CA')},
-                {'tile_id': 'cir_striped', 'name': 'Striped Indigo Circle', 'svg': make_striped_circle('#4338CA', '#EEF2FF')},
+                {'tile_id': 'cir_plain', 'name': _('Plain Indigo Circle'), 'svg': make_circle('#EEF2FF', '#4338CA')},
+                {'tile_id': 'cir_striped', 'name': _('Striped Indigo Circle'), 'svg': make_striped_circle('#4338CA', '#EEF2FF')},
             ],
             [
-                {'tile_id': 'tri_plain', 'name': 'Plain Indigo Triangle', 'svg': make_triangle('#EEF2FF', '#4338CA')},
+                {'tile_id': 'tri_plain', 'name': _('Plain Indigo Triangle'), 'svg': make_triangle('#EEF2FF', '#4338CA')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'tri_striped',
-            'name': 'Striped Indigo Triangle',
+            'name': _('Striped Indigo Triangle'),
             'svg': make_striped_triangle('#4338CA', '#EEF2FF'),
         },
         'distractors': [
-            {'id': 'tri_plain', 'name': 'Plain Indigo Triangle', 'svg': make_triangle('#EEF2FF', '#4338CA')},
-            {'id': 'cir_striped', 'name': 'Striped Indigo Circle', 'svg': make_striped_circle('#4338CA', '#EEF2FF')},
-            {'id': 'sq_striped', 'name': 'Striped Indigo Square', 'svg': make_square('#EEF2FF', '#4338CA')},
+            {'id': 'tri_plain', 'name': _('Plain Indigo Triangle'), 'svg': make_triangle('#EEF2FF', '#4338CA')},
+            {'id': 'cir_striped', 'name': _('Striped Indigo Circle'), 'svg': make_striped_circle('#4338CA', '#EEF2FF')},
+            {'id': 'sq_striped', 'name': _('Striped Indigo Square'), 'svg': make_square('#EEF2FF', '#4338CA')},
         ],
-        'explanation': 'Moving horizontally adds diagonal stripes across the shape. The plain indigo triangle becomes the Striped Indigo Triangle.',
+        'explanation': _('Moving horizontally adds diagonal stripes across the shape. The plain indigo triangle becomes the Striped Indigo Triangle.'),
     },
 
     'lvl3_inner_core_matrix': {
@@ -2229,29 +2251,29 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 3,
         'pattern_type': 'matrix_analogy',
         'layout': 'matrix_2x2',
-        'title': 'Central Core Relationship',
-        'prompt': 'A central dot is placed inside the shape in the second column. What happens to the terracotta square?',
+        'title': _('Central Core Relationship'),
+        'prompt': _('A central dot is placed inside the shape in the second column. What happens to the terracotta square?'),
         'matrix': [
             [
-                {'tile_id': 'cir_empty', 'name': 'Hollow Teal Circle', 'svg': make_ring('#0F766E', 4)},
-                {'tile_id': 'cir_with_dot', 'name': 'Teal Circle with Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+                {'tile_id': 'cir_empty', 'name': _('Hollow Teal Circle'), 'svg': make_ring('#0F766E', 4)},
+                {'tile_id': 'cir_with_dot', 'name': _('Teal Circle with Dot'), 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
             ],
             [
-                {'tile_id': 'sq_empty', 'name': 'Hollow Terracotta Square', 'svg': make_square('none', '#C2410C', 4)},
+                {'tile_id': 'sq_empty', 'name': _('Hollow Terracotta Square'), 'svg': make_square('none', '#C2410C', 4)},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'sq_with_dot',
-            'name': 'Terracotta Square with Dot',
+            'name': _('Terracotta Square with Dot'),
             'svg': make_square('#FFEDD5', '#C2410C', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#C2410C"/>'),
         },
         'distractors': [
-            {'id': 'sq_empty', 'name': 'Hollow Terracotta Square', 'svg': make_square('none', '#C2410C', 4)},
-            {'id': 'cir_with_dot', 'name': 'Teal Circle with Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
-            {'id': 'tri_with_dot', 'name': 'Triangle with Dot', 'svg': make_triangle('#FFEDD5', '#C2410C', 2.5, '<circle cx="32" cy="36" r="6" fill="#C2410C"/>')},
+            {'id': 'sq_empty', 'name': _('Hollow Terracotta Square'), 'svg': make_square('none', '#C2410C', 4)},
+            {'id': 'cir_with_dot', 'name': _('Teal Circle with Dot'), 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+            {'id': 'tri_with_dot', 'name': _('Triangle with Dot'), 'svg': make_triangle('#FFEDD5', '#C2410C', 2.5, '<circle cx="32" cy="36" r="6" fill="#C2410C"/>')},
         ],
-        'explanation': 'The pattern adds a central solid dot inside the outer border. The square gains a central dot, becoming Terracotta Square with Dot.',
+        'explanation': _('The pattern adds a central solid dot inside the outer border. The square gains a central dot, becoming Terracotta Square with Dot.'),
     },
 
     # -------------------------------------------------------------
@@ -2262,26 +2284,26 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 4,
         'pattern_type': 'rotation_sequence',
         'layout': 'linear_sequence',
-        'title': 'Clockwise Compass Turning',
-        'prompt': 'The pointer turns clockwise by a quarter-turn at each step: Up, Right, Down. Which direction points next?',
+        'title': _('Clockwise Compass Turning'),
+        'prompt': _('The pointer turns clockwise by a quarter-turn at each step: Up, Right, Down. Which direction points next?'),
         'sequence': [
-            {'tile_id': 'pointer_up', 'name': 'Pointer Up', 'svg': make_pointer(0)},
-            {'tile_id': 'pointer_right', 'name': 'Pointer Right', 'svg': make_pointer(90)},
-            {'tile_id': 'pointer_down', 'name': 'Pointer Down', 'svg': make_pointer(180)},
+            {'tile_id': 'pointer_up', 'name': _('Pointer Up'), 'svg': make_pointer(0)},
+            {'tile_id': 'pointer_right', 'name': _('Pointer Right'), 'svg': make_pointer(90)},
+            {'tile_id': 'pointer_down', 'name': _('Pointer Down'), 'svg': make_pointer(180)},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'pointer_left',
-            'name': 'Pointer Left',
+            'name': _('Pointer Left'),
             'svg': make_pointer(270),
         },
         'distractors': [
-            {'id': 'pointer_up', 'name': 'Pointer Up', 'svg': make_pointer(0)},
-            {'id': 'pointer_right', 'name': 'Pointer Right', 'svg': make_pointer(90)},
-            {'id': 'pointer_down', 'name': 'Pointer Down', 'svg': make_pointer(180)},
-            {'id': 'pointer_diag', 'name': 'Pointer Diagonal', 'svg': make_pointer(45)},
+            {'id': 'pointer_up', 'name': _('Pointer Up'), 'svg': make_pointer(0)},
+            {'id': 'pointer_right', 'name': _('Pointer Right'), 'svg': make_pointer(90)},
+            {'id': 'pointer_down', 'name': _('Pointer Down'), 'svg': make_pointer(180)},
+            {'id': 'pointer_diag', 'name': _('Pointer Diagonal'), 'svg': make_pointer(45)},
         ],
-        'explanation': 'The pointer rotates 90 degrees clockwise each turn (Up, Right, Down). The next quarter-turn points to the Left.',
+        'explanation': _('The pointer rotates 90 degrees clockwise each turn (Up, Right, Down). The next quarter-turn points to the Left.'),
     },
 
     'lvl4_crescent_rotation': {
@@ -2289,26 +2311,26 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 4,
         'pattern_type': 'rotation_sequence',
         'layout': 'linear_sequence',
-        'title': 'Turning Golden Crescent',
-        'prompt': 'The curved crescent turns clockwise step by step. Which crescent shows the next quarter turn?',
+        'title': _('Turning Golden Crescent'),
+        'prompt': _('The curved crescent turns clockwise step by step. Which crescent shows the next quarter turn?'),
         'sequence': [
-            {'tile_id': 'cres_up', 'name': 'Crescent Opening Up', 'svg': make_crescent(0)},
-            {'tile_id': 'cres_right', 'name': 'Crescent Opening Right', 'svg': make_crescent(90)},
-            {'tile_id': 'cres_down', 'name': 'Crescent Opening Down', 'svg': make_crescent(180)},
+            {'tile_id': 'cres_up', 'name': _('Crescent Opening Up'), 'svg': make_crescent(0)},
+            {'tile_id': 'cres_right', 'name': _('Crescent Opening Right'), 'svg': make_crescent(90)},
+            {'tile_id': 'cres_down', 'name': _('Crescent Opening Down'), 'svg': make_crescent(180)},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'cres_left',
-            'name': 'Crescent Opening Left',
+            'name': _('Crescent Opening Left'),
             'svg': make_crescent(270),
         },
         'distractors': [
-            {'id': 'cres_up', 'name': 'Crescent Opening Up', 'svg': make_crescent(0)},
-            {'id': 'cres_right', 'name': 'Crescent Opening Right', 'svg': make_crescent(90)},
-            {'id': 'cres_down', 'name': 'Crescent Opening Down', 'svg': make_crescent(180)},
-            {'id': 'cir_full', 'name': 'Full Moon Circle', 'svg': make_circle('#FEF3C7', '#D97706')},
+            {'id': 'cres_up', 'name': _('Crescent Opening Up'), 'svg': make_crescent(0)},
+            {'id': 'cres_right', 'name': _('Crescent Opening Right'), 'svg': make_crescent(90)},
+            {'id': 'cres_down', 'name': _('Crescent Opening Down'), 'svg': make_crescent(180)},
+            {'id': 'cir_full', 'name': _('Full Moon Circle'), 'svg': make_circle('#FEF3C7', '#D97706')},
         ],
-        'explanation': 'The crescent opening rotates clockwise by 90 degrees each step. Following the downward opening is the Crescent Opening Left.',
+        'explanation': _('The crescent opening rotates clockwise by 90 degrees each step. Following the downward opening is the Crescent Opening Left.'),
     },
 
     'lvl4_symmetric_reflection': {
@@ -2316,30 +2338,30 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 4,
         'pattern_type': 'symmetry_reflection',
         'layout': 'matrix_2x2',
-        'title': 'Mirror Reflection Symmetry',
-        'prompt': 'Shapes mirror each other across the columns. What mirrors the left-pointing curved feather?',
+        'title': _('Mirror Reflection Symmetry'),
+        'prompt': _('Shapes mirror each other across the columns. What mirrors the left-pointing curved feather?'),
         'matrix': [
             [
-                {'tile_id': 'feather_left', 'name': 'Left Feather', 'svg': make_feather(False)},
-                {'tile_id': 'feather_right', 'name': 'Right Feather', 'svg': make_feather(True)},
+                {'tile_id': 'feather_left', 'name': _('Left Feather'), 'svg': make_feather(False)},
+                {'tile_id': 'feather_right', 'name': _('Right Feather'), 'svg': make_feather(True)},
             ],
             [
-                {'tile_id': 'feather_left_terracotta', 'name': 'Left Terracotta Feather', 'svg': make_feather(False, '#C2410C', '#FFEDD5')},
+                {'tile_id': 'feather_left_terracotta', 'name': _('Left Terracotta Feather'), 'svg': make_feather(False, '#C2410C', '#FFEDD5')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'feather_right_terracotta',
-            'name': 'Right Terracotta Feather',
+            'name': _('Right Terracotta Feather'),
             'svg': make_feather(True, '#C2410C', '#FFEDD5'),
         },
         'distractors': [
-            {'id': 'feather_left_terracotta', 'name': 'Left Terracotta Feather', 'svg': make_feather(False, '#C2410C', '#FFEDD5')},
-            {'id': 'feather_right', 'name': 'Right Teal Feather', 'svg': make_feather(True)},
-            {'id': 'feather_left', 'name': 'Left Teal Feather', 'svg': make_feather(False)},
-            {'id': 'pointer_right', 'name': 'Pointer Right', 'svg': make_pointer(90)},
+            {'id': 'feather_left_terracotta', 'name': _('Left Terracotta Feather'), 'svg': make_feather(False, '#C2410C', '#FFEDD5')},
+            {'id': 'feather_right', 'name': _('Right Teal Feather'), 'svg': make_feather(True)},
+            {'id': 'feather_left', 'name': _('Left Teal Feather'), 'svg': make_feather(False)},
+            {'id': 'pointer_right', 'name': _('Pointer Right'), 'svg': make_pointer(90)},
         ],
-        'explanation': 'Each row consists of a left-facing motif mirrored into a right-facing motif of the same color. The answer is Right Terracotta Feather.',
+        'explanation': _('Each row consists of a left-facing motif mirrored into a right-facing motif of the same color. The answer is Right Terracotta Feather.'),
     },
 
     'lvl4_pinwheel_quadrant': {
@@ -2347,26 +2369,26 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 4,
         'pattern_type': 'rotation_sequence',
         'layout': 'linear_sequence',
-        'title': 'Four-Petal Clockwise Shift',
-        'prompt': 'The golden petal moves clockwise: Top, Right, Bottom. Where does it light up next?',
+        'title': _('Four-Petal Clockwise Shift'),
+        'prompt': _('The golden petal moves clockwise: Top, Right, Bottom. Where does it light up next?'),
         'sequence': [
-            {'tile_id': 'pin_top', 'name': 'Top Petal Highlighted', 'svg': make_pinwheel_quadrant('top')},
-            {'tile_id': 'pin_right', 'name': 'Right Petal Highlighted', 'svg': make_pinwheel_quadrant('right')},
-            {'tile_id': 'pin_bottom', 'name': 'Bottom Petal Highlighted', 'svg': make_pinwheel_quadrant('bottom')},
+            {'tile_id': 'pin_top', 'name': _('Top Petal Highlighted'), 'svg': make_pinwheel_quadrant('top')},
+            {'tile_id': 'pin_right', 'name': _('Right Petal Highlighted'), 'svg': make_pinwheel_quadrant('right')},
+            {'tile_id': 'pin_bottom', 'name': _('Bottom Petal Highlighted'), 'svg': make_pinwheel_quadrant('bottom')},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'pin_left',
-            'name': 'Left Petal Highlighted',
+            'name': _('Left Petal Highlighted'),
             'svg': make_pinwheel_quadrant('left'),
         },
         'distractors': [
-            {'id': 'pin_top', 'name': 'Top Petal Highlighted', 'svg': make_pinwheel_quadrant('top')},
-            {'id': 'pin_right', 'name': 'Right Petal Highlighted', 'svg': make_pinwheel_quadrant('right')},
-            {'id': 'pin_bottom', 'name': 'Bottom Petal Highlighted', 'svg': make_pinwheel_quadrant('bottom')},
-            {'id': 'pin_all', 'name': 'All Petals Highlighted', 'svg': make_pinwheel_quadrant('all')},
+            {'id': 'pin_top', 'name': _('Top Petal Highlighted'), 'svg': make_pinwheel_quadrant('top')},
+            {'id': 'pin_right', 'name': _('Right Petal Highlighted'), 'svg': make_pinwheel_quadrant('right')},
+            {'id': 'pin_bottom', 'name': _('Bottom Petal Highlighted'), 'svg': make_pinwheel_quadrant('bottom')},
+            {'id': 'pin_all', 'name': _('All Petals Highlighted'), 'svg': make_pinwheel_quadrant('all')},
         ],
-        'explanation': 'The golden petal advances clockwise around the 4 petals (Top, Right, Bottom). The fourth position highlights the Left Petal.',
+        'explanation': _('The golden petal advances clockwise around the 4 petals (Top, Right, Bottom). The fourth position highlights the Left Petal.'),
     },
 
     'lvl4_diamond_tilt_alternate': {
@@ -2374,26 +2396,26 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 4,
         'pattern_type': 'linear_alternating',
         'layout': 'linear_sequence',
-        'title': 'Kolam Diamond Tilt Rhythm',
-        'prompt': 'The square alternates between upright and a 45-degree diamond tilt. Which orientation comes next?',
+        'title': _('Kolam Diamond Tilt Rhythm'),
+        'prompt': _('The square alternates between upright and a 45-degree diamond tilt. Which orientation comes next?'),
         'sequence': [
-            {'tile_id': 'sq_upright', 'name': 'Upright Square', 'svg': make_square('#CCFBF1', '#0F766E')},
-            {'tile_id': 'dia_tilted', 'name': 'Tilted Diamond', 'svg': make_diamond('#CCFBF1', '#0F766E')},
-            {'tile_id': 'sq_upright', 'name': 'Upright Square', 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'tile_id': 'sq_upright', 'name': _('Upright Square'), 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'tile_id': 'dia_tilted', 'name': _('Tilted Diamond'), 'svg': make_diamond('#CCFBF1', '#0F766E')},
+            {'tile_id': 'sq_upright', 'name': _('Upright Square'), 'svg': make_square('#CCFBF1', '#0F766E')},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'dia_tilted',
-            'name': 'Tilted Diamond',
+            'name': _('Tilted Diamond'),
             'svg': make_diamond('#CCFBF1', '#0F766E'),
         },
         'distractors': [
-            {'id': 'sq_upright', 'name': 'Upright Square', 'svg': make_square('#CCFBF1', '#0F766E')},
-            {'id': 'tri_teal', 'name': 'Teal Triangle', 'svg': make_triangle('#CCFBF1', '#0F766E')},
-            {'id': 'cir_teal', 'name': 'Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
-            {'id': 'cross_teal', 'name': 'Teal Cross', 'svg': make_cross('#CCFBF1', '#0F766E')},
+            {'id': 'sq_upright', 'name': _('Upright Square'), 'svg': make_square('#CCFBF1', '#0F766E')},
+            {'id': 'tri_teal', 'name': _('Teal Triangle'), 'svg': make_triangle('#CCFBF1', '#0F766E')},
+            {'id': 'cir_teal', 'name': _('Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E')},
+            {'id': 'cross_teal', 'name': _('Teal Cross'), 'svg': make_cross('#CCFBF1', '#0F766E')},
         ],
-        'explanation': 'The motif alternates between an upright square and a 45-degree tilted diamond. After the upright square comes the Tilted Diamond.',
+        'explanation': _('The motif alternates between an upright square and a 45-degree tilted diamond. After the upright square comes the Tilted Diamond.'),
     },
 
     # -------------------------------------------------------------
@@ -2404,40 +2426,40 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 5,
         'pattern_type': 'dual_attribute_matrix',
         'layout': 'matrix_2x2',
-        'title': 'Motif & Count Matrix',
-        'prompt': 'Rows set the motif (Sun vs. Star); columns set the count (1 item vs. 2 items). What completes the corner?',
+        'title': _('Motif & Count Matrix'),
+        'prompt': _('Rows set the motif (Sun vs. Star); columns set the count (1 item vs. 2 items). What completes the corner?'),
         'matrix': [
             [
-                {'tile_id': 'sun_1', 'name': '1 Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
-                {'tile_id': 'sun_2', 'name': '2 Golden Suns', 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                {'tile_id': 'sun_1', 'name': _('1 Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+                {'tile_id': 'sun_2', 'name': _('2 Golden Suns'), 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
   <circle cx="20" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
   <circle cx="44" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
 </svg>'''},
             ],
             [
-                {'tile_id': 'star_1', 'name': '1 Amber Star', 'svg': make_count_stars(1)},
+                {'tile_id': 'star_1', 'name': _('1 Amber Star'), 'svg': make_count_stars(1)},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'star_2',
-            'name': '2 Amber Stars',
+            'name': _('2 Amber Stars'),
             'svg': make_count_stars(2),
         },
         'distractors': [
-            {'id': 'star_1', 'name': '1 Amber Star', 'svg': make_count_stars(1)},
-            {'id': 'sun_2', 'name': '2 Golden Suns', 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+            {'id': 'star_1', 'name': _('1 Amber Star'), 'svg': make_count_stars(1)},
+            {'id': 'sun_2', 'name': _('2 Golden Suns'), 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
   <circle cx="20" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
   <circle cx="44" cy="32" r="10" fill="#F59E0B" stroke="#B45309" stroke-width="2"/>
 </svg>'''},
-            {'id': 'star_3', 'name': '3 Amber Stars', 'svg': make_count_stars(3)},
-            {'id': 'sun_1', 'name': '1 Golden Sun', 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
-            {'id': 'cir_2', 'name': '2 Teal Circles', 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+            {'id': 'star_3', 'name': _('3 Amber Stars'), 'svg': make_count_stars(3)},
+            {'id': 'sun_1', 'name': _('1 Golden Sun'), 'svg': make_sun('#F59E0B', '#B45309', '#D97706')},
+            {'id': 'cir_2', 'name': _('2 Teal Circles'), 'svg': f'''<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
   <circle cx="20" cy="32" r="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
   <circle cx="44" cy="32" r="10" fill="#CCFBF1" stroke="#0F766E" stroke-width="2"/>
 </svg>'''},
         ],
-        'explanation': 'Row 2 requires stars, and Column 2 requires a pair of items (count of 2). The matching combination is 2 Amber Stars.',
+        'explanation': _('Row 2 requires stars, and Column 2 requires a pair of items (count of 2). The matching combination is 2 Amber Stars.'),
     },
 
     'lvl5_concentric_frame_core': {
@@ -2445,31 +2467,31 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 5,
         'pattern_type': 'dual_attribute_matrix',
         'layout': 'matrix_2x2',
-        'title': 'Frame & Core Synthesis',
-        'prompt': 'The outer frame is set by the row; the inner symbol is set by the column. What belongs in the lower corner?',
+        'title': _('Frame & Core Synthesis'),
+        'prompt': _('The outer frame is set by the row; the inner symbol is set by the column. What belongs in the lower corner?'),
         'matrix': [
             [
-                {'tile_id': 'cir_dot', 'name': 'Circle with Inner Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
-                {'tile_id': 'cir_star', 'name': 'Circle with Inner Star', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
+                {'tile_id': 'cir_dot', 'name': _('Circle with Inner Dot'), 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+                {'tile_id': 'cir_star', 'name': _('Circle with Inner Star'), 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
             ],
             [
-                {'tile_id': 'sq_dot', 'name': 'Square with Inner Dot', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+                {'tile_id': 'sq_dot', 'name': _('Square with Inner Dot'), 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'sq_star',
-            'name': 'Square with Inner Star',
+            'name': _('Square with Inner Star'),
             'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>'),
         },
         'distractors': [
-            {'id': 'sq_dot', 'name': 'Square with Inner Dot', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
-            {'id': 'cir_star', 'name': 'Circle with Inner Star', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
-            {'id': 'cir_dot', 'name': 'Circle with Inner Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
-            {'id': 'sq_cross', 'name': 'Square with Inner Cross', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<line x1="26" y1="32" x2="38" y2="32" stroke="#0F766E" stroke-width="3"/><line x1="32" y1="26" x2="32" y2="38" stroke="#0F766E" stroke-width="3"/>')},
-            {'id': 'dia_star', 'name': 'Diamond with Inner Star', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
+            {'id': 'sq_dot', 'name': _('Square with Inner Dot'), 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+            {'id': 'cir_star', 'name': _('Circle with Inner Star'), 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
+            {'id': 'cir_dot', 'name': _('Circle with Inner Dot'), 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="6" fill="#0F766E"/>')},
+            {'id': 'sq_cross', 'name': _('Square with Inner Cross'), 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 12, 12, 40, 40, 4, '<line x1="26" y1="32" x2="38" y2="32" stroke="#0F766E" stroke-width="3"/><line x1="32" y1="26" x2="32" y2="38" stroke="#0F766E" stroke-width="3"/>')},
+            {'id': 'dia_star', 'name': _('Diamond with Inner Star'), 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<polygon points="32,24 34,29 39,29 35,32 37,37 32,34 27,37 29,32 25,29 30,29" fill="#0F766E"/>')},
         ],
-        'explanation': 'Row 2 uses square frames, and Column 2 uses inner stars. The synthesis is the Square with Inner Star.',
+        'explanation': _('Row 2 uses square frames, and Column 2 uses inner stars. The synthesis is the Square with Inner Star.'),
     },
 
     'lvl5_color_inversion_analogy': {
@@ -2477,31 +2499,31 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 5,
         'pattern_type': 'dual_attribute_matrix',
         'layout': 'matrix_2x2',
-        'title': 'Color Inversion Analogy',
-        'prompt': 'Examine the color exchange across the top row. What happens when the diamond colors exchange?',
+        'title': _('Color Inversion Analogy'),
+        'prompt': _('Examine the color exchange across the top row. What happens when the diamond colors exchange?'),
         'matrix': [
             [
-                {'tile_id': 'ring_t_dot_a', 'name': 'Teal Ring with Amber Dot', 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
-                {'tile_id': 'ring_a_dot_t', 'name': 'Amber Ring with Teal Dot', 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
+                {'tile_id': 'ring_t_dot_a', 'name': _('Teal Ring with Amber Dot'), 'svg': make_circle('#CCFBF1', '#0F766E', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+                {'tile_id': 'ring_a_dot_t', 'name': _('Amber Ring with Teal Dot'), 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
             ],
             [
-                {'tile_id': 'dia_t_dot_a', 'name': 'Teal Diamond with Amber Dot', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+                {'tile_id': 'dia_t_dot_a', 'name': _('Teal Diamond with Amber Dot'), 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'dia_a_dot_t',
-            'name': 'Amber Diamond with Teal Dot',
+            'name': _('Amber Diamond with Teal Dot'),
             'svg': make_diamond('#FEF3C7', '#D97706', 2.5, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>'),
         },
         'distractors': [
-            {'id': 'dia_t_dot_a', 'name': 'Teal Diamond with Amber Dot', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
-            {'id': 'ring_a_dot_t', 'name': 'Amber Ring with Teal Dot', 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
-            {'id': 'dia_a_dot_a', 'name': 'Amber Diamond with Amber Dot', 'svg': make_diamond('#FEF3C7', '#D97706', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
-            {'id': 'dia_t_dot_t', 'name': 'Teal Diamond with Teal Dot', 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
-            {'id': 'dia_indigo_dot_rose', 'name': 'Indigo Diamond with Rose Dot', 'svg': make_diamond('#EEF2FF', '#4338CA', 2.5, '<circle cx="32" cy="32" r="8" fill="#BE185D" stroke="#831843" stroke-width="1.5"/>')},
+            {'id': 'dia_t_dot_a', 'name': _('Teal Diamond with Amber Dot'), 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+            {'id': 'ring_a_dot_t', 'name': _('Amber Ring with Teal Dot'), 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 22, 32, 32, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
+            {'id': 'dia_a_dot_a', 'name': _('Amber Diamond with Amber Dot'), 'svg': make_diamond('#FEF3C7', '#D97706', 2.5, '<circle cx="32" cy="32" r="8" fill="#F59E0B" stroke="#B45309" stroke-width="1.5"/>')},
+            {'id': 'dia_t_dot_t', 'name': _('Teal Diamond with Teal Dot'), 'svg': make_diamond('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="32" r="8" fill="#0F766E" stroke="#042F2E" stroke-width="1.5"/>')},
+            {'id': 'dia_indigo_dot_rose', 'name': _('Indigo Diamond with Rose Dot'), 'svg': make_diamond('#EEF2FF', '#4338CA', 2.5, '<circle cx="32" cy="32" r="8" fill="#BE185D" stroke="#831843" stroke-width="1.5"/>')},
         ],
-        'explanation': 'Across each row, the outer color and inner dot color swap places. The Teal Diamond with Amber Dot swaps into an Amber Diamond with Teal Dot.',
+        'explanation': _('Across each row, the outer color and inner dot color swap places. The Teal Diamond with Amber Dot swaps into an Amber Diamond with Teal Dot.'),
     },
 
     'lvl5_geometric_overlay': {
@@ -2509,31 +2531,31 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 5,
         'pattern_type': 'dual_attribute_matrix',
         'layout': 'matrix_2x2',
-        'title': 'Motif Overlay Combination',
-        'prompt': 'Column 1 shows a base shape; Column 2 adds a horizontal crossbar. Which tile completes the triangle row?',
+        'title': _('Motif Overlay Combination'),
+        'prompt': _('Column 1 shows a base shape; Column 2 adds a horizontal crossbar. Which tile completes the triangle row?'),
         'matrix': [
             [
-                {'tile_id': 'cir_base', 'name': 'Plain Circle', 'svg': make_circle('#CCFBF1', '#0F766E')},
-                {'tile_id': 'cir_bar', 'name': 'Circle with Crossbar', 'svg': make_shape_with_bar('circle')},
+                {'tile_id': 'cir_base', 'name': _('Plain Circle'), 'svg': make_circle('#CCFBF1', '#0F766E')},
+                {'tile_id': 'cir_bar', 'name': _('Circle with Crossbar'), 'svg': make_shape_with_bar('circle')},
             ],
             [
-                {'tile_id': 'tri_base', 'name': 'Plain Triangle', 'svg': make_triangle('#CCFBF1', '#0F766E')},
+                {'tile_id': 'tri_base', 'name': _('Plain Triangle'), 'svg': make_triangle('#CCFBF1', '#0F766E')},
                 {'is_missing': True, 'position': 4},
             ],
         ],
         'target_tile': {
             'id': 'tri_bar',
-            'name': 'Triangle with Crossbar',
+            'name': _('Triangle with Crossbar'),
             'svg': make_shape_with_bar('triangle'),
         },
         'distractors': [
-            {'id': 'tri_base', 'name': 'Plain Triangle', 'svg': make_triangle('#CCFBF1', '#0F766E')},
-            {'id': 'cir_bar', 'name': 'Circle with Crossbar', 'svg': make_shape_with_bar('circle')},
-            {'id': 'sq_bar', 'name': 'Square with Crossbar', 'svg': make_shape_with_bar('square')},
-            {'id': 'tri_dot', 'name': 'Triangle with Dot', 'svg': make_triangle('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="34" r="6" fill="#0F766E"/>')},
-            {'id': 'tri_solid', 'name': 'Solid Triangle', 'svg': make_triangle('#0F766E', '#0F766E')},
+            {'id': 'tri_base', 'name': _('Plain Triangle'), 'svg': make_triangle('#CCFBF1', '#0F766E')},
+            {'id': 'cir_bar', 'name': _('Circle with Crossbar'), 'svg': make_shape_with_bar('circle')},
+            {'id': 'sq_bar', 'name': _('Square with Crossbar'), 'svg': make_shape_with_bar('square')},
+            {'id': 'tri_dot', 'name': _('Triangle with Dot'), 'svg': make_triangle('#CCFBF1', '#0F766E', 2.5, '<circle cx="32" cy="34" r="6" fill="#0F766E"/>')},
+            {'id': 'tri_solid', 'name': _('Solid Triangle'), 'svg': make_triangle('#0F766E', '#0F766E')},
         ],
-        'explanation': 'Across each row, a horizontal crossbar is layered across the base shape. Triangle plus crossbar produces Triangle with Crossbar.',
+        'explanation': _('Across each row, a horizontal crossbar is layered across the base shape. Triangle plus crossbar produces Triangle with Crossbar.'),
     },
 
     'lvl5_triple_rhythm_harmony': {
@@ -2541,27 +2563,27 @@ PATTERN_DETECTIVE_CATALOG = {
         'difficulty': 5,
         'pattern_type': 'linear_alternating',
         'layout': 'linear_sequence',
-        'title': 'Triple Attribute Alternation',
-        'prompt': 'Notice the synchronized changes: Size (Large, Small), Color (Teal, Amber), and Shape (Circle, Square). What follows the Large Teal Circle?',
+        'title': _('Triple Attribute Alternation'),
+        'prompt': _('Notice the synchronized changes: Size (Large, Small), Color (Teal, Amber), and Shape (Circle, Square). What follows the Large Teal Circle?'),
         'sequence': [
-            {'tile_id': 'cir_lg_teal', 'name': 'Large Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
-            {'tile_id': 'sq_sm_amber', 'name': 'Small Amber Square', 'svg': make_square('#FEF3C7', '#D97706', 2.5, 20, 20, 24, 24, 3)},
-            {'tile_id': 'cir_lg_teal', 'name': 'Large Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
+            {'tile_id': 'cir_lg_teal', 'name': _('Large Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
+            {'tile_id': 'sq_sm_amber', 'name': _('Small Amber Square'), 'svg': make_square('#FEF3C7', '#D97706', 2.5, 20, 20, 24, 24, 3)},
+            {'tile_id': 'cir_lg_teal', 'name': _('Large Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
             {'is_missing': True, 'position': 4},
         ],
         'target_tile': {
             'id': 'sq_sm_amber',
-            'name': 'Small Amber Square',
+            'name': _('Small Amber Square'),
             'svg': make_square('#FEF3C7', '#D97706', 2.5, 20, 20, 24, 24, 3),
         },
         'distractors': [
-            {'id': 'cir_lg_teal', 'name': 'Large Teal Circle', 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
-            {'id': 'sq_lg_amber', 'name': 'Large Amber Square', 'svg': make_square('#FEF3C7', '#D97706', 3, 12, 12, 40, 40, 4)},
-            {'id': 'sq_sm_teal', 'name': 'Small Teal Square', 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 20, 20, 24, 24, 3)},
-            {'id': 'cir_sm_amber', 'name': 'Small Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 14)},
-            {'id': 'cir_lg_amber', 'name': 'Large Amber Circle', 'svg': make_circle('#FEF3C7', '#D97706', 3, 24)},
+            {'id': 'cir_lg_teal', 'name': _('Large Teal Circle'), 'svg': make_circle('#CCFBF1', '#0F766E', 3, 24)},
+            {'id': 'sq_lg_amber', 'name': _('Large Amber Square'), 'svg': make_square('#FEF3C7', '#D97706', 3, 12, 12, 40, 40, 4)},
+            {'id': 'sq_sm_teal', 'name': _('Small Teal Square'), 'svg': make_square('#CCFBF1', '#0F766E', 2.5, 20, 20, 24, 24, 3)},
+            {'id': 'cir_sm_amber', 'name': _('Small Amber Circle'), 'svg': make_circle('#FEF3C7', '#D97706', 2.5, 14)},
+            {'id': 'cir_lg_amber', 'name': _('Large Amber Circle'), 'svg': make_circle('#FEF3C7', '#D97706', 3, 24)},
         ],
-        'explanation': 'The pattern synchronizes Size, Color, and Shape in alternation. Following the Large Teal Circle comes the Small Amber Square.',
+        'explanation': _('The pattern synchronizes Size, Color, and Shape in alternation. Following the Large Teal Circle comes the Small Amber Square.'),
     },
 }
 
@@ -2593,23 +2615,23 @@ class PatternDetectiveEngine:
         return [
             {
                 'number': 1,
-                'title': "Observe the Visual Pattern",
-                'description': "Look at the harmonious sequence of symbols or grid on the main display card.",
+                'title': _("Observe the Visual Pattern"),
+                'description': _("Look at the harmonious sequence of symbols or grid on the main display card."),
             },
             {
                 'number': 2,
-                'title': "Identify the Missing Position",
-                'description': "Notice the empty space marked with a question card. Consider which symbol naturally belongs there.",
+                'title': _("Identify the Missing Position"),
+                'description': _("Notice the empty space marked with a question card. Consider which symbol naturally belongs there."),
             },
             {
                 'number': 3,
-                'title': "Select Your Choice",
-                'description': "Tap the symbol card that fits best. You can change your choice anytime without penalty.",
+                'title': _("Select Your Choice"),
+                'description': _("Tap the symbol card that fits best. You can change your choice anytime without penalty."),
             },
             {
                 'number': 4,
-                'title': "Confirm & Enjoy Feedback",
-                'description': "Press \"Confirm My Selection\" to review your choice and complete 3 pleasant rounds.",
+                'title': _("Confirm & Enjoy Feedback"),
+                'description': _("Press \"Confirm My Selection\" to review your choice and complete 3 pleasant rounds."),
             },
         ]
 
@@ -2695,7 +2717,7 @@ class PatternDetectiveEngine:
             missed_ids = []
             mistake_count = 0
             score = 1
-            feedback_message = f"Splendid! {explanation}"
+            feedback_message = str(_("Splendid! %(explanation)s") % {'explanation': explanation})
             feedback_tone = "success"
         else:
             correct_ids = []
@@ -2703,7 +2725,10 @@ class PatternDetectiveEngine:
             missed_ids = [target_id]
             mistake_count = 1
             score = 0
-            feedback_message = f"Good effort! The harmonious choice is {target_name}. {explanation}"
+            feedback_message = str(_("Good effort! The harmonious choice is %(target_name)s. %(explanation)s") % {
+                'target_name': target_name,
+                'explanation': explanation,
+            })
             feedback_tone = "encouraging"
 
         return {
@@ -2835,9 +2860,13 @@ def record_round_submission(session, round_number, actual_selected_ids, response
     else:
         stimulus_payload = round_data
 
+    # Ensure pure JSON serialization for model JSONField validation
+    stimulus_payload = json.loads(json.dumps(stimulus_payload, cls=DjangoJSONEncoder))
+
     expected_payload = {
         'target_ids': round_data['target_ids'],
     }
+    expected_payload = json.loads(json.dumps(expected_payload, cls=DjangoJSONEncoder))
     actual_payload = {
         'selected_ids': actual_selected_ids,
         'correct_ids': eval_result.get('correct_ids', []),
@@ -2845,6 +2874,7 @@ def record_round_submission(session, round_number, actual_selected_ids, response
         'missed_ids': eval_result.get('missed_ids', []),
         'misplaced_ids': eval_result.get('misplaced_ids', []),
     }
+    actual_payload = json.loads(json.dumps(actual_payload, cls=DjangoJSONEncoder))
 
     # Ensure non-negative integers for latency and mistakes
     safe_response_time = max(0, int(response_time_ms))
